@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>모아루: 잠든 길의 노래</title>
+<style>body{margin:0}[hidden]{display:none!important}</style>
+<style>
+/* Layout: two 256x192 pixel screens like a folding handheld, stacked on phones and side by side on wide screens.
+   One committed dusk-gold console look (single theme). */
+:root{
+  --bg:#15110d;
+  --bg-2:#241b12;
+  --bezel:#0b0a0c;
+  --rim:#4a3a26;
+  --ink:#efe3c6;
+  --muted:#a6957a;
+  --gold:#e3b23c;
+  --font-ui:'G11B','Apple SD Gothic Neo','Malgun Gothic',system-ui,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;background:var(--bg)}
+body{color:var(--ink);font:13px/1.45 var(--font-ui);-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+#app{
+  height:100%;box-sizing:border-box;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+  background:radial-gradient(120% 80% at 50% 38%,var(--bg-2) 0%,var(--bg) 70%);
+}
+#device{display:flex;flex-direction:column;align-items:center;gap:14px}
+#device.side{flex-direction:row}
+canvas{
+  display:block;border-radius:3px;touch-action:none;
+  image-rendering:crisp-edges;image-rendering:pixelated;
+  box-shadow:0 0 0 3px var(--bezel),0 0 0 5px var(--rim),0 12px 28px rgba(0,0,0,.55);
+}
+#hint{color:var(--muted);font-size:12px;text-align:center;letter-spacing:.02em;min-height:1em}
+#hint b{color:var(--ink);font-weight:600}
+@media (pointer:coarse){#hint{display:none}}
+#dlg{position:fixed;inset:0;display:grid;place-items:center;background:rgba(10,8,6,.72);z-index:20;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+#dlg .card{width:min(360px,100%);box-sizing:border-box;background:#fbf7ea;color:#2c2f45;border-radius:10px;
+  box-shadow:0 0 0 3px #2c2f45,0 0 0 6px var(--gold),0 18px 40px rgba(0,0,0,.6);padding:18px 16px 14px;display:grid;gap:10px}
+#dlg p{margin:0;font-size:15px;line-height:1.5}
+#dlg input,#dlg textarea{font:16px/1.4 var(--font-ui);color:#2c2f45;background:#fff;border:2px solid #2c2f45;border-radius:6px;padding:8px 10px;width:100%;box-sizing:border-box}
+#dlg textarea{height:96px;resize:none;font-size:12px;word-break:break-all}
+#dlg .row{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+#dlg button{font:15px/1 var(--font-ui);padding:10px 16px;border-radius:6px;border:2px solid #2c2f45;background:#fff;color:#2c2f45;cursor:pointer}
+#dlg button.primary{background:#2c2f45;color:#fbf7ea}
+#dlg button:focus-visible,#dlg input:focus-visible,#dlg textarea:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+#dlg .note{font-size:12px;color:#6a6458;margin:0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="device">
+    <canvas id="top" width="256" height="192" aria-label="게임 화면"></canvas>
+    <canvas id="bot" width="256" height="192" aria-label="터치 화면"></canvas>
+  </div>
+  <div id="hint"><b>방향키</b> 이동 · <b>Z</b> 결정 · <b>X</b> 취소 (누른 채 이동하면 달리기) · <b>Enter</b> 메뉴</div>
+</div>
+<div id="dlg" hidden>
+  <div class="card" role="dialog" aria-modal="true" aria-labelledby="dlgMsg">
+    <p id="dlgMsg"></p>
+    <input id="dlgInput" type="text" maxlength="6" autocomplete="off" hidden>
+    <textarea id="dlgText" spellcheck="false" hidden></textarea>
+    <p class="note" id="dlgNote" hidden></p>
+    <div class="row">
+      <button id="dlgCopy" type="button" hidden>복사</button>
+      <button id="dlgCancel" type="button">취소</button>
+      <button id="dlgOk" type="button" class="primary">확인</button>
+    </div>
+  </div>
+</div>
+<script src="fonts.js"></script>
+<script src="chars.js"></script>
+<script src="core.js"></script>
+<script src="art.js"></script>
+<script src="sprites.js"></script>
+<script src="mons.js"></script>
+<script src="data.js"></script>
+<script src="maps.js"></script>
+<script src="maps2.js"></script>
+<script src="maps3.js"></script>
+<script src="maps4.js"></script>
+<script src="maps5.js"></script>
+<script src="audio.js"></script>
+<script src="world.js"></script>
+<script src="field.js"></script>
+<script src="battle.js"></script>
+<script src="menus.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
