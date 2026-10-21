@@ -742,7 +742,7 @@
       const isNew = !G.S.dex.caught[e.id];
       e.status = e.status || null;
       const where = D.receive(e);
-      if (isNew) await G.say(`${name(e)}의 정보가 도감에 새로 기록되었다!`);
+      if (isNew) await G.menus.dexReveal(e.id);   // the silhouette in the dex turns into the picture
       if (where === 'box') await G.say(`데리고 다닐 몬스터가 가득 차서 ${G.eun(name(e))} 보관함으로 보내졌다.`);
       return true;
     }
@@ -953,10 +953,12 @@
       // the same share of HP as before, never above the new maximum; a fainted monster stays fainted
       m.hp = m.hp <= 0 ? 0 : Math.max(1, Math.min(after.hp, Math.round(after.hp * ratio)));
       phase = 2;
+      const newKind = !G.S.dex.caught[to];
       D.caught(to);
       await G.fadeTo(0, 20);
       G.audio && G.audio.jingle('evolve');
       await G.say(`축하합니다! ${G.eun(oldName)} ${G.ro(D.MONS[to].n)} 진화했다!`);
+      if (newKind) await G.say(`${D.MONS[to].n}의 정보가 도감에 새로 기록되었다!`);
       for (const [lv, mv] of D.MONS[to].learn) if (lv === m.lv) await learnMove(m, mv);
     }
     G.scene = prev;

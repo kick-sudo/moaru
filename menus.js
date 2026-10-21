@@ -482,6 +482,8 @@
   };
 
   // ------------------------------------------------------------ dex
+  // a kind that is not caught yet shows only its black silhouette; the picture appears once it is caught
+  const DEXSIL = '#1c1c26';
   // the owner (the designer) can flip on a preview that shows every entry without touching the save
   function dexInfo(id) {
     const sp = D.MONS[id], o = D.origin(id);
@@ -499,8 +501,7 @@
     }
     const sp = D.MONS[id], seen = preview || G.S.dex.seen[id], caught = preview || G.S.dex.caught[id];
     G.box(T, 6, 24, 84, 84, G.STYLE.white, 4);
-    if (seen) drawCard(T, id, 6, 24, 84, 84, caught ? null : G.mons.silhouette(id, 'card', '#3a3d52'));
-    else G.textC(T, '?', 48, 58, '#9a968c', null);
+    drawCard(T, id, 6, 24, 84, 84, caught ? null : G.mons.silhouette(id, 'card', DEXSIL));
     G.text(T, `No.${String(sp.no).padStart(3, '0')}  ${seen ? sp.n : '???'}`, 98, 26, '#2c2f45', null);
     if (seen) { let bx = 98; sp.t.forEach(t => { bx += typeBadge(T, t, bx, 44) + 3; }); }
     const info = seen ? dexInfo(id) : '';
@@ -511,10 +512,50 @@
     const txt = caught ? sp.dex : seen ? '잡으면 자세한 정보를 볼 수 있다.' : '아직 만나지 못한 몬스터.';
     G.wrap(txt, 226).forEach((ln, k) => G.text(T, ln, 14, 122 + k * 16, '#36363f', null));
   }
+  // a kind caught for the first time: its dex card turns from the black silhouette into the full picture
+  Mn.dexReveal = id => new Promise(res => {
+    const sp = D.MONS[id], no = String(sp.no).padStart(3, '0');
+    const HOLD = 36, FLASH = 12, READY = HOLD + FLASH + 14;
+    let t = 0;
+    const L = { modal: true };
+    L.update = () => {
+      t++;
+      if (t === HOLD) { G.audio && G.audio.sfx('sparkle'); G.audio && G.audio.cry(id); }
+      if (t > READY && (G.hit('a') || G.hit('b'))) { G.popLayer(L); G.audio && G.audio.sfx('select'); res(); }
+    };
+    L.drawTop = T => {
+      topCard(T, '도감 등록');
+      const shown = t >= HOLD;
+      G.disc(T, 128, 104, shown ? 74 : 66, shown ? 'rgba(255,248,214,0.85)' : 'rgba(255,255,255,0.55)');
+      const img = shown ? G.mons.card(id) : G.mons.silhouette(id, 'card', DEXSIL);
+      const bob = shown ? 0 : Math.round(Math.sin(t / 6));
+      T.drawImage(img, 128 - img.width, 184 - img.height * 2 + bob, img.width * 2, img.height * 2);
+      if (shown) for (let i = 0; i < 10; i++) {
+        const a = i * 0.63 + t * 0.03, r = 62 + (i % 3) * 9, k = (t + i * 7) % 24 < 12;
+        T.fillStyle = k ? '#ffe85a' : '#ffffff';
+        const x = Math.round(128 + Math.cos(a) * r), y = Math.round(104 + Math.sin(a) * r * 0.75);
+        T.fillRect(x - 1, y, 3, 1); T.fillRect(x, y - 1, 1, 3);
+      }
+      if (t >= HOLD && t < HOLD + FLASH) { T.fillStyle = `rgba(255,255,255,${(1 - (t - HOLD) / FLASH).toFixed(2)})`; T.fillRect(0, 0, 256, 192); }
+    };
+    L.drawBot = B => {
+      header(B, '도감 등록', 'No.' + no);
+      if (t < HOLD) { G.textC(B, '새로운 몬스터를 도감에 기록하는 중...', 128, 86, '#5a5648', null); return; }
+      G.text(B, sp.n, 14, 30, '#2c2f45', null);
+      let bx = 14 + Math.ceil(G.tw(sp.n)) + 8; sp.t.forEach(ty => { bx += typeBadge(B, ty, bx, 32) + 3; });
+      const head = G.wrap(`${sp.n}의 정보가 도감에 새로 기록되었다!`, 228);
+      head.forEach((ln, k) => G.text(B, ln, 14, 50 + k * 16, '#2c7a3a', null));
+      const y0 = 50 + head.length * 16 + 8;
+      G.wrap(sp.dex || '', 228).slice(0, Math.floor((164 - y0) / 16)).forEach((ln, k) => G.text(B, ln, 14, y0 + k * 16, '#36363f', null));
+      if (t > READY) G.textC(B, 'A 버튼으로 계속', 128, 172, '#8a8270', null);
+      G.addHot({ x: 0, y: 0, w: 256, h: 192, onTap: () => { G.pressed.a = 1; } });
+    };
+    G.pushLayer(L);
+  });
   Mn.dex = async () => {
     const ids = D.DEX;
     const owner = await G.isOwner();
-    let preview = owner && G.S.settings.dexPreview !== false, start = owner ? 1 : 0;
+    let preview = owner && G.S.settings.dexPreview === true, start = owner ? 1 : 0;   // off unless the designer turns it on
     for (;;) {
       const head = owner ? [{ label: preview ? '◆ 디자이너 미리보기  켜짐' : '◇ 디자이너 미리보기  꺼짐', color: '#6a3a8a' }] : [];
       const off = head.length;

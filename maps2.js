@@ -448,9 +448,11 @@
             if (ok) {
               const m = D().makeMon('muljjori', 7, { ivMin: 10 });
               m.hp = Math.max(1, Math.floor(D().stats(m).hp / 2));
+              const fresh = !G.S.dex.caught.muljjori;
               D().receive(m); set('q07_adopt');
               G.audio && G.audio.jingle('catch');
               await say(`${P()}${G.josa(P(), '은', '는')} 물쫄이를 입양했다! 아직 체력이 반쯤 남아 있다.`);
+              if (fresh) await G.menus.dexReveal('muljjori');
               await say('고마워! 약해 보여도 오래 키우면 깜짝 놀랄 거야. 정말이야!', N);
             } else await say('그래, 괜찮아! 저 연못 낚시 둔덕에서도 물쫄이를 만날 수 있어.', N);
             return;
