@@ -1,0 +1,1015 @@
+{
+  "version": 1,
+  "status": "design-complete-implementation-pending",
+  "date": "2026-10-22",
+  "scope": "chapter-3-gyms-5-6",
+  "baseCommit": "ea5e8017df96a8ab76acf9f6c15970ab49113610",
+  "startState": [
+    "Q20",
+    "badge_4",
+    "F01",
+    "F02",
+    "F04",
+    "F06",
+    "F07",
+    "MAP08",
+    "seaboard",
+    "lamp"
+  ],
+  "regions": [
+    {
+      "id": "R12",
+      "name": "다음 해안 항로",
+      "kind": "existing-connector",
+      "legacyKey": "searoute",
+      "access": "Q20·F07 이후 기존 항로 끝에 R13 연결점만 추가",
+      "map": "MAP08"
+    },
+    {
+      "id": "R13",
+      "name": "흰부표 해로",
+      "kind": "sea-and-beach",
+      "access": "F07·해상 안정판",
+      "map": "MAP08",
+      "detail": "첫 구간은 안전 부표 3개와 하선점이 보이는 짧은 항로. 바깥 해상과 해변 조우를 구별하고 중간 바위섬에서 무료 구조 귀환 가능."
+    },
+    {
+      "id": "M07",
+      "name": "해무나루",
+      "kind": "village",
+      "map": "MAP09",
+      "detail": "관장 없는 섬마을. 구조대·센터·상점·조개 관찰소·급류 강습장·정기선 부두. Q24 안내도 이후 선택 의뢰가 갈라짐."
+    },
+    {
+      "id": "D09",
+      "name": "너울잠굴",
+      "kind": "cave",
+      "map": "MAP10",
+      "detail": "동굴등·F02·F06 사용. 입구 암반길/관측 수문/옛 부두 3구역. 잠수·급류·현실 썰물 대기 불필요. 안전도를 입장 전 지급."
+    },
+    {
+      "id": "R14",
+      "name": "바닷솔길",
+      "kind": "coastal-path",
+      "map": "MAP09",
+      "detail": "Q25 복구한 부두 건너편에서 해안 보행로로 이어짐. 바닷솔 쉼터와 작은 풀밭. R13 바다와 밝은 모래 하선점으로 양방향 연결."
+    },
+    {
+      "id": "M08",
+      "name": "푸른숨시",
+      "kind": "city-gym5",
+      "map": "MAP11",
+      "detail": "흰 수로·청록 유리 관측창·휴식 화단. 센터/상점/정화소 안내실/보건 체육관/연안 부두. 전 도시를 오염 피해 지형으로 처리하지 않음."
+    },
+    {
+      "id": "D10",
+      "name": "침전수로",
+      "kind": "facility",
+      "map": "MAP11",
+      "detail": "Q26 때 받은 보호 장비와 작업 허가로 진입. 취수층/수동 우회수로/동료 휴식대. F02·F04 사용, 독 동료 포획이나 해독제 소비 불필요."
+    },
+    {
+      "id": "R15",
+      "name": "굽이강",
+      "kind": "current-river",
+      "map": "MAP12",
+      "detail": "Q29 급류 수업·Q30_start 안내 후 접근. 가느다란 실선 화살표의 잔잔한 물과 굵은 물결 띠 급류를 구별. 허용 급류만 F08, 폭포는 통과 불가."
+    },
+    {
+      "id": "H02",
+      "name": "강굽이 쉼터",
+      "kind": "camp",
+      "map": "MAP12",
+      "detail": "R15 첫 하선점. 무료 회복·지원 호출·구조·낮은 제방길을 제공. Q30 작은 운송 수문 복구를 여기서 시작해 도보 점검로로 해결."
+    },
+    {
+      "id": "R16",
+      "name": "제방들길",
+      "kind": "levee-path",
+      "map": "MAP12",
+      "detail": "Q30 완료 시 양방향 낮은 보행 다리 개방. 작은 금 간 돌은 F06, 큰 운반석은 F09 대상임을 문양과 크기로 구별."
+    },
+    {
+      "id": "M09",
+      "name": "돌바퀴시",
+      "kind": "city-gym6",
+      "map": "MAP12",
+      "detail": "석조 창고·원형 광차 선로·보행 육교·적재장. 센터/상점/운송조합/기록원/하중 체육관/무료 도시간 화차. 민간 작업자와 감독 구별."
+    },
+    {
+      "id": "D11",
+      "name": "옛 배차소",
+      "kind": "archive-and-yard",
+      "map": "MAP12",
+      "detail": "Q31_start 때 안전 확인과 기록 열람 허가. F02·F06로 정해진 레일 받침을 맞추며 장비 이력 대조. F09 선행 요구 금지."
+    },
+    {
+      "id": "R17",
+      "name": "돌바퀴 언덕",
+      "kind": "optional-upland",
+      "map": "MAP12",
+      "detail": "도시 서쪽 보행 계단으로 접근. 전투 연습·생활 동료 관찰·귀환용 운반석. 필수 단서·필수 기술은 배치하지 않음."
+    },
+    {
+      "id": "R18",
+      "name": "높은물길 입구",
+      "kind": "next-chapter-connector",
+      "map": "MAP12",
+      "detail": "Q33 F09 강습 후 표식이 있는 운반석을 레일 받침으로 옮기면 첫 안전 전망대까지만 개방. 폭포·7관장·상회 본부 내부는 후속 장."
+    }
+  ],
+  "edges": [
+    {
+      "from": "R12",
+      "to": "R13",
+      "requires": [
+        "Q20",
+        "F07"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "R13",
+      "to": "M07",
+      "requires": [
+        "F07"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "M07",
+      "to": "D09",
+      "requires": [
+        "Q24",
+        "F02",
+        "F06",
+        "MAP10",
+        "lamp"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "M07",
+      "to": "R14",
+      "requires": [
+        "Q25"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "R14",
+      "to": "M08",
+      "requires": [],
+      "bidirectional": true
+    },
+    {
+      "from": "M08",
+      "to": "D10",
+      "requires": [
+        "Q26",
+        "protective_kit_3",
+        "permit_D10"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "M07",
+      "to": "M08",
+      "requires": [
+        "Q27"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "M07",
+      "to": "R15",
+      "requires": [
+        "Q29",
+        "Q30_start",
+        "F08"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "R15",
+      "to": "H02",
+      "requires": [
+        "F08"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "H02",
+      "to": "R16",
+      "requires": [
+        "Q30"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "R16",
+      "to": "M09",
+      "requires": [],
+      "bidirectional": true
+    },
+    {
+      "from": "M09",
+      "to": "D11",
+      "requires": [
+        "Q31_start",
+        "permit_D11"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "M09",
+      "to": "R17",
+      "requires": [],
+      "bidirectional": true
+    },
+    {
+      "from": "M09",
+      "to": "M08",
+      "requires": [
+        "Q31"
+      ],
+      "bidirectional": true
+    },
+    {
+      "from": "M09",
+      "to": "R18",
+      "requires": [
+        "Q33",
+        "F09"
+      ],
+      "bidirectional": true
+    }
+  ],
+  "quests": [
+    {
+      "id": "Q24",
+      "name": "흰 부표를 따라",
+      "location": "M07",
+      "requires": [
+        "Q20",
+        "F07"
+      ],
+      "grants": [
+        "Q24",
+        "MAP09"
+      ],
+      "action": "R13 안전 항로를 따라 해무나루 구조대장 가온에게 도착 보고. 섬마을 안내도를 받고 옛 부두 조사 의뢰를 읽는다.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q25",
+      "name": "물결 아래 남은 길",
+      "location": "M07",
+      "requires": [
+        "Q24",
+        "F02",
+        "F06"
+      ],
+      "grants": [
+        "Q25"
+      ],
+      "action": "입장 전 가온에게 동굴 안전도 수령. 너울잠굴에서 작은 낙석 정리·받침돌 2개 원위치·옛 부두 발판을 수동으로 내림. 미탐험 상세 지도는 표시하지 않음.",
+      "optional": false,
+      "repeatable": false,
+      "acceptAt": "M07",
+      "acceptRequires": [
+        "Q24"
+      ],
+      "acceptGrants": [
+        "MAP10"
+      ],
+      "requiredVisited": [
+        "D09"
+      ]
+    },
+    {
+      "id": "Q26",
+      "name": "쉬러 나온 동료들",
+      "location": "M08",
+      "requires": [
+        "Q25"
+      ],
+      "grants": [
+        "Q26",
+        "MAP11",
+        "protective_kit_3",
+        "permit_D10"
+      ],
+      "action": "정화사 은서가 진득이 무리가 휴식대로 나온 것을 보여 줌. 주민 인터뷰 후 정화소 안내도·보호 장비·작업 허가를 입장 전에 지급.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q27",
+      "name": "맑은 흐름의 순서",
+      "location": "D10",
+      "requires": [
+        "Q26",
+        "F02",
+        "F04",
+        "protective_kit_3",
+        "permit_D10"
+      ],
+      "grants": [
+        "Q27",
+        "coast_ferry_3"
+      ],
+      "action": "기존 취수 기록 대조→우회수로 개방→교체 거름틀을 받침에 이동→휴식대 물길 복구. 감독과 1회 대결 후 누락된 정비표를 고정 확보. 정기선·5관장 개방.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q28",
+      "name": "푸른숨의 시험",
+      "location": "M08",
+      "requires": [
+        "Q27"
+      ],
+      "grants": [
+        "Q28",
+        "badge_5"
+      ],
+      "action": "관장 하진에게 상태이상 대응·교체 시험. 의무 부가 포획이나 독 동료 소유 조건 없음.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q29",
+      "name": "거센 물에도 돌아오는 길",
+      "location": "M07",
+      "requires": [
+        "Q28"
+      ],
+      "grants": [
+        "Q29",
+        "F08",
+        "current_bridle"
+      ],
+      "action": "정기선으로 해무나루 재방문. 교관 여민이 지원 해품범·급류용 물판 고정끈 지급. 표시된 2개 물살에서 진입/횡단/안전 하선/귀환 연습.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q30_start",
+      "name": "강 위의 운송표",
+      "location": "M08",
+      "requires": [
+        "Q29"
+      ],
+      "grants": [
+        "Q30_start",
+        "MAP12"
+      ],
+      "action": "푸른숨 부두의 운송원 담소가 강·운송도시 개략도를 지급. 강굽이 쉼터에 운송표 전달을 부탁. 가려진 지형·배차소 내부는 유지.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q30",
+      "name": "움직이지 않는 작은 수문",
+      "location": "H02",
+      "requires": [
+        "Q30_start",
+        "F08",
+        "F02",
+        "F06"
+      ],
+      "grants": [
+        "Q30",
+        "freight_bridge_3"
+      ],
+      "action": "강굽이 쉼터의 무료 점검 보행로로 이동. 수문 옆 레일의 작은 받침 복구→수동 윈치 재연결→낮은 운송 다리 개방. F09는 요구하지 않음.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q31_start",
+      "name": "같은 부품, 다른 기록",
+      "location": "M09",
+      "requires": [
+        "Q30"
+      ],
+      "grants": [
+        "Q31_start",
+        "permit_D11"
+      ],
+      "action": "운송조합 조사원 시온에게 기존 1·2장 표식 사본을 보여 줌. 없어도 보존된 조사 기록에서 복사 가능. 옛 배차소 안전 통로와 열람 허가를 먼저 받음.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q31",
+      "name": "지워진 점검 날짜",
+      "location": "D11",
+      "requires": [
+        "Q31_start",
+        "F02",
+        "F06",
+        "permit_D11"
+      ],
+      "grants": [
+        "Q31",
+        "freight_shuttle_3",
+        "evidence_copy_3"
+      ],
+      "action": "출하 장부·검사 도장·교체 이력 3종 대조. 감독이 정비 주기를 축소해 보고한 사실과 본부 승인 번호 확보. 현장 작업자 증언을 기록하고 원본 대신 사본을 보관. 도시간 화차·6관장 개방.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q32",
+      "name": "무게를 나누는 법",
+      "location": "M09",
+      "requires": [
+        "Q31"
+      ],
+      "grants": [
+        "Q32",
+        "badge_6"
+      ],
+      "action": "관장 규호의 하중·교체 시험. 체육관 퍼즐은 수동 저울과 기존 F02만 사용. F09를 체육관 입장 조건으로 쓰지 않음.",
+      "optional": false,
+      "repeatable": false
+    },
+    {
+      "id": "Q33",
+      "name": "함께 옮기는 돌",
+      "location": "M09",
+      "requires": [
+        "Q32"
+      ],
+      "grants": [
+        "Q33",
+        "F09",
+        "load_harness",
+        "chapter_3_complete"
+      ],
+      "action": "적재장 무료 F09 괴력운반 수업. 레일 표식 운반석 1개를 받침에 옮기고 초기화·되돌리기를 학습. 높은물길 첫 전망대 개방과 본부 조사 의뢰 전달로 장 종료.",
+      "optional": false,
+      "repeatable": false
+    }
+  ],
+  "skills": [
+    {
+      "id": "F08",
+      "name": "급류타기",
+      "quest": "Q29",
+      "requires": [
+        "badge_5"
+      ],
+      "providedSupport": 92,
+      "trainedOwnedSupportOutsideParty": true,
+      "applies": "표식이 있는 가로 급류 항로",
+      "excludes": [
+        "폭포",
+        "잠수",
+        "모든 바다의 자동 통과"
+      ],
+      "free": true,
+      "eligibleSpecies": [
+        7,
+        8,
+        9,
+        58,
+        61,
+        81,
+        83,
+        85,
+        87,
+        91,
+        92,
+        97,
+        98
+      ]
+    },
+    {
+      "id": "F09",
+      "name": "괴력운반",
+      "quest": "Q33",
+      "requires": [
+        "badge_6"
+      ],
+      "providedSupport": 70,
+      "trainedOwnedSupportOutsideParty": true,
+      "applies": "레일·고리 문양이 있는 큰 운반석",
+      "excludes": [
+        "임의 건물 파괴",
+        "체육관6 선행 관문"
+      ],
+      "free": true,
+      "eligibleSpecies": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        16,
+        29,
+        32,
+        36,
+        40,
+        41,
+        59,
+        68,
+        69,
+        70,
+        96
+      ]
+    }
+  ],
+  "maps": [
+    {
+      "id": "MAP09",
+      "name": "해무군도 안내도",
+      "quest": "Q24",
+      "before": "첫 섬마을 선택 의뢰",
+      "visible": "공공 부두·마을·해안 큰 윤곽과 기존 방문 구간"
+    },
+    {
+      "id": "MAP10",
+      "name": "너울잠굴 안전도",
+      "quest": "Q25",
+      "grantPhase": "accept-before-entry",
+      "before": "D09 첫 진입",
+      "visible": "입구·안전 발판·대피 지점의 개략"
+    },
+    {
+      "id": "MAP11",
+      "name": "푸른숨 정화 안내도",
+      "quest": "Q26",
+      "before": "D10 조사",
+      "visible": "공공 시설·취수구 구역 이름·대피소"
+    },
+    {
+      "id": "MAP12",
+      "name": "굽이강 운송도",
+      "quest": "Q30_start",
+      "before": "R15 출발",
+      "visible": "허용 급류·공공 하선점·도시 개략"
+    }
+  ],
+  "gyms": [
+    {
+      "id": "G05",
+      "region": "M08",
+      "leader": "하진",
+      "theme": "독·정화와 상태이상 대응",
+      "quest": "Q28",
+      "team": [
+        {
+          "number": 34,
+          "level": 39
+        },
+        {
+          "number": 100,
+          "level": 40
+        },
+        {
+          "number": 38,
+          "level": 40
+        },
+        {
+          "number": 102,
+          "level": 41
+        }
+      ],
+      "badge": "푸른숨배지",
+      "lesson": "독에 걸린 동료를 교체하거나 치료하고 다음 행동을 읽기",
+      "moves": {
+        "34": [
+          "venomjab",
+          "bite",
+          "glare",
+          "bind"
+        ],
+        "38": [
+          "wingcut",
+          "venomjab",
+          "bite",
+          "ultrasonic"
+        ],
+        "100": [
+          "venomjab",
+          "sludge",
+          "bodyslam",
+          "harden"
+        ],
+        "102": [
+          "sludge",
+          "aircut",
+          "poisongas",
+          "harden"
+        ]
+      }
+    },
+    {
+      "id": "G06",
+      "region": "M09",
+      "leader": "규호",
+      "theme": "운송·하중과 지형 대응",
+      "quest": "Q32",
+      "team": [
+        {
+          "number": 67,
+          "level": 44
+        },
+        {
+          "number": 96,
+          "level": 44
+        },
+        {
+          "number": 41,
+          "level": 45
+        },
+        {
+          "number": 74,
+          "level": 47
+        }
+      ],
+      "badge": "돌바퀴배지",
+      "lesson": "빠른 땅·방어적인 물/땅·바위/땅·전기/강철 사이의 교체",
+      "moves": {
+        "41": [
+          "rockslide",
+          "quake",
+          "rockguard",
+          "butt"
+        ],
+        "67": [
+          "dig",
+          "mudshot",
+          "slash",
+          "sandattack"
+        ],
+        "74": [
+          "flashcannon",
+          "bolt",
+          "chargeguard",
+          "ironbash"
+        ],
+        "96": [
+          "wave",
+          "mudshot",
+          "rockguard",
+          "pinch"
+        ]
+      }
+    }
+  ],
+  "encounters": [
+    {
+      "id": "C3E01",
+      "region": "R13",
+      "zone": "sea",
+      "levels": [
+        31,
+        34
+      ],
+      "entries": [
+        {
+          "number": 91,
+          "percent": 45
+        },
+        {
+          "number": 82,
+          "percent": 25
+        },
+        {
+          "number": 60,
+          "percent": 20
+        },
+        {
+          "number": 97,
+          "percent": 10
+        }
+      ]
+    },
+    {
+      "id": "C3E02",
+      "region": "R13",
+      "zone": "shore",
+      "levels": [
+        31,
+        34
+      ],
+      "entries": [
+        {
+          "number": 95,
+          "percent": 35
+        },
+        {
+          "number": 93,
+          "percent": 35
+        },
+        {
+          "number": 91,
+          "percent": 20
+        },
+        {
+          "number": 86,
+          "percent": 10
+        }
+      ]
+    },
+    {
+      "id": "C3E03",
+      "region": "D09",
+      "zone": "pool",
+      "levels": [
+        32,
+        35
+      ],
+      "entries": [
+        {
+          "number": 93,
+          "percent": 45
+        },
+        {
+          "number": 95,
+          "percent": 25
+        },
+        {
+          "number": 60,
+          "percent": 20
+        },
+        {
+          "number": 91,
+          "percent": 10
+        }
+      ]
+    },
+    {
+      "id": "C3E04",
+      "region": "D09",
+      "zone": "raised-path",
+      "levels": [
+        32,
+        35
+      ],
+      "entries": [
+        {
+          "number": 37,
+          "percent": 35
+        },
+        {
+          "number": 39,
+          "percent": 30
+        },
+        {
+          "number": 66,
+          "percent": 20
+        },
+        {
+          "number": 93,
+          "percent": 15
+        }
+      ]
+    },
+    {
+      "id": "C3E05",
+      "region": "R14",
+      "zone": "grass",
+      "levels": [
+        33,
+        36
+      ],
+      "entries": [
+        {
+          "number": 35,
+          "percent": 30
+        },
+        {
+          "number": 77,
+          "percent": 25
+        },
+        {
+          "number": 49,
+          "percent": 25
+        },
+        {
+          "number": 101,
+          "percent": 20
+        }
+      ]
+    },
+    {
+      "id": "C3E06",
+      "region": "D10",
+      "zone": "inspection-basin",
+      "levels": [
+        35,
+        38
+      ],
+      "entries": [
+        {
+          "number": 99,
+          "percent": 45
+        },
+        {
+          "number": 101,
+          "percent": 30
+        },
+        {
+          "number": 66,
+          "percent": 15
+        },
+        {
+          "number": 73,
+          "percent": 10
+        }
+      ]
+    },
+    {
+      "id": "C3E07",
+      "region": "M08",
+      "zone": "voluntary-quayside",
+      "levels": [
+        33,
+        36
+      ],
+      "entries": [
+        {
+          "number": 91,
+          "percent": 30
+        },
+        {
+          "number": 97,
+          "percent": 25
+        },
+        {
+          "number": 82,
+          "percent": 25
+        },
+        {
+          "number": 95,
+          "percent": 20
+        }
+      ]
+    },
+    {
+      "id": "C3E08",
+      "region": "R15",
+      "zone": "current",
+      "levels": [
+        37,
+        40
+      ],
+      "entries": [
+        {
+          "number": 97,
+          "percent": 40
+        },
+        {
+          "number": 91,
+          "percent": 25
+        },
+        {
+          "number": 86,
+          "percent": 20
+        },
+        {
+          "number": 82,
+          "percent": 15
+        }
+      ]
+    },
+    {
+      "id": "C3E09",
+      "region": "R16",
+      "zone": "grass",
+      "levels": [
+        37,
+        40
+      ],
+      "entries": [
+        {
+          "number": 95,
+          "percent": 40
+        },
+        {
+          "number": 66,
+          "percent": 25
+        },
+        {
+          "number": 68,
+          "percent": 20
+        },
+        {
+          "number": 101,
+          "percent": 15
+        }
+      ]
+    },
+    {
+      "id": "C3E10",
+      "region": "D11",
+      "zone": "yard",
+      "levels": [
+        39,
+        42
+      ],
+      "entries": [
+        {
+          "number": 73,
+          "percent": 35
+        },
+        {
+          "number": 71,
+          "percent": 25
+        },
+        {
+          "number": 39,
+          "percent": 25
+        },
+        {
+          "number": 99,
+          "percent": 15
+        }
+      ]
+    },
+    {
+      "id": "C3E11",
+      "region": "R17",
+      "zone": "grass",
+      "levels": [
+        40,
+        43
+      ],
+      "entries": [
+        {
+          "number": 35,
+          "percent": 30
+        },
+        {
+          "number": 68,
+          "percent": 25
+        },
+        {
+          "number": 75,
+          "percent": 25
+        },
+        {
+          "number": 99,
+          "percent": 20
+        }
+      ]
+    },
+    {
+      "id": "C3E12",
+      "region": "R13",
+      "zone": "rod2",
+      "levels": [
+        32,
+        36
+      ],
+      "entries": [
+        {
+          "number": 93,
+          "percent": 25
+        },
+        {
+          "number": 95,
+          "percent": 25
+        },
+        {
+          "number": 97,
+          "percent": 30
+        },
+        {
+          "number": 91,
+          "percent": 20
+        }
+      ]
+    }
+  ],
+  "requiredCapturedSpecies": [],
+  "requiredCurrency": 0,
+  "mandatoryRandomDrops": 0,
+  "optionalQuestIds": [
+    "SQ3-01",
+    "SQ3-02",
+    "SQ3-03",
+    "SQ3-04",
+    "SQ3-05",
+    "SQ3-06",
+    "SQ3-07",
+    "SQ3-08"
+  ],
+  "nextChapterReserved": [
+    "폭포 오르기",
+    "7·8관장",
+    "상회 본부 내부",
+    "#103 이후"
+  ],
+  "battleValidation": "미실행. 포획 0회·소지금 0의 이동/기술 의존 검사와 실전 전투 난이도 검증을 구별한다."
+}

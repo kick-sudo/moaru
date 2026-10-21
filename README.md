@@ -88,6 +88,10 @@ DS(두 화면 휴대용 게임기) 감성의 몬스터 RPG **시안 빌드**입�
 
 자동 플레이 봇이 실제 이벤트 스크립트를 따라 스타팅 3종 모두로 1장·2장 끝까지 통과하는지 확인했습니다. 자세한 결과는 [`docs/balance-and-decisions.md`](docs/balance-and-decisions.md)에 있습니다.
 
+## 추가 기획 · 구현 대기
+
+[기획 변경 안내](docs/planning/README.md)에 이후 제작할 내용을 기록합니다. 현재 추가분은 [3장 「물결이 모이는 곳」](docs/planning/chapter-03/README.md)으로, 5·6관장·새 동료 #091–102·서브 퀘스트 8개·컨셉아트 2장을 포함합니다. 실제 게임에 구현된 범위는 위의 1·2장 설명을 기준으로 확인합니다.
+
 ## 크레딧
 
 - 글꼴: 갈무리11 Bold — Copyright (c) 2019-2025 Lee Minseo, SIL Open Font License 1.1 ([`OFL.txt`](OFL.txt))

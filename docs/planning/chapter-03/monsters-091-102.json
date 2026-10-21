@@ -1,0 +1,914 @@
+{
+  "version": 1,
+  "date": "2026-10-22",
+  "status": "design-complete-implementation-pending",
+  "range": [
+    91,
+    102
+  ],
+  "families": 6,
+  "count": 12,
+  "baseCommit": "ea5e8017df96a8ab76acf9f6c15970ab49113610",
+  "compatibility": {
+    "preserveLegacyNumbers": [
+      901,
+      902,
+      903,
+      904,
+      905,
+      906,
+      907,
+      908,
+      909
+    ],
+    "noNewTypes": true,
+    "noNewAbilities": true,
+    "moveCategoryRule": "현행 D.SPECIAL을 유지한다. 물은 특수, 드래곤은 물리. 기술별 분류 개편은 이번 범위 밖.",
+    "statAndMoveBalance": "proposal-requires-playtest",
+    "levelEvolutionRule": "임계 레벨 이상으로 포획한 초기형은 다음 레벨업 때 진화 선택. 즉시 강제 진화하지 않음.",
+    "stoneRecallRule": "물결돌은 성공 시 1개 소모. 선조의 현재 레벨 이하 기술 무료 복습."
+  },
+  "monsters": [
+    {
+      "number": 91,
+      "key": "pomal",
+      "name": "포말이",
+      "types": [
+        "물"
+      ],
+      "familyRole": "해안 구조 동료",
+      "visualMotif": "baby seal",
+      "appearance": "연한 안개색 털과 크림 배, 볼마다 짧은 수염 세 가닥. 작은 물거품처럼 둥글고 양쪽 귀끝이 민트색으로 말렸다.",
+      "lore": "파도에 떠밀린 조개를 코로 밀어 마른 곳에 옮긴다. 헤엄을 연습하다가 칭찬받으면 두 앞지느러미를 마주 친다.",
+      "habitat": "R13 바깥여울·해무나루 해변",
+      "evolution": {
+        "to": 92,
+        "method": "level",
+        "level": 34,
+        "playerChoice": true
+      },
+      "battleRole": "체력과 특수방어로 버티는 물 동료",
+      "baseStatsProposal": {
+        "hp": 70,
+        "atk": 45,
+        "def": 55,
+        "spa": 55,
+        "spd": 70,
+        "spe": 40
+      },
+      "battleMovePool": [
+        "bubble",
+        "aquaring",
+        "refresh",
+        "pulse"
+      ],
+      "worldAndQuestRole": "너울잠굴에서 흘러온 구조용 부표 끈을 따라오는 선택 의뢰의 주인공.",
+      "fieldSkills": [
+        "F07",
+        "F08"
+      ],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "bubble"
+        },
+        {
+          "level": 1,
+          "move": "growl"
+        },
+        {
+          "level": 10,
+          "move": "aqua"
+        },
+        {
+          "level": 16,
+          "move": "refresh"
+        },
+        {
+          "level": 22,
+          "move": "aquaring"
+        },
+        {
+          "level": 28,
+          "move": "pulse"
+        },
+        {
+          "level": 34,
+          "move": "bodyslam"
+        },
+        {
+          "level": 40,
+          "move": "wave"
+        }
+      ],
+      "catchRateProposal": 180,
+      "baseExperienceProposal": 75
+    },
+    {
+      "number": 92,
+      "key": "haepum",
+      "name": "해품범",
+      "types": [
+        "물"
+      ],
+      "familyRole": "해안 구조 동료",
+      "visualMotif": "adult seal",
+      "appearance": "길어진 유선형 몸, 넓은 앞지느러미와 어깨의 크림색 초승달 무늬. 수염과 귀끝이 뒤로 부드럽게 흐른다.",
+      "lore": "물결이 잠잠해지는 곳을 먼저 찾아 뒤따르는 무리에게 알려준다. 지친 동료 곁에서는 물살을 막는 방향으로 몸을 눕힌다.",
+      "habitat": "해무군도 구조대·바깥여울",
+      "evolution": null,
+      "battleRole": "물 공격·자기 상태 회복·긴 호흡",
+      "baseStatsProposal": {
+        "hp": 105,
+        "atk": 70,
+        "def": 85,
+        "spa": 80,
+        "spd": 105,
+        "spe": 60
+      },
+      "battleMovePool": [
+        "pulse",
+        "wave",
+        "aquaring",
+        "refresh"
+      ],
+      "worldAndQuestRole": "F08 급류타기 강습의 무료 지원 동료. 포획하거나 진화시킬 필요 없이 교육을 받을 수 있다.",
+      "fieldSkills": [
+        "F07",
+        "F08"
+      ],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "bubble"
+        },
+        {
+          "level": 1,
+          "move": "growl"
+        },
+        {
+          "level": 10,
+          "move": "aqua"
+        },
+        {
+          "level": 16,
+          "move": "refresh"
+        },
+        {
+          "level": 22,
+          "move": "aquaring"
+        },
+        {
+          "level": 28,
+          "move": "pulse"
+        },
+        {
+          "level": 34,
+          "move": "bodyslam"
+        },
+        {
+          "level": 40,
+          "move": "wave"
+        }
+      ],
+      "catchRateProposal": 75,
+      "baseExperienceProposal": 175
+    },
+    {
+      "number": 93,
+      "key": "moraekkom",
+      "name": "모래꼼",
+      "types": [
+        "물",
+        "바위"
+      ],
+      "familyRole": "방파제 조개 동료",
+      "visualMotif": "baby bivalve",
+      "appearance": "복숭아빛 동심원 껍데기, 안쪽 민트색 몸과 호박색 눈. 혀 대신 넓적한 작은 발 두 갈래가 보인다.",
+      "lore": "자기보다 작은 모래알을 꼭 맞춰 쌓으려 한다. 물이 탁해지면 껍데기를 닫고 천천히 맑은 물을 내보낸다.",
+      "habitat": "R13 해변·D09 너울잠굴 물웅덩이",
+      "evolution": {
+        "to": 94,
+        "method": "stone",
+        "item": "wavestone",
+        "consumes": 1,
+        "minLevel": null,
+        "playerChoice": true
+      },
+      "battleRole": "느리지만 단단한 방어형 물·바위",
+      "baseStatsProposal": {
+        "hp": 45,
+        "atk": 45,
+        "def": 100,
+        "spa": 55,
+        "spd": 55,
+        "spe": 20
+      },
+      "battleMovePool": [
+        "bubble",
+        "rockguard",
+        "rockthrow",
+        "aquaring"
+      ],
+      "worldAndQuestRole": "조개밭 관찰 의뢰. 야생 개체를 잡지 않고 관찰만 해도 완료.",
+      "fieldSkills": [
+        "F07"
+      ],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "bubble"
+        },
+        {
+          "level": 1,
+          "move": "harden"
+        },
+        {
+          "level": 10,
+          "move": "aqua"
+        },
+        {
+          "level": 18,
+          "move": "rockthrow"
+        },
+        {
+          "level": 26,
+          "move": "aquaring"
+        },
+        {
+          "level": 32,
+          "move": "pulse"
+        },
+        {
+          "level": 38,
+          "move": "rockguard"
+        },
+        {
+          "level": 44,
+          "move": "rockslide"
+        }
+      ],
+      "catchRateProposal": 180,
+      "baseExperienceProposal": 75
+    },
+    {
+      "number": 94,
+      "key": "borupae",
+      "name": "보루패",
+      "types": [
+        "물",
+        "바위"
+      ],
+      "familyRole": "방파제 조개 동료",
+      "visualMotif": "adult bivalve",
+      "appearance": "두꺼운 사암색 두 장 껍데기와 뭉툭한 버팀 능선 세 개. 민트색 몸이 넓은 발로 바닥을 잡는다.",
+      "lore": "무리의 앞에서 껍데기를 비스듬히 세워 작은 파도를 흘려보낸다. 살아 있는 방파제라고 불리지만 강한 흐름은 스스로 피한다.",
+      "habitat": "해무군도 얕은 암초",
+      "evolution": null,
+      "battleRole": "높은 방어·느린 물 공격과 바위 견제",
+      "baseStatsProposal": {
+        "hp": 80,
+        "atk": 70,
+        "def": 140,
+        "spa": 80,
+        "spd": 80,
+        "spe": 30
+      },
+      "battleMovePool": [
+        "pulse",
+        "rockslide",
+        "rockguard",
+        "aquaring"
+      ],
+      "worldAndQuestRole": "해안 정화소의 취수구를 지키는 생활 동료. 주 퍼즐은 수동 장치로도 해결.",
+      "fieldSkills": [
+        "F07"
+      ],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "bubble"
+        },
+        {
+          "level": 1,
+          "move": "harden"
+        },
+        {
+          "level": 10,
+          "move": "aqua"
+        },
+        {
+          "level": 18,
+          "move": "rockthrow"
+        },
+        {
+          "level": 26,
+          "move": "aquaring"
+        },
+        {
+          "level": 32,
+          "move": "pulse"
+        },
+        {
+          "level": 38,
+          "move": "rockguard"
+        },
+        {
+          "level": 44,
+          "move": "rockslide"
+        }
+      ],
+      "catchRateProposal": 75,
+      "baseExperienceProposal": 175
+    },
+    {
+      "number": 95,
+      "key": "chalkakge",
+      "name": "찰칵게",
+      "types": [
+        "물",
+        "땅"
+      ],
+      "familyRole": "갯벌 토목 동료",
+      "visualMotif": "baby crab",
+      "appearance": "테라코타색 둥근 갑각, 옅은 물빛 마디. 걷는 다리 네 개와 집게 두 개, 한쪽 집게가 조금 큰 삽 모양이다.",
+      "lore": "젖은 모래를 집게로 눌러 작은 둑을 만든다. 완성한 둑을 파도가 넘으면 성을 내는 대신 더 넓게 다시 쌓는다.",
+      "habitat": "R13 해변·R16 제방들길",
+      "evolution": {
+        "to": 96,
+        "method": "level",
+        "level": 32,
+        "playerChoice": true
+      },
+      "battleRole": "물·땅 공격을 번갈아 쓰는 방어형",
+      "baseStatsProposal": {
+        "hp": 50,
+        "atk": 60,
+        "def": 80,
+        "spa": 60,
+        "spd": 45,
+        "spe": 30
+      },
+      "battleMovePool": [
+        "bubble",
+        "mudshot",
+        "pinch",
+        "harden"
+      ],
+      "worldAndQuestRole": "제방 주민의 흙길 손질을 돕는 선택 장면에 등장. 여섯 부속지 실루엣 고정.",
+      "fieldSkills": [
+        "F02",
+        "F06"
+      ],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "bubble"
+        },
+        {
+          "level": 1,
+          "move": "harden"
+        },
+        {
+          "level": 10,
+          "move": "pinch"
+        },
+        {
+          "level": 18,
+          "move": "mudshot"
+        },
+        {
+          "level": 26,
+          "move": "aqua"
+        },
+        {
+          "level": 32,
+          "move": "dig"
+        },
+        {
+          "level": 38,
+          "move": "wave"
+        },
+        {
+          "level": 44,
+          "move": "quake"
+        }
+      ],
+      "catchRateProposal": 180,
+      "baseExperienceProposal": 75
+    },
+    {
+      "number": 96,
+      "key": "jebangjipge",
+      "name": "제방집게",
+      "types": [
+        "물",
+        "땅"
+      ],
+      "familyRole": "갯벌 토목 동료",
+      "visualMotif": "adult crab",
+      "appearance": "넓은 육각 갑각, 낮은 등 능선 세 줄. 네 개의 낮고 튼튼한 보행 다리와 두 집게, 큰 집게는 넓은 둑다짐 삽이다.",
+      "lore": "물이 새는 지점을 먼저 살피고 흙을 눌러 보강한다. 사람들이 세운 둑과 자신이 만든 둑을 같은 길로 여긴다.",
+      "habitat": "제방·운송도시 하천",
+      "evolution": null,
+      "battleRole": "전기 무효·물과 땅의 혼합 견제, 풀에 큰 약점",
+      "baseStatsProposal": {
+        "hp": 85,
+        "atk": 85,
+        "def": 110,
+        "spa": 85,
+        "spd": 70,
+        "spe": 45
+      },
+      "battleMovePool": [
+        "wave",
+        "mudshot",
+        "quake",
+        "rockguard"
+      ],
+      "worldAndQuestRole": "운송도시 관장 팀과 수문 정비 현장에서 등장. 물 기술은 현행 엔진의 특수 판정을 그대로 사용.",
+      "fieldSkills": [
+        "F02",
+        "F06",
+        "F09"
+      ],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "bubble"
+        },
+        {
+          "level": 1,
+          "move": "harden"
+        },
+        {
+          "level": 10,
+          "move": "pinch"
+        },
+        {
+          "level": 18,
+          "move": "mudshot"
+        },
+        {
+          "level": 26,
+          "move": "aqua"
+        },
+        {
+          "level": 32,
+          "move": "dig"
+        },
+        {
+          "level": 38,
+          "move": "wave"
+        },
+        {
+          "level": 40,
+          "move": "rockguard"
+        },
+        {
+          "level": 44,
+          "move": "quake"
+        }
+      ],
+      "catchRateProposal": 75,
+      "baseExperienceProposal": 175
+    },
+    {
+      "number": 97,
+      "key": "silhaema",
+      "name": "실해마",
+      "types": [
+        "물"
+      ],
+      "familyRole": "해초숲 길잡이",
+      "visualMotif": "baby leafy seahorse",
+      "appearance": "밝은 청록색 긴 코와 가는 말린 꼬리, 살구빛의 작은 잎 모양 지느러미. 작은 해초처럼 세로로 떠 있다.",
+      "lore": "해초에 꼬리를 걸고 쉬다가 같은 물살을 따라 무리째 움직인다. 길을 잃으면 작은 방울 소리를 낸다.",
+      "habitat": "R13 바깥여울·R15 굽이강 어귀",
+      "evolution": {
+        "to": 98,
+        "method": "level",
+        "level": 40,
+        "playerChoice": true
+      },
+      "battleRole": "빠른 물 특수 공격, 성장 후 드래곤 견제",
+      "baseStatsProposal": {
+        "hp": 45,
+        "atk": 45,
+        "def": 50,
+        "spa": 75,
+        "spd": 55,
+        "spe": 65
+      },
+      "battleMovePool": [
+        "bubble",
+        "pulse",
+        "twister",
+        "agility"
+      ],
+      "worldAndQuestRole": "해초밭 선택 탐험의 관찰 대상. 포획은 이야기·수상 이동의 조건이 아니다.",
+      "fieldSkills": [
+        "F07",
+        "F08"
+      ],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "bubble"
+        },
+        {
+          "level": 1,
+          "move": "growl"
+        },
+        {
+          "level": 10,
+          "move": "aqua"
+        },
+        {
+          "level": 18,
+          "move": "twister"
+        },
+        {
+          "level": 26,
+          "move": "agility"
+        },
+        {
+          "level": 32,
+          "move": "pulse"
+        },
+        {
+          "level": 40,
+          "move": "dragonbreath"
+        },
+        {
+          "level": 44,
+          "move": "wave"
+        }
+      ],
+      "catchRateProposal": 180,
+      "baseExperienceProposal": 75
+    },
+    {
+      "number": 98,
+      "key": "haeryonggyeol",
+      "name": "해룡결",
+      "types": [
+        "물",
+        "드래곤"
+      ],
+      "familyRole": "해초숲 길잡이",
+      "visualMotif": "adult leafy sea dragon",
+      "appearance": "가늘고 긴 해룡 몸통, 길게 말리는 꼬리와 살구색 잎 지느러미가 등에서 물결처럼 이어진다. 뿔 대신 낮은 잎관이다.",
+      "lore": "먼 바다로 나가는 새끼들이 따라올 수 있도록 같은 자리를 크게 돌아 준다. 해초 숲에서 몸을 흔들면 물결 방향이 드러난다.",
+      "habitat": "해초숲·굽이강 하구",
+      "evolution": null,
+      "battleRole": "빠른 물 특수 공격과 기존 드래곤 보조 공격",
+      "baseStatsProposal": {
+        "hp": 75,
+        "atk": 75,
+        "def": 75,
+        "spa": 105,
+        "spd": 80,
+        "spe": 95
+      },
+      "battleMovePool": [
+        "pulse",
+        "wave",
+        "dragonbreath",
+        "agility"
+      ],
+      "worldAndQuestRole": "느린 고화력 용솟치와 달리 속도·물 특수 공격이 중심. 드래곤 기술은 현행 타입 판정에 따라 물리로 계산.",
+      "fieldSkills": [
+        "F07",
+        "F08"
+      ],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "bubble"
+        },
+        {
+          "level": 1,
+          "move": "growl"
+        },
+        {
+          "level": 10,
+          "move": "aqua"
+        },
+        {
+          "level": 18,
+          "move": "twister"
+        },
+        {
+          "level": 26,
+          "move": "agility"
+        },
+        {
+          "level": 32,
+          "move": "pulse"
+        },
+        {
+          "level": 40,
+          "move": "dragonbreath"
+        },
+        {
+          "level": 44,
+          "move": "wave"
+        }
+      ],
+      "catchRateProposal": 75,
+      "baseExperienceProposal": 175
+    },
+    {
+      "number": 99,
+      "key": "jindeugi",
+      "name": "진득이",
+      "types": [
+        "독"
+      ],
+      "familyRole": "침전물을 먹는 동료",
+      "visualMotif": "baby sediment slug",
+      "appearance": "짙은 점토색 납작한 몸에 옅은 황금 알갱이, 크림색 밑면. 손 대신 넓은 주름발 네 갈래와 낮은 호박색 눈이 있다.",
+      "lore": "물밑에 가라앉은 찌꺼기를 조금씩 모아 먹는다. 먹을 수 있는 양보다 찌꺼기가 많아지면 쉬러 나와 몸을 말린다.",
+      "habitat": "D10 침전수로·R17 돌바퀴 언덕",
+      "evolution": {
+        "to": 100,
+        "method": "level",
+        "level": 38,
+        "playerChoice": true
+      },
+      "battleRole": "공격과 체력 중심 독 동료",
+      "baseStatsProposal": {
+        "hp": 65,
+        "atk": 75,
+        "def": 55,
+        "spa": 45,
+        "spd": 65,
+        "spe": 20
+      },
+      "battleMovePool": [
+        "acid",
+        "sludge",
+        "venomjab",
+        "harden"
+      ],
+      "worldAndQuestRole": "정화시설의 과부하를 알려 주는 생물. 오염 원인으로 몰아 퇴치하는 퀘스트를 만들지 않는다.",
+      "fieldSkills": [],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "acid"
+        },
+        {
+          "level": 1,
+          "move": "harden"
+        },
+        {
+          "level": 10,
+          "move": "growl"
+        },
+        {
+          "level": 18,
+          "move": "sludge"
+        },
+        {
+          "level": 26,
+          "move": "venomjab"
+        },
+        {
+          "level": 32,
+          "move": "bodyslam"
+        },
+        {
+          "level": 38,
+          "move": "rockguard"
+        },
+        {
+          "level": 44,
+          "move": "screech"
+        }
+      ],
+      "catchRateProposal": 180,
+      "baseExperienceProposal": 75
+    },
+    {
+      "number": 100,
+      "key": "hoesureong",
+      "name": "회수렁",
+      "types": [
+        "독"
+      ],
+      "familyRole": "침전물을 먹는 동료",
+      "visualMotif": "adult sediment slug",
+      "appearance": "낮고 넓어진 점토색 몸, 등 가장자리를 따라 층층이 접힌 주름 일곱 줄. 금빛 알갱이는 몸속 침전물의 자연 무늬다.",
+      "lore": "먹은 찌꺼기를 몸속에서 안정시켜 둔다. 한도를 넘기 전에 물 밖으로 나와 쉬기 때문에 작업자는 쉬는 무리를 보고 설비를 점검한다.",
+      "habitat": "정화시설 휴식대·제방 가장자리",
+      "evolution": null,
+      "battleRole": "큰 체력과 독 물리 공격, 특수 물·땅에 견제됨",
+      "baseStatsProposal": {
+        "hp": 100,
+        "atk": 105,
+        "def": 80,
+        "spa": 65,
+        "spd": 95,
+        "spe": 35
+      },
+      "battleMovePool": [
+        "venomjab",
+        "sludge",
+        "bodyslam",
+        "rockguard"
+      ],
+      "worldAndQuestRole": "5관장 팀과 정화소 직원의 생활 동료. 독을 이유로 악당·오염의 근원으로 묘사하지 않는다.",
+      "fieldSkills": [],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "acid"
+        },
+        {
+          "level": 1,
+          "move": "harden"
+        },
+        {
+          "level": 10,
+          "move": "growl"
+        },
+        {
+          "level": 18,
+          "move": "sludge"
+        },
+        {
+          "level": 26,
+          "move": "venomjab"
+        },
+        {
+          "level": 32,
+          "move": "bodyslam"
+        },
+        {
+          "level": 38,
+          "move": "rockguard"
+        },
+        {
+          "level": 44,
+          "move": "screech"
+        }
+      ],
+      "catchRateProposal": 75,
+      "baseExperienceProposal": 175
+    },
+    {
+      "number": 101,
+      "key": "huugi",
+      "name": "후욱이",
+      "types": [
+        "독"
+      ],
+      "familyRole": "환기 흐름 동료",
+      "visualMotif": "baby vent bladder",
+      "appearance": "연한 세이지색 배 모양 공기주머니 몸, 라벤더색 여과 주름 두 개와 짧은 크림색 꼬리지느러미. 작은 통풍 구멍은 원형이고 표정은 호기심 많다.",
+      "lore": "몸에 모은 기체를 아주 조금씩 내보내며 떠오른다. 막힌 바람길 근처에서는 둥실둥실 같은 자리를 돈다.",
+      "habitat": "R14 바닷솔길·D10 정화시설",
+      "evolution": {
+        "to": 102,
+        "method": "level",
+        "level": 35,
+        "playerChoice": true
+      },
+      "battleRole": "방어·독 보조에서 비행 복합으로 성장",
+      "baseStatsProposal": {
+        "hp": 45,
+        "atk": 45,
+        "def": 80,
+        "spa": 60,
+        "spd": 55,
+        "spe": 40
+      },
+      "battleMovePool": [
+        "poisongas",
+        "acid",
+        "gust",
+        "harden"
+      ],
+      "worldAndQuestRole": "환기 점검 의뢰의 관찰 대상. 기체를 들이마시거나 불로 태워 제거하는 행동은 없음.",
+      "fieldSkills": [],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "acid"
+        },
+        {
+          "level": 1,
+          "move": "harden"
+        },
+        {
+          "level": 10,
+          "move": "gust"
+        },
+        {
+          "level": 18,
+          "move": "poisongas"
+        },
+        {
+          "level": 26,
+          "move": "sludge"
+        },
+        {
+          "level": 32,
+          "move": "agility"
+        },
+        {
+          "level": 35,
+          "move": "aircut"
+        },
+        {
+          "level": 42,
+          "move": "chargeguard"
+        }
+      ],
+      "catchRateProposal": 180,
+      "baseExperienceProposal": 75
+    },
+    {
+      "number": 102,
+      "key": "hwangidung",
+      "name": "환기둥",
+      "types": [
+        "독",
+        "비행"
+      ],
+      "familyRole": "환기 흐름 동료",
+      "visualMotif": "adult vent bladder",
+      "appearance": "하나로 이어진 넓은 세이지색 부유 몸체, 옆으로 펼친 라벤더색 막지느러미와 위로 선 부드러운 여과 주름 세 개. 한 얼굴, 해골·기계·복수 머리 없음.",
+      "lore": "연결된 여러 환기구 사이를 돌며 막힌 흐름을 감지한다. 흐름이 풀리면 몸이 가볍게 펴져 작업자들이 멀리서도 알아본다.",
+      "habitat": "푸른숨시 환기탑·정화시설",
+      "evolution": null,
+      "battleRole": "높은 방어·독 특수 공격·비행 견제, 전기·에스퍼·바위 약점",
+      "baseStatsProposal": {
+        "hp": 75,
+        "atk": 65,
+        "def": 115,
+        "spa": 90,
+        "spd": 80,
+        "spe": 65
+      },
+      "battleMovePool": [
+        "sludge",
+        "aircut",
+        "poisongas",
+        "harden"
+      ],
+      "worldAndQuestRole": "5관장 에이스. 땅 무효는 비행 타입에서만 오며 미구현 특성을 새로 붙이지 않는다.",
+      "fieldSkills": [],
+      "status": "design-complete-implementation-pending",
+      "learnsetProposal": [
+        {
+          "level": 1,
+          "move": "acid"
+        },
+        {
+          "level": 1,
+          "move": "harden"
+        },
+        {
+          "level": 10,
+          "move": "gust"
+        },
+        {
+          "level": 18,
+          "move": "poisongas"
+        },
+        {
+          "level": 26,
+          "move": "sludge"
+        },
+        {
+          "level": 32,
+          "move": "agility"
+        },
+        {
+          "level": 35,
+          "move": "aircut"
+        },
+        {
+          "level": 42,
+          "move": "chargeguard"
+        }
+      ],
+      "catchRateProposal": 75,
+      "baseExperienceProposal": 175
+    }
+  ]
+}
