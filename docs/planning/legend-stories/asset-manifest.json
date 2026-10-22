@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "kind": "transparent-character-source-art",
+  "gameReadySprites": false,
+  "background": "transparent-alpha-no-environment",
+  "generationMode": "built-in-imagegen",
+  "assets": [
+    {
+      "id": "geumo-front",
+      "legend": "L01",
+      "name": "금오",
+      "view": "front-three-quarter",
+      "faces": "left",
+      "path": "assets/geumo-front.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 2325192,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "fullyTransparentFraction": 0.452576,
+      "cornerAlpha": [
+        0,
+        0,
+        1,
+        0
+      ],
+      "anatomyTarget": {
+        "heads": 1,
+        "wings": 2,
+        "legs": 3,
+        "mainTailFeathers": 3
+      }
+    },
+    {
+      "id": "geumo-back",
+      "legend": "L01",
+      "name": "금오",
+      "view": "rear-from-above",
+      "faces": "right",
+      "path": "assets/geumo-back.png",
+      "width": 1672,
+      "height": 941,
+      "bytes": 1947682,
+      "alphaRange": [
+        0,
+        255
+      ],
+      "fullyTransparentFraction": 0.516639,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "anatomyTarget": {
+        "heads": 1,
+        "wings": 2,
+        "legs": 3,
+        "mainTailFeathers": 3
+      }
+    },
+    {
+      "id": "wolbaek-front",
+      "legend": "L02",
+      "name": "월백(가칭)",
+      "view": "front-three-quarter",
+      "faces": "left",
+      "path": "assets/wolbaek-front.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2387636,
+      "alphaRange": [
+        0,
+        254
+      ],
+      "fullyTransparentFraction": 0.448514,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "anatomyTarget": {
+        "heads": 1,
+        "legs": 4,
+        "tails": 9
+      }
+    },
+    {
+      "id": "wolbaek-back",
+      "legend": "L02",
+      "name": "월백(가칭)",
+      "view": "rear-from-above",
+      "faces": "right",
+      "path": "assets/wolbaek-back.png",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 2535724,
+      "alphaRange": [
+        0,
+        254
+      ],
+      "fullyTransparentFraction": 0.479191,
+      "cornerAlpha": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "anatomyTarget": {
+        "heads": 1,
+        "legs": 4,
+        "tails": 9
+      }
+    }
+  ],
+  "integration": "Keep alpha; measure body pivot per source; derive battle/minis and verify at game scale; do not crop long wings/tails or bake solar/lunar environments into PNGs.",
+  "alphaVerification": "PNG alpha inspected directly; transparent areas exist in all four files. Very low-alpha edge residues are retained; pixel conversion and game compositing remain to be verified."
+}

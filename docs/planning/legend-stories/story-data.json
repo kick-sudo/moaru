@@ -1,0 +1,446 @@
+{
+  "version": 2,
+  "packetId": "LGS-001",
+  "date": "2026-10-22",
+  "status": "sun-moon-legend-story-and-source-art-design",
+  "baseCommit": "68b967761e6a112ec1af3b18ab297836e803e7f0",
+  "scope": {
+    "current": [
+      "금오·월백의 특징·관계·설정",
+      "1~3장 전설 장면 8개",
+      "6배지 뒤 선택 의뢰 2개·성역 2곳",
+      "정면·뒷면 투명 캐릭터 일러스트 4장"
+    ],
+    "future": [
+      "후속 상회 본부·최종장 세부",
+      "실제 게임용 도트·미니·전투 수치·모바일 검증"
+    ]
+  },
+  "legends": [
+    {
+      "id": "L01",
+      "name": "금오",
+      "nameStatus": "existing",
+      "types": [
+        "불",
+        "비행"
+      ],
+      "runtimeKey": "geumo",
+      "runtimeNumber": 909,
+      "visualStatus": "transparent-character-source-ready",
+      "concept": "남청·먹빛 깃에 금빛 자연 문양과 태양 불꽃이 흐르는 삼족오. 거대한 긴 날개와 눈무늬가 있는 긴 꼬리깃 세 줄, 가늘고 긴 목과 몸을 갖는다.",
+      "theme": "낮의 길·출발·드러나는 지형",
+      "firstHint": "LG_S01",
+      "firstEncounter": "LG_S05",
+      "capture": {
+        "scope": "late-chapter-3-optional",
+        "levelProposal": 48,
+        "requires": [
+          "badge6",
+          "q33",
+          "f_haul",
+          "q13"
+        ],
+        "site": "LGZ01",
+        "repeatOnFailure": true,
+        "uniquePerSave": true
+      },
+      "arc": "햇살들판의 세 갈래 그림자→등대 일지의 따뜻한 바람→바람등성이의 먼 날개→햇귀절벽의 선택 조우.",
+      "legacyPolicy": "geumo·#909·불/비행·세 발이라는 종 정체성 유지. 새 캐릭터 원본으로 외형을 교체하며 기존 능력치·기술·소유·포획 기록은 보존한다.",
+      "visualBrief": "사용자 참고 이미지에 맞춘 화려한 태양의 신조. 길고 가는 몸·목, 독수리처럼 거대한 긴 날개, 금빛 자연 문양이 흐르는 남청·먹빛 깃, 태양 눈무늬가 있는 매우 긴 꼬리깃 세 줄, 흩날리는 장식 머리깃과 태양 불꽃. 정확히 세 다리.",
+      "visualSpec": "character-specs.md",
+      "visualAssets": {
+        "front": "assets/geumo-front.png",
+        "back": "assets/geumo-back.png"
+      },
+      "evolution": null
+    },
+    {
+      "id": "L02",
+      "name": "월백",
+      "nameStatus": "working-name",
+      "types": [
+        "에스퍼",
+        "고스트"
+      ],
+      "runtimeKeyProposal": "wolbaek",
+      "runtimeKey": null,
+      "runtimeNumber": null,
+      "visualStatus": "transparent-character-source-ready",
+      "visualSpec": "character-specs.md",
+      "visualAssets": {
+        "front": "assets/wolbaek-front.png",
+        "back": "assets/wolbaek-back.png"
+      },
+      "concept": "진주빛·은빛 털과 초승달 문양의 날렵한 아홉 꼬리 구미호. 푸른 눈과 긴 몸·꼬리를 지니며 청보랏빛 달불은 조우·기술 때 별도로 표현한다.",
+      "theme": "밤의 귀로·기억·다시 돌아오는 여정",
+      "firstHint": "LG_S02",
+      "firstEncounter": "LG_S06",
+      "capture": {
+        "scope": "late-chapter-3-optional",
+        "levelProposal": 49,
+        "requires": [
+          "badge6",
+          "q33",
+          "f_haul",
+          "q08",
+          "q17"
+        ],
+        "site": "LGZ02",
+        "repeatOnFailure": true,
+        "uniquePerSave": true
+      },
+      "arc": "달숨동굴의 은빛 털→울림당 기록의 아홉 갈래 귀로→옛 부두에 비친 아홉 꼬리→월은못의 선택 조우.",
+      "lore": "살아 있는 여행자가 남긴 발걸음과 울림을 읽어, 돌아갈 길을 빛의 잔향으로 비춘다. 인간의 영혼이나 죽은 사람으로 설명하지 않는다.",
+      "evolution": null
+    }
+  ],
+  "scenes": [
+    {
+      "id": "LG_S01",
+      "title": "세 갈래의 그림자",
+      "legendIds": [
+        "L01"
+      ],
+      "chapter": 1,
+      "map": "route1",
+      "requires": [
+        "q00"
+      ],
+      "trigger": "첫 안전 전망 지점 통과",
+      "kind": "short-cameo",
+      "durationSeconds": [
+        6,
+        8
+      ],
+      "staging": "날개를 펼친 그림자가 길 위를 지나가고 발자국처럼 세 점이 잠깐 비친다. 바람이 따뜻해지고 선두 동료가 하늘을 본다. 이름·타입·도감 그림은 공개하지 않는다.",
+      "record": "새벽에 지나간 새",
+      "fallback": "바람나루 주민이 '커다란 새가 지나갔다'는 목격담을 들려줌.",
+      "optionalForProgress": true,
+      "skipAllowed": true,
+      "skipKeepsRecord": true,
+      "noCombat": true,
+      "setsMainQuest": false,
+      "oneTimePresentation": true
+    },
+    {
+      "id": "LG_S02",
+      "title": "은빛 털이 남은 돌",
+      "legendIds": [
+        "L02"
+      ],
+      "chapter": 1,
+      "map": "moonroom",
+      "requires": [
+        "q08"
+      ],
+      "trigger": "공명석 복구 뒤 안전 발판 조사",
+      "kind": "optional-observation",
+      "durationSeconds": [
+        5,
+        8
+      ],
+      "staging": "달빛방의 물기 어린 돌에 긴 은빛 털 한 가닥과 갈라진 달빛 무늬가 보인다. 정체·타입·전신을 공개하지 않는다.",
+      "record": "달빛방의 은빛 흔적",
+      "fallback": "석호가 보여 주는 탁본과 해솔의 기록으로 보충.",
+      "optionalForProgress": true,
+      "skipAllowed": true,
+      "skipKeepsRecord": true,
+      "noCombat": true,
+      "setsMainQuest": false,
+      "oneTimePresentation": true
+    },
+    {
+      "id": "LG_S03",
+      "title": "일지에 남은 따뜻한 바람",
+      "legendIds": [
+        "L01"
+      ],
+      "chapter": 2,
+      "map": "harbor",
+      "requires": [
+        "q13"
+      ],
+      "trigger": "등대 복구 후 정비사 세나와 선택 대화",
+      "kind": "npc-story",
+      "durationSeconds": [
+        10,
+        15
+      ],
+      "staging": "세나가 등대 정비 일지에 남은 따뜻한 바람과 금빛 새의 목격담을 들려준다. 등대를 고친 것은 주민과 동료이며 금오가 사고를 일으키거나 복구를 대신했다고 바꾸지 않는다.",
+      "record": "금빛 새가 지나간 날의 기상 일지",
+      "fallback": "등대 정비 기록판과 세나의 회상 대화로 보충.",
+      "optionalForProgress": true,
+      "skipAllowed": true,
+      "skipKeepsRecord": true,
+      "noCombat": true,
+      "setsMainQuest": false,
+      "oneTimePresentation": true
+    },
+    {
+      "id": "LG_S04",
+      "title": "해를 향한 길, 달을 향한 길",
+      "legendIds": [
+        "L01",
+        "L02"
+      ],
+      "chapter": 2,
+      "map": "archive",
+      "requires": [
+        "q17"
+      ],
+      "trigger": "옛길 지도 복원 후 기록판을 추가 조사",
+      "kind": "optional-record",
+      "durationSeconds": [
+        15,
+        20
+      ],
+      "staging": "울림당 기록판에 세 발의 날개와 아홉 갈래 꼬리가 같은 옛길의 양쪽 끝에 그려져 있다. 한쪽은 떠나는 발걸음, 한쪽은 돌아오는 발걸음이다. Q17 지도 복원 조건에 이 판을 추가하지 않는다.",
+      "record": "해와 달의 두 길",
+      "fallback": "해솔에게 언제든 기록판 설명을 다시 들을 수 있음.",
+      "optionalForProgress": true,
+      "skipAllowed": true,
+      "skipKeepsRecord": true,
+      "noCombat": true,
+      "setsMainQuest": false,
+      "oneTimePresentation": true
+    },
+    {
+      "id": "LG_S05",
+      "title": "절벽 너머의 날개",
+      "legendIds": [
+        "L01"
+      ],
+      "chapter": 2,
+      "map": "ridge",
+      "requires": [
+        "badge3",
+        "f_smash"
+      ],
+      "trigger": "기존 대피소 옆 전망 돌판 선택 조사",
+      "kind": "distant-sighting",
+      "durationSeconds": [
+        8,
+        12
+      ],
+      "staging": "바람이 한 번 걷히며 먼 절벽의 세 발 달린 금빛 새가 보인다. 가까이 날아오거나 길을 열어 주지 않고 떠난다. 관찰한 뒤 주민이 금오라는 이름을 알려 준다.",
+      "record": "금오 목격",
+      "fallback": "정비사 세나의 일지에 같은 절벽 방향을 남김.",
+      "optionalForProgress": true,
+      "skipAllowed": true,
+      "skipKeepsRecord": true,
+      "noCombat": true,
+      "setsMainQuest": false,
+      "oneTimePresentation": true
+    },
+    {
+      "id": "LG_S06",
+      "title": "물 위를 지나간 아홉 빛",
+      "legendIds": [
+        "L02"
+      ],
+      "chapter": 3,
+      "map": "nw3",
+      "requires": [
+        "q25"
+      ],
+      "trigger": "옛 부두 복구 뒤 첫 안전 하선점에서 짧은 만남",
+      "kind": "short-cameo",
+      "durationSeconds": [
+        12,
+        18
+      ],
+      "staging": "옛 부두 복구 뒤 물 위에 아홉 갈래 은빛이 비친다. 물결인 줄 알았던 빛이 월백의 긴 꼬리로 이어지고, 구미호가 안전한 돌판을 지나 조용히 멀어진다. 낮에도 같은 사건을 볼 수 있으며 달/구름 배경을 강제로 붙이지 않는다.",
+      "record": "월백 첫 조우",
+      "fallback": "가온의 선택 대화와 부두 물빛 흔적에서 장면을 회상. 첫 장면을 놓쳐도 조사·포획 가능.",
+      "optionalForProgress": true,
+      "skipAllowed": true,
+      "skipKeepsRecord": true,
+      "noCombat": true,
+      "setsMainQuest": false,
+      "oneTimePresentation": true
+    },
+    {
+      "id": "LG_S07",
+      "title": "돌아오는 쪽의 발자국",
+      "legendIds": [
+        "L02"
+      ],
+      "chapter": 3,
+      "map": "memory",
+      "requires": [
+        "q17",
+        "q29"
+      ],
+      "trigger": "급류 건너 공개 표지 주변 추가 조사",
+      "kind": "optional-track",
+      "durationSeconds": [
+        8,
+        12
+      ],
+      "staging": "기억나루 강 건너에는 나가는 발자국보다 돌아오는 작은 발자국이 더 선명하다. 얇은 은빛 털과 아홉 갈래 꼬리 자국이 귀로를 가리킨다. SQ3-05 완료와 독립된 추가 관찰.",
+      "record": "다시 돌아온 발걸음",
+      "fallback": "울림당 기록판에서 같은 귀로 탁본을 읽음. SQ3-05가 필수 조건이 아님.",
+      "optionalForProgress": true,
+      "skipAllowed": true,
+      "skipKeepsRecord": true,
+      "noCombat": true,
+      "setsMainQuest": false,
+      "oneTimePresentation": true
+    },
+    {
+      "id": "LG_S08",
+      "title": "두 빛이 만나는 길",
+      "legendIds": [
+        "L01",
+        "L02"
+      ],
+      "chapter": 3,
+      "map": "r18",
+      "requires": [
+        "ch3_end"
+      ],
+      "trigger": "3장 끝 연출 뒤 전망대의 울림돌 선택 조사",
+      "kind": "chapter-end-hook",
+      "durationSeconds": [
+        10,
+        15
+      ],
+      "staging": "전망대 울림돌에서 낮의 표식과 밤의 표식이 같은 골짜기 쪽으로 이어진다. 시온은 장비가 오래된 생물 이동로까지 측정한 별도 기록을 찾겠다고 한다. 금오·월백의 포획을 메인 조건으로 삼지 않는다.",
+      "record": "해와 달이 만나는 옛길",
+      "fallback": "이미 ch3_end인 저장은 울림돌/시온 선택 대화로 확인. 엔딩을 다시 재생하지 않음.",
+      "optionalForProgress": true,
+      "skipAllowed": true,
+      "skipKeepsRecord": true,
+      "noCombat": true,
+      "setsMainQuest": false,
+      "oneTimePresentation": true
+    }
+  ],
+  "sites": [
+    {
+      "id": "LGZ01",
+      "name": "햇귀절벽",
+      "legendId": "L01",
+      "fromMap": "ridge",
+      "proposedMapKey": "lg_suncliff",
+      "mapGroup": "MAP05",
+      "requires": [
+        "q33",
+        "f_haul"
+      ],
+      "reveal": "바람등성이 전망 바위의 고리무늬 운반석을 실제 조사했을 때 입구만 발견 처리",
+      "challenge": "수동 바람막이 두 개의 방향을 바꿔 세 깃 그림자가 하나의 안전 발판에 겹치도록 한다. 불·비행 포획이나 기술은 필요 없다.",
+      "reset": "돌판 되돌리기·전체 초기화·기존 대피소 귀환",
+      "rest": "기존 바람등성이 대피소 무료 회복"
+    },
+    {
+      "id": "LGZ02",
+      "name": "월은못",
+      "legendId": "L02",
+      "fromMap": "moonroom",
+      "proposedMapKey": "lg_moonpool",
+      "mapGroup": "MAP02",
+      "requires": [
+        "q33",
+        "f_haul",
+        "q08"
+      ],
+      "reveal": "달숨동굴 달빛방 옆의 고리무늬 운반석을 직접 조사한 뒤 입구와 안전 발판의 개략만 추가",
+      "challenge": "운반석을 옮겨 입구를 연 뒤 물에 비친 문양과 실제 발판을 구별하며 나갔다 돌아오는 짧은 길을 잇는다. 순서는 관찰·선택형이고 밤 시각·소리·반사 신경·에스퍼 포획을 요구하지 않는다.",
+      "reset": "발판 초기화·입구/야영지 무료 구조·수첩 다시 읽기",
+      "rest": "산등 야영지 무료 회복"
+    }
+  ],
+  "quests": [
+    {
+      "id": "LQ01",
+      "name": "해를 등에 진 새",
+      "legendId": "L01",
+      "startsAt": "harbor",
+      "giver": "정비사 세나",
+      "offerRequires": [
+        "q13",
+        "badge3",
+        "f_smash"
+      ],
+      "stages": [
+        {
+          "id": "listen",
+          "action": "등대 복구 뒤 세나의 오래된 기상 일지를 읽고 금빛 새의 목격담을 듣는다."
+        },
+        {
+          "id": "survey",
+          "action": "바람등성이 전망 돌판에서 먼 날개/남은 흔적을 관찰한다. 새벽 시각을 기다리지 않는다."
+        },
+        {
+          "id": "approach",
+          "action": "Q33 이후 고리무늬 운반석을 옮기고 햇귀절벽의 바람막이를 맞춘다. 앞 단계는 현장 일지로 보충할 수 있다."
+        },
+        {
+          "id": "observe",
+          "action": "금오와 마주 보고 관찰 기록을 남긴다. 여기서 퀘스트 서사가 완료된다."
+        },
+        {
+          "id": "optional_battle",
+          "optional": true,
+          "action": "계속 다가가면 일반 야생전·포획 도전. 물러나도 관찰 완료와 다른 전설 진행은 유지."
+        }
+      ],
+      "storyCompletionRequiresCapture": false,
+      "storyReward": "전설 관찰 기록·조사증표 2개(1회)",
+      "site": "LGZ01"
+    },
+    {
+      "id": "LQ02",
+      "name": "달빛에 남은 귀로",
+      "legendId": "L02",
+      "startsAt": "archive",
+      "giver": "기억나루 관리인 해솔",
+      "offerRequires": [
+        "q17"
+      ],
+      "stages": [
+        {
+          "id": "listen",
+          "action": "달빛방의 은빛 흔적 또는 해솔의 탁본에서 월백의 이야기를 듣는다."
+        },
+        {
+          "id": "compare",
+          "action": "기록판의 나가는 발자국·돌아오는 발자국을 비교한다. 옛 부두/강 건너 목격은 추가 대사이며 모두 수집할 필요 없음."
+        },
+        {
+          "id": "approach",
+          "action": "Q33 후 달빛방 고리무늬 운반석을 옮기고 월은못의 실제 길과 물에 비친 길을 구별한다."
+        },
+        {
+          "id": "observe",
+          "action": "한 바퀴 돌아와 처음 발판을 비워 두면 아홉 꼬리가 차례로 빛나며 월백이 모습을 드러낸다. 여기서 관찰 서사 완료."
+        },
+        {
+          "id": "optional_battle",
+          "optional": true,
+          "action": "원하면 일반 야생전·포획 도전. 관찰만 하고 돌아가도 보상과 메인 진행 유지."
+        }
+      ],
+      "storyCompletionRequiresCapture": false,
+      "storyReward": "전설 관찰 기록·조사증표 2개(1회)",
+      "site": "LGZ02"
+    }
+  ],
+  "policies": {
+    "requiredForMain": [],
+    "mainQuestFlagsWritten": [],
+    "captureMandatory": false,
+    "regionalCaptureOrder": "either",
+    "regionalClueCollection": "optional-recap-at-site",
+    "realtimeGate": false,
+    "ownerAccountGate": false,
+    "uniqueEncounterReset": "KO/flee/defeat does not remove. Leave arena or choose retry after recovery. Successful capture is saved atomically and cannot repeat.",
+    "legacySave": "기존 3장 완료 저장은 과거 장면 재생 없이 두 성역 조사 가능. 소문은 현장 회상으로 보충하며 captured를 거짓으로 채우지 않는다.",
+    "dex": "Observation journal differs from caught status. Keep legacy #909 and hidden nonlegend 901–908. Ordinary players can discover legend entries; developer preview and owner-only master cube are not requirements.",
+    "worldAfterCapture": "Legends read and follow natural flows; they are not the sole engines of the sun, sea or forest. Capture does not break habitats or duplicate overworld bodies.",
+    "mainClimax": "금오·월백의 포획 또는 두 의뢰 완료를 후속 메인 열쇠로 사용하지 않는다.",
+    "background": "Game assets are character-only transparent PNGs. Sun/moon/cloud/mountain environments belong to separate optional encounter effects and are not baked into the character."
+  }
+}
