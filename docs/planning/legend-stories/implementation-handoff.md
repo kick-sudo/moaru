@@ -6,6 +6,12 @@
 
 [특징·미술 기준](character-specs.md), [이야기·조우·선택 의뢰](story-plan.md), [구조 데이터](story-data.json), [원본 목록](asset-manifest.json), [점검 결과](validation.md).
 
+## 최종 디자인 기준
+
+초기 모델·중간 시안·배경 포함 시안은 제작 참고와 선택 목록에서 제외한다. asset-manifest.json의 canonicalAssets 네 장을 유일한 외형 기준으로 사용한다.
+
+현재 게임의 mons.js에 남아 있는 초기 DRAW.geumo는 교체 대상이다. 최종 원본 적용 시 전투·도감·미니·대체 렌더 경로까지 함께 갱신하고, 초기 그림으로 되돌아가는 선택·대체 표시를 남기지 않는다. 이번 정리는 기획 자료에 대한 것으로 실제 게임 렌더 교체는 구현 대기다.
+
 ## 그림 적용
 
 - assets/geumo-front.png: 금오 사선 정면(왼쪽을 봄).

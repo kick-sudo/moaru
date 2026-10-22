@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "kind": "transparent-character-source-art",
   "gameReadySprites": false,
   "background": "transparent-alpha-no-environment",
@@ -117,5 +117,13 @@
     }
   ],
   "integration": "Keep alpha; measure body pivot per source; derive battle/minis and verify at game scale; do not crop long wings/tails or bake solar/lunar environments into PNGs.",
-  "alphaVerification": "PNG alpha inspected directly; transparent areas exist in all four files. Very low-alpha edge residues are retained; pixel conversion and game compositing remain to be verified."
+  "alphaVerification": "PNG alpha inspected directly; transparent areas exist in all four files. Very low-alpha edge residues are retained; pixel conversion and game compositing remain to be verified.",
+  "selectionStatus": "canonical-source-art",
+  "canonicalAssets": [
+    "assets/geumo-front.png",
+    "assets/geumo-back.png",
+    "assets/wolbaek-front.png",
+    "assets/wolbaek-back.png"
+  ],
+  "supersededModelPolicy": "Excluded from production references and selection. Use only these four canonical source images; replace existing in-game Geumo art during integration."
 }
