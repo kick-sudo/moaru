@@ -351,17 +351,96 @@
     P(x, ox + 5, oy + 13, '#5a8a4a'); P(x, ox + 10, oy + 12, '#5a8a4a');
     R(x, ox + 4, oy + 15, 8, 1, 'rgba(30,40,20,0.35)');
   }
-  // the heavy dark boulder that needs far more strength than chapter 1 teaches (고급 괴력)
-  function bigBoulder(x, ox, oy, seed) {
-    grass(x, ox, oy, seed);
+  // the heavy dark haul stone (운반석): far bigger than a round push stone, with a carved ring and rail notch (괴력운반, chapter 3)
+  function bigBoulder(x, ox, oy, seed, base) {
+    if (base) base(); else grass(x, ox, oy, seed);
     for (let y = 0; y < 16; y++) for (let X = 0; X < 16; X++) {
       const dx = (X - 7.5) / 8, dy = (y - 8.5) / 7.8;
       const d = dx * dx + dy * dy;
       if (d > 1) continue;
       P(x, ox + X, oy + y, d > 0.8 ? '#1e2028' : dx + dy > 0.45 ? '#3a3e4c' : dx + dy < -0.6 ? '#7a7e8e' : '#555a6a');
     }
-    [[5, 4], [6, 5], [6, 6], [7, 7], [11, 9], [10, 10], [10, 11]].forEach(([X, Y]) => P(x, ox + X, oy + Y, '#1e2028'));
-    [[3, 11], [4, 12], [12, 4]].forEach(([X, Y]) => P(x, ox + X, oy + Y, '#5a8a4a'));
+    // the carved ring (고리 문양) and the two rail notches at its foot
+    for (let a = 0; a < 20; a++) { const ang = a / 20 * Math.PI * 2; P(x, ox + 8 + Math.round(Math.cos(ang) * 3.4), oy + 8 + Math.round(Math.sin(ang) * 3), a % 4 ? '#a8acba' : '#d0d4e0'); }
+    R(x, ox + 4, oy + 14, 2, 1, '#a8acba'); R(x, ox + 10, oy + 14, 2, 1, '#a8acba');
+    [[3, 11], [12, 4]].forEach(([X, Y]) => P(x, ox + X, oy + Y, '#5a8a4a'));
+  }
+  // ---- 모아루 chapter 3 pieces ----
+  // the ground under a haul stone or its cradle: the floor named by the map's haul entry (default grass)
+  function haulBase(x, m, tx, ty, ox, oy) {
+    const h = (m.def.hauls || []).find(e => (e.x === tx && e.y === ty) || (e.to[0] === tx && e.to[1] === ty));
+    const c = (h && h.floor) || m.def.haulFloor || '.', t = A.OUT[c];
+    if (t && !t.bigrock && !t.haulseat) t.draw(x, m, tx, ty, ox, oy, 0); else grass(x, ox, oy, hash(tx, ty));
+  }
+  // a clam bed on the beach (조개 군락): three striped shells half sunk in wet sand
+  function shellBed(x, tx, ty, ox, oy) {
+    sandTile(x, tx, ty, ox, oy);
+    for (let y = 6; y < 16; y++) for (let X = 0; X < 16; X++) { const dx = (X - 7.5) / 8, dy = (y - 11) / 5; if (dx * dx + dy * dy <= 1) P(x, ox + X, oy + y, (X + y) % 5 ? '#d6c08c' : '#c8b07a'); }
+    [[3, 9, '#e8a878'], [9, 7, '#f0c098'], [8, 12, '#dc9468']].forEach(([X, Y, c]) => {
+      for (let j = 0; j < 4; j++) for (let i = 0; i < 6; i++) { const dx = (i - 2.5) / 3, dy = (j - 3) / 3.4; if (dx * dx + dy * dy > 1) continue; P(x, ox + X + i, oy + Y + j, j % 2 ? '#fbe8d0' : c); }
+      R(x, ox + X, oy + Y + 4, 6, 1, '#8a5a3a'); P(x, ox + X + 2, oy + Y, '#ffffff');
+    });
+  }
+  // a waterfall (폭포): falling white streaks over deep blue, foam where it lands. Never crossable in chapter 3.
+  function waterfall(x, m, tx, ty, ox, oy, f) {
+    R(x, ox, oy, 16, 16, '#3c7cc8');
+    const r = G.srng(hash(tx, ty, 23));
+    for (let i = 0; i < 7; i++) {
+      const X = Math.floor(r() * 15), Y = (Math.floor(r() * 16) + f * 5) & 15, n = 3 + Math.floor(r() * 4);
+      for (let k = 0; k < n; k++) P(x, ox + X, oy + ((Y + k) & 15), k === 0 ? '#ffffff' : '#bfe0fa');
+    }
+    for (let X = 0; X < 16; X += 4) R(x, ox + X + (f & 1), oy, 1, 16, 'rgba(255,255,255,0.18)');
+    if (m.at(tx - 1, ty) !== 'W') { R(x, ox, oy, 2, 16, '#24508e'); P(x, ox + 2, oy + (f * 3 & 15), '#e8f6ff'); }
+    if (m.at(tx + 1, ty) !== 'W') { R(x, ox + 14, oy, 2, 16, '#24508e'); }
+    if (m.at(tx, ty + 1) !== 'W') { R(x, ox, oy + 11, 16, 5, '#e8f6ff'); for (let X = 0; X < 16; X += 3) R(x, ox + X, oy + 10 + ((X + f) & 1), 2, 1, '#ffffff'); R(x, ox, oy + 15, 16, 1, '#a8d4f4'); }
+  }
+  // cart rails on gravel; the longer run through the tile decides the direction
+  function railTile(x, m, tx, ty, ox, oy) {
+    gravel(x, tx, ty, ox, oy);
+    const run = (dx, dy) => { let n = 0; for (let k = 1; k < 4 && m.at(tx + dx * k, ty + dy * k) === 'B'; k++) n++; return n; };
+    const horiz = run(-1, 0) + run(1, 0) > run(0, -1) + run(0, 1);
+    if (horiz) {
+      for (let X = 1; X < 16; X += 4) R(x, ox + X, oy + 3, 2, 10, '#6a4a2a');
+      R(x, ox, oy + 4, 16, 1, '#8a9098'); R(x, ox, oy + 11, 16, 1, '#8a9098'); R(x, ox, oy + 5, 16, 1, '#4a4e56'); R(x, ox, oy + 12, 16, 1, '#4a4e56');
+    } else {
+      for (let Y = 1; Y < 16; Y += 4) R(x, ox + 3, oy + Y, 10, 2, '#6a4a2a');
+      R(x, ox + 4, oy, 1, 16, '#8a9098'); R(x, ox + 11, oy, 1, 16, '#8a9098'); R(x, ox + 5, oy, 1, 16, '#4a4e56'); R(x, ox + 12, oy, 1, 16, '#4a4e56');
+    }
+  }
+  // the stone cradle a haul stone sits in (레일 받침); with the stone on it once carried
+  function railSupport(x, tx, ty, ox, oy, full, base) {
+    if (base) base(); else gravel(x, tx, ty, ox, oy);
+    R(x, ox + 1, oy + 10, 14, 5, '#5a5448'); R(x, ox + 2, oy + 10, 12, 4, '#a89c84'); R(x, ox + 2, oy + 10, 12, 1, '#d0c4aa');
+    R(x, ox + 1, oy + 6, 3, 6, '#5a5448'); R(x, ox + 12, oy + 6, 3, 6, '#5a5448'); R(x, ox + 2, oy + 6, 1, 5, '#c8bca2'); R(x, ox + 13, oy + 6, 1, 5, '#c8bca2');
+    R(x, ox + 4, oy + 13, 2, 1, '#e3b23c'); R(x, ox + 10, oy + 13, 2, 1, '#e3b23c');   // painted rail marks
+    if (!full) { for (let a = 0; a < 16; a++) { const ang = a / 16 * Math.PI * 2; P(x, ox + 8 + Math.round(Math.cos(ang) * 3), oy + 6 + Math.round(Math.sin(ang) * 2), '#e3b23c'); } return; }
+    for (let y = 0; y < 12; y++) for (let X = 2; X < 14; X++) {
+      const dx = (X - 7.5) / 6, dy = (y - 6) / 6, d = dx * dx + dy * dy;
+      if (d > 1) continue;
+      P(x, ox + X, oy + y, d > 0.78 ? '#1e2028' : dx + dy > 0.45 ? '#3a3e4c' : dx + dy < -0.6 ? '#7a7e8e' : '#555a6a');
+    }
+    for (let a = 0; a < 16; a++) { const ang = a / 16 * Math.PI * 2; P(x, ox + 8 + Math.round(Math.cos(ang) * 2.6), oy + 6 + Math.round(Math.sin(ang) * 2.4), '#d0d4e0'); }
+  }
+  // a little pool in the cave floor (물웅덩이): look in and something may be there
+  function cavePool(x, m, tx, ty, ox, oy, f) {
+    caveFloor(x, m, tx, ty, ox, oy, true);
+    for (let y = 3; y < 15; y++) for (let X = 1; X < 15; X++) {
+      const dx = (X - 7.5) / 6.6, dy = (y - 9) / 5.6, d = dx * dx + dy * dy;
+      if (d > 1) continue;
+      P(x, ox + X, oy + y, d > 0.78 ? '#3a3028' : d > 0.55 ? '#2a5a8a' : '#3e7cb8');
+    }
+    R(x, ox + 4 + ((f || 0) & 1), oy + 7, 3, 1, '#8ec8f0'); P(x, ox + 10, oy + 11, '#c8e8ff');
+  }
+  // clear teal water in a tiled facility basin (침전수로): calm, so the water board works here
+  function basinWater(x, m, tx, ty, ox, oy, f) {
+    R(x, ox, oy, 16, 16, '#2e8a96');
+    const r = G.srng(hash(tx, ty, 37));
+    for (let i = 0; i < 3; i++) { const Y = Math.floor(r() * 13) + 1, X = (Math.floor(r() * 12) + (f || 0) * 2) & 15; R(x, ox + Math.min(X, 12), oy + Y, 4, 1, '#7ccad2'); }
+    const edge = (dx, dy) => m.at(tx + dx, ty + dy) !== 'o';
+    if (edge(0, -1)) { R(x, ox, oy, 16, 2, '#e8f0f0'); R(x, ox, oy + 2, 16, 1, '#1e5a64'); }
+    if (edge(-1, 0)) { R(x, ox, oy, 2, 16, '#e8f0f0'); R(x, ox + 2, oy, 1, 16, '#1e5a64'); }
+    if (edge(1, 0)) { R(x, ox + 14, oy, 2, 16, '#c8d4d6'); }
+    if (edge(0, 1)) { R(x, ox, oy + 14, 16, 2, '#c8d4d6'); }
   }
   function dockTile(x, m, tx, ty, ox, oy) {
     R(x, ox, oy, 16, 16, WATER.d);
@@ -503,7 +582,7 @@
     'D': { door: 1, draw: (x, m, tx, ty, ox, oy) => pathTile(x, m, tx, ty, ox, oy) },
     'X': { solid: 1, draw: (x, m, tx, ty, ox, oy) => grass(x, ox, oy, hash(tx, ty)) },
     'V': { solid: 1, vine: 1, draw: (x, m, tx, ty, ox, oy) => thinVine(x, ox, oy, hash(tx, ty, 8)) },
-    'Q': { solid: 1, bigrock: 1, draw: (x, m, tx, ty, ox, oy) => bigBoulder(x, ox, oy, hash(tx, ty)) },
+    'Q': { solid: 1, bigrock: 1, draw: (x, m, tx, ty, ox, oy) => bigBoulder(x, ox, oy, hash(tx, ty), () => haulBase(x, m, tx, ty, ox, oy)) },
     'd': { draw: (x, m, tx, ty, ox, oy) => dockTile(x, m, tx, ty, ox, oy) },
     'n': { draw: (x, m, tx, ty, ox, oy) => stoneBridge(x, m, tx, ty, ox, oy) },
     'R': { solid: 1, rapids: 1, anim: 1, draw: (x, m, tx, ty, ox, oy, f) => rapidsTile(x, m, tx, ty, ox, oy, f || 0) },
@@ -530,6 +609,12 @@
     'N': { solid: 1, oldmark: 1, draw: (x, m, tx, ty, ox, oy) => oldMarker(x, ox, oy, hash(tx, ty)) },
     'v': { solid: 1, valve: 1, draw: (x, m, tx, ty, ox, oy) => { plaza(x, tx, ty, ox, oy); R(x, ox + 7, oy + 6, 2, 10, '#5a6670'); G.disc(x, ox + 8, oy + 6, 5, '#2c7a8a'); G.disc(x, ox + 8, oy + 6, 3, '#5ac0c8'); G.disc(x, ox + 8, oy + 6, 1, '#e8fcff'); } },
     'H': { solid: 1, draw: (x, m, tx, ty, ox, oy) => { R(x, ox, oy, 16, 16, '#6a8a7a'); R(x, ox + 1, oy + 1, 14, 14, '#d8f0ec'); R(x, ox + 1, oy + 1, 14, 14, 'rgba(160,220,210,0.55)'); R(x, ox + 7, oy, 2, 16, '#6a8a7a'); R(x, ox, oy + 7, 16, 2, '#6a8a7a'); P(x, ox + 3, oy + 3, '#ffffff'); P(x, ox + 4, oy + 2, '#ffffff'); P(x, ox + 11, oy + 11, '#ffffff'); } },
+    // ---- chapter 3
+    'e': { solid: 1, shellbed: 1, draw: (x, m, tx, ty, ox, oy) => shellBed(x, tx, ty, ox, oy) },
+    'W': { solid: 1, falls: 1, anim: 1, draw: (x, m, tx, ty, ox, oy, f) => waterfall(x, m, tx, ty, ox, oy, f || 0) },
+    'B': { draw: (x, m, tx, ty, ox, oy) => railTile(x, m, tx, ty, ox, oy) },
+    '^': { solid: 1, haulseat: 1, draw: (x, m, tx, ty, ox, oy) => railSupport(x, tx, ty, ox, oy, false, () => haulBase(x, m, tx, ty, ox, oy)) },
+    '%': { solid: 1, haulseat: 2, draw: (x, m, tx, ty, ox, oy) => railSupport(x, tx, ty, ox, oy, true, () => haulBase(x, m, tx, ty, ox, oy)) },
   };
   A.TALLFRONT = (x, ox, oy, seed, pal) => tallGrass(x, ox, oy, seed, pal || TG, true);
 
@@ -673,6 +758,9 @@
     'q': { solid: 1, draw: (x, m, tx, ty, ox, oy) => { gymFloor(x, tx, ty, ox, oy); R(x, ox, oy + 6, 16, 2, '#3a3e48'); R(x, ox, oy + 6, 16, 1, '#8a90a0'); R(x, ox, oy + 11, 16, 2, '#3a3e48'); for (let X = 1; X < 16; X += 5) R(x, ox + X, oy + 4, 2, 11, '#5a6070'); R(x, ox, oy + 14, 16, 1, 'rgba(0,0,0,0.15)'); } },
     // garden gym hedge planter (잎향 체육관)
     'h': { solid: 1, draw: (x, m, tx, ty, ox, oy) => { gymFloor(x, tx, ty, ox, oy); R(x, ox + 1, oy + 9, 14, 7, '#8a6a4a'); R(x, ox + 1, oy + 9, 14, 1, '#b08a5a'); G.disc(x, ox + 5, oy + 7, 5, '#3f8a4a'); G.disc(x, ox + 11, oy + 7, 5, '#3f8a4a'); G.disc(x, ox + 8, oy + 5, 5, '#5aa864'); P(x, ox + 6, oy + 3, '#8ed096'); P(x, ox + 4, oy + 6, '#f08aa0'); P(x, ox + 11, oy + 4, '#f2d23a'); } },
+    // ---- chapter 3: the scale pans of the 돌바퀴 load gym (a model stone pushed in sinks onto the pan)
+    'u': { solid: 1, slot: 1, draw: (x, m, tx, ty, ox, oy) => { gymFloor(x, tx, ty, ox, oy); G.disc(x, ox + 8, oy + 9, 7, '#3a3e48'); G.disc(x, ox + 8, oy + 9, 6, '#c8ccd6'); G.disc(x, ox + 8, oy + 9, 4, '#9aa0ae'); R(x, ox + 2, oy + 2, 12, 1, '#5a6070'); } },
+    'U': { draw: (x, m, tx, ty, ox, oy) => { gymFloor(x, tx, ty, ox, oy); G.disc(x, ox + 8, oy + 9, 7, '#3a3e48'); G.disc(x, ox + 8, oy + 9, 6, '#c8ccd6'); G.disc(x, ox + 8, oy + 8, 4, '#8a7a66'); G.disc(x, ox + 7, oy + 7, 2, '#c8b8a0'); } },
     'o': { solid: 1, draw: (x, m, tx, ty, ox, oy) => { gymFloor(x, tx, ty, ox, oy); for (let y = 2; y < 15; y++) for (let X = 1; X < 15; X++) { const dx = (X - 7.5) / 6.6, dy = (y - 9) / 6, d = dx * dx + dy * dy; if (d <= 1) P(x, ox + X, oy + y, d > 0.78 ? '#4a3e32' : dx + dy > 0.45 ? '#7a6a58' : dx + dy < -0.55 ? '#d0c0a8' : '#a8987e'); } } },
   };
 
@@ -837,6 +925,9 @@
     'Z': { solid: 1, lever: 1, draw: (x, m, tx, ty, ox, oy) => lever(x, m, tx, ty, ox, oy, true) },
     'A': { solid: 1, magnet: 1, draw: (x, m, tx, ty, ox, oy) => magnetLock(x, ox, oy, () => caveFloor(x, m, tx, ty, ox, oy, true)) },
     'x': { exit: 1, draw: (x, m, tx, ty, ox, oy) => { caveFloor(x, m, tx, ty, ox, oy, true); R(x, ox + 2, oy + 6, 12, 8, 'rgba(255,240,200,0.25)'); } },
+    // ---- chapter 3: tide pools in the sea caves, and the calm teal basins of the purification works (the water board works there)
+    'i': { solid: 1, pool: 1, anim: 1, draw: (x, m, tx, ty, ox, oy, f) => cavePool(x, m, tx, ty, ox, oy, f || 0) },
+    'o': { solid: 1, water: 1, anim: 1, draw: (x, m, tx, ty, ox, oy, f) => basinWater(x, m, tx, ty, ox, oy, f || 0) },
   };
 
   // pushable round stone (바위 밀기) and its small gym model
@@ -849,6 +940,12 @@
     }
     [[5, 5], [6, 4], [4, 6]].forEach(([X, Y]) => P(x, X, Y, '#e8dcc8'));
     [[9, 9], [10, 10], [11, 9]].forEach(([X, Y]) => P(x, X, Y, '#5a4a3a'));
+    return c;
+  })();
+  // the ring-marked haul stone while it is being carried (괴력운반)
+  A.haulStone = (() => {
+    const [c, x] = cv(16, 16);
+    bigBoulder(x, 0, 0, 1, () => {});
     return c;
   })();
   // a flat box of light / dark map icons is drawn by the field module; the props below sit in the ground canvas
@@ -994,6 +1091,12 @@
       } else if (b.emblem === 'leaf') {   // a leaf with its vein
         for (let i = 0; i < 9; i++) { const ww = Math.round(Math.sin(Math.PI * i / 8) * 5); R(x, cx - ww, cy - 4 + i, ww * 2 + 1, 1, i % 2 ? '#bfe8a8' : '#ffffff'); }
         R(x, cx, cy - 4, 1, 10, '#5aa864');
+      } else if (b.emblem === 'filter') {   // a clear drop over a filter mesh (푸른숨 보건 체육관)
+        for (let i = 0; i < 8; i++) { const ww = Math.round(Math.sin(Math.PI * Math.min(1, (i + 1) / 6) / 2) * (i < 5 ? i : 4)); R(x, cx - ww, cy - 5 + i, ww * 2 + 1, 1, i < 2 ? '#ffffff' : '#9ee4ea'); }
+        R(x, cx - 6, cy + 4, 13, 1, '#ffffff'); for (let X = -6; X <= 6; X += 3) R(x, cx + X, cy + 3, 1, 3, '#ffffff');
+      } else if (b.emblem === 'wheel') {   // a stone cart wheel (돌바퀴 하중 체육관)
+        for (let a = 0; a < 24; a++) { const ang = a / 24 * Math.PI * 2; R(x, Math.round(cx + Math.cos(ang) * 5), Math.round(cy + 1 + Math.sin(ang) * 5), 2, 2, '#ffffff'); }
+        R(x, cx - 4, cy + 1, 9, 1, '#d8d0bc'); R(x, cx, cy - 3, 1, 9, '#d8d0bc'); G.disc(x, cx, cy + 1, 2, '#ffffff');
       } else {
         for (let i = 0; i < 7; i++) R(x, cx - 1 + i, cy - 3 + i, 3, 2, '#ffffff');
         R(x, cx + 2, cy - 3, 1, 9, '#e3b23c');

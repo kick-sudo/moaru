@@ -425,6 +425,43 @@
     bamnuri: { no: 90, n: '밤누리', t: ['고스트', '독'], b: [60, 65, 60, 130, 75, 110], cr: 45, xp: 225,
       learn: [[1, 'lick'], [1, 'mistveil'], [1, 'hypnosis'], [1, 'poisongas'], [18, 'nightshade'], [25, 'dreameat'], [31, 'sludge'], [37, 'shadowball'], [45, 'psychic']],
       dex: '사람이 끊긴 길의 흔적을 오래 기억한다. 잊힌 쉼터를 찾는 이가 다가오면 안개를 걷어 옛 표지석을 보여 준다.' },
+    // ---- #091-#102 (chapter 3 design v1: docs/planning/chapter-03/monsters-091-102.json; stats and learnsets are a playtest draft)
+    pomal: { no: 91, n: '포말이', t: ['물'], b: [70, 45, 55, 55, 70, 40], cr: 180, xp: 75, evo: { lv: 34, to: 'haepum' }, hab: '흰부표 해로 바다·해변 (3장)',
+      learn: [[1, 'bubble'], [1, 'growl'], [10, 'aqua'], [16, 'refresh'], [22, 'aquaring'], [28, 'pulse'], [34, 'bodyslam'], [40, 'wave']],
+      dex: '물거품처럼 둥근 아기 물범 몬스터. 파도에 떠밀린 조개를 코로 밀어 마른 곳에 옮겨 주고, 칭찬받으면 두 앞지느러미를 마주 친다.' },
+    haepum: { no: 92, n: '해품범', t: ['물'], b: [105, 70, 85, 80, 105, 60], cr: 75, xp: 175,
+      learn: [[1, 'bubble'], [1, 'growl'], [10, 'aqua'], [16, 'refresh'], [22, 'aquaring'], [28, 'pulse'], [34, 'bodyslam'], [40, 'wave']],
+      dex: '길고 매끈한 몸의 물범 몬스터. 물결이 잠잠한 곳을 먼저 찾아 무리에게 알리고, 지친 동료 곁에서는 물살을 막는 쪽으로 몸을 눕힌다.' },
+    moraekkom: { no: 93, n: '모래꼼', t: ['물', '바위'], b: [45, 45, 100, 55, 55, 20], cr: 180, xp: 75, evo: { item: 'wavestone', to: 'borupae' }, hab: '흰부표 해로 해변·너울잠굴 물웅덩이 (3장)',
+      learn: [[1, 'bubble'], [1, 'harden'], [10, 'aqua'], [18, 'rockthrow'], [26, 'aquaring'], [32, 'pulse'], [38, 'rockguard'], [44, 'rockslide']],
+      dex: '복숭아빛 동심원 껍데기를 가진 아기 조개 몬스터. 모래알을 꼭 맞게 쌓으려 하고, 물이 탁해지면 껍데기를 닫고 맑은 물을 천천히 내보낸다.' },
+    borupae: { no: 94, n: '보루패', t: ['물', '바위'], b: [80, 70, 140, 80, 80, 30], cr: 75, xp: 175,
+      learn: [[1, 'bubble'], [1, 'harden'], [10, 'aqua'], [18, 'rockthrow'], [26, 'aquaring'], [32, 'pulse'], [38, 'rockguard'], [44, 'rockslide']],
+      dex: '두꺼운 사암색 껍데기를 비스듬히 세워 작은 파도를 흘려보낸다. 살아 있는 방파제라 불리지만 강한 흐름은 스스로 피한다.' },
+    chalkakge: { no: 95, n: '찰칵게', t: ['물', '땅'], b: [50, 60, 80, 60, 45, 30], cr: 180, xp: 75, evo: { lv: 32, to: 'jebangjipge' }, hab: '흰부표 해로 해변·제방들길 (3장)',
+      learn: [[1, 'bubble'], [1, 'harden'], [10, 'pinch'], [18, 'mudshot'], [26, 'aqua'], [32, 'dig'], [38, 'wave'], [44, 'quake']],
+      dex: '젖은 모래를 집게로 눌러 작은 둑을 쌓는 아기 게 몬스터. 파도가 둑을 넘어도 성내지 않고 더 넓게 다시 쌓는다.' },
+    jebangjipge: { no: 96, n: '제방집게', t: ['물', '땅'], b: [85, 85, 110, 85, 70, 45], cr: 75, xp: 175,
+      learn: [[1, 'bubble'], [1, 'harden'], [10, 'pinch'], [18, 'mudshot'], [26, 'aqua'], [32, 'dig'], [38, 'wave'], [40, 'rockguard'], [44, 'quake']],
+      dex: '넓은 육각 갑각과 둑다짐 삽 같은 큰 집게를 가졌다. 물이 새는 곳을 먼저 살펴 흙을 눌러 보강하고, 사람이 세운 둑과 자기 둑을 같은 길로 여긴다.' },
+    silhaema: { no: 97, n: '실해마', t: ['물'], b: [45, 45, 50, 75, 55, 65], cr: 180, xp: 75, evo: { lv: 40, to: 'haeryonggyeol' }, hab: '흰부표 해로 바다·굽이강 (3장)',
+      learn: [[1, 'bubble'], [1, 'growl'], [10, 'aqua'], [18, 'twister'], [26, 'agility'], [32, 'pulse'], [40, 'dragonbreath'], [44, 'wave']],
+      dex: '해초에 꼬리를 걸고 쉬는 작은 해마 몬스터. 같은 물살을 따라 무리째 움직이고, 길을 잃으면 작은 방울 소리를 낸다.' },
+    haeryonggyeol: { no: 98, n: '해룡결', t: ['물', '드래곤'], b: [75, 75, 75, 105, 80, 95], cr: 75, xp: 175,
+      learn: [[1, 'bubble'], [1, 'growl'], [10, 'aqua'], [18, 'twister'], [26, 'agility'], [32, 'pulse'], [40, 'dragonbreath'], [44, 'wave']],
+      dex: '살구빛 잎 지느러미가 등에서 물결처럼 이어지는 해룡 몬스터. 먼 바다로 나가는 새끼들이 따라오도록 같은 자리를 크게 돌아 준다.' },
+    jindeugi: { no: 99, n: '진득이', t: ['독'], b: [65, 75, 55, 45, 65, 20], cr: 180, xp: 75, evo: { lv: 38, to: 'hoesureong' }, hab: '침전수로·옛 배차소 (3장)',
+      learn: [[1, 'acid'], [1, 'harden'], [10, 'growl'], [18, 'sludge'], [26, 'venomjab'], [32, 'bodyslam'], [38, 'rockguard'], [44, 'screech']],
+      dex: '물밑에 가라앉은 찌꺼기를 조금씩 모아 먹는 납작한 몬스터. 먹을 수 있는 양보다 찌꺼기가 많아지면 물 밖으로 나와 몸을 말리며 쉰다.' },
+    hoesureong: { no: 100, n: '회수렁', t: ['독'], b: [100, 105, 80, 65, 95, 35], cr: 75, xp: 175,
+      learn: [[1, 'acid'], [1, 'harden'], [10, 'growl'], [18, 'sludge'], [26, 'venomjab'], [32, 'bodyslam'], [38, 'rockguard'], [44, 'screech']],
+      dex: '먹은 찌꺼기를 몸속에서 안정시켜 두는 커다란 몬스터. 한도를 넘기 전에 쉬러 나오기 때문에, 작업자들은 쉬는 무리를 보고 설비를 점검한다.' },
+    huugi: { no: 101, n: '후욱이', t: ['독'], b: [45, 45, 80, 60, 55, 40], cr: 180, xp: 75, evo: { lv: 35, to: 'hwangidung' }, hab: '바닷솔길·침전수로 (3장)',
+      learn: [[1, 'acid'], [1, 'harden'], [10, 'gust'], [18, 'poisongas'], [26, 'sludge'], [32, 'agility'], [35, 'aircut'], [42, 'chargeguard']],
+      dex: '공기주머니 몸에 모은 기체를 아주 조금씩 내보내며 떠오른다. 막힌 바람길 근처에서는 같은 자리를 둥실둥실 맴돈다.' },
+    hwangidung: { no: 102, n: '환기둥', t: ['독', '비행'], b: [75, 65, 115, 90, 80, 65], cr: 75, xp: 175,
+      learn: [[1, 'acid'], [1, 'harden'], [10, 'gust'], [18, 'poisongas'], [26, 'sludge'], [32, 'agility'], [35, 'aircut'], [42, 'chargeguard']],
+      dex: '라벤더색 막지느러미를 펼치고 여러 환기구 사이를 돌며 막힌 흐름을 감지한다. 흐름이 풀리면 몸이 가볍게 펴져 멀리서도 알아볼 수 있다.' },
     // ---- provisional drafts: kept only so older saves still load; not in the dex or the world ----
     banjjak: { no: 901, hidden: true, n: '반짝이', t: ['벌레', '전기'], b: [48, 38, 42, 68, 58, 78], cr: 150, xp: 90, night: true,
       learn: [[1, 'zap'], [1, 'glow'], [8, 'bugbite'], [12, 'stun'], [15, 'bolt'], [19, 'antenna']],
@@ -483,7 +520,7 @@
     chargestone: { n: '충전돌', price: 2000, cat: 'stone', stone: true, icon: 'chargestone', desc: '찌릿한 울림이 맺힌 공명 광물. 전기를 모으는 찌리콩이 이 돌에 반응한다.' },
     leafstone: { n: '잎숨돌', price: 2000, cat: 'stone', stone: true, icon: 'leafstone', desc: '숨 쉬듯 초록빛이 일렁이는 공명 광물. 꾸벅초와 덩굴종의 꽃과 잎을 깨운다.' },
     firestone: { n: '불씨돌', price: 2000, cat: 'stone', stone: true, icon: 'firestone', desc: '속에서 작은 불씨가 꺼지지 않는 공명 광물. 불발이와 여우불이 이 온기에 반응한다.' },
-    wavestone: { n: '물결돌', price: 2000, cat: 'stone', stone: true, icon: 'wavestone', desc: '쥐면 물결이 이는 듯 떨리는 공명 광물. 별방울과 물돌개가 이 흐름에 반응한다.' },
+    wavestone: { n: '물결돌', price: 2000, cat: 'stone', stone: true, icon: 'wavestone', desc: '쥐면 물결이 이는 듯 떨리는 공명 광물. 별방울·물돌개·모래꼼이 이 흐름에 반응한다.' },
     hyperpotion: { n: '특제상처약', price: 1200, cat: 'heal', icon: 'medicine', heal: 120, desc: '몬스터 한 마리의 체력을 120 회복한다. 항구 이후의 상점에서 판다.' },
     berry: { n: '회복열매', price: 0, cat: 'heal', icon: 'berry', heal: 25, desc: '과수원과 길가 나무에서 따는 열매. 몬스터 한 마리의 체력을 25 회복한다.' },
     rope: { n: '탈출줄', price: 550, cat: 'tool', icon: 'rope', rope: true, desc: '동굴 안에서 쓰면 마지막으로 지나온 동굴 입구로 돌아간다. 구조 요청과 같은 일을 한다.' },
@@ -513,6 +550,8 @@
     tm_slide: { n: '교본: 바위떨구기', price: 0, cat: 'tm', icon: 'book', tm: 'rockslide', desc: '옛 갱도에서 찾은 바위 계열 교본. [바위떨구기]를 가르친다.' },
     tm_screen: { n: '교본: 전류막', price: 0, cat: 'tm', icon: 'book', tm: 'chargeguard', desc: '관장 단우의 교본. 몸에 전류막을 둘러 특수방어를 크게 올리는 [전류막]을 가르친다.' },
     tm_refresh: { n: '교본: 맑은숨', price: 0, cat: 'tm', icon: 'book', tm: 'refresh', desc: '기억나루의 수면 해제 보조 교본. 숨을 골라 자기 상태이상과 졸음을 푸는 [맑은숨]을 가르친다.' },
+    tm_sludge: { n: '교본: 독물튀기기', price: 0, cat: 'tm', icon: 'book', tm: 'sludge', desc: '관장 하진의 교본. 독물을 튀겨 독에 걸리게 하기도 하는 [독물튀기기]를 가르친다.' },
+    tm_quake: { n: '교본: 대지흔들기', price: 0, cat: 'tm', icon: 'book', tm: 'quake', desc: '관장 규호의 교본. 땅을 크게 흔드는 [대지흔들기]를 가르친다.' },
     tm_scent: { n: '교본: 향기장막', price: 0, cat: 'tm', icon: 'book', tm: 'scentveil', desc: '관장 윤슬의 교본. 향기로 몸을 감싸 방어와 특수방어를 올리는 [향기장막]을 가르친다.' },
     request: { n: '새 조사 의뢰서', price: 0, cat: 'key', icon: 'letter', desc: '물울림 수문연구소의 조사 의뢰서. 돛바람항 항만소에 전해야 한다.' },
     equipcopy: { n: '장비 표식 사본', price: 0, cat: 'key', icon: 'letter', desc: '동굴과 수문에 쓰인 새길상회 장비의 표식을 베낀 종이.' },
@@ -539,6 +578,21 @@
     map08: { n: '외해 안전 항로도', price: 0, cat: 'key', icon: 'mapItem', map: 'MAP08', desc: '해양학교의 항로도. 안전 항로와 부표, 공공 선착장만 표시되어 있다.' },
     drainpart: { n: '배수 부품', price: 0, cat: 'key', icon: 'part', desc: '상회 작업자가 배수로를 메울 때 빼 둔 부품. 터널 지하의 배수 홈에 다시 끼우면 물이 빠진다.' },
     tidelog: { n: '조수 관측 기록', price: 0, cat: 'key', icon: 'book', desc: '관측 데크 세 곳의 물높이 표식을 옮겨 적은 기록. 조수연구소의 유라에게 전하자.' },
+    // ---- chapter 3 (key items: never sold or thrown away)
+    map09: { n: '해무군도 안내도', price: 0, cat: 'key', icon: 'mapItem', map: 'MAP09', desc: '구조대장 가온의 안내도. 공공 부두와 해무나루, 해안의 큰 윤곽만 그려져 있고 걸은 길이 더해진다.' },
+    map10: { n: '너울잠굴 안전도', price: 0, cat: 'key', icon: 'mapItem', map: 'MAP10', desc: '가온이 동굴에 들어가기 전에 건넨 안전도. 입구와 안전 발판, 대피 지점의 개략만 그려져 있다.' },
+    map11: { n: '푸른숨 정화 안내도', price: 0, cat: 'key', icon: 'mapItem', map: 'MAP11', desc: '정화사 은서의 안내도. 공공 시설과 취수구 구역 이름, 대피소가 표시되어 있다.' },
+    map12: { n: '굽이강 운송도', price: 0, cat: 'key', icon: 'mapItem', map: 'MAP12', desc: '운송원 담소의 운송도. 허용 급류와 공공 하선점, 운송도시의 개략만 그려져 있다.' },
+    protkit: { n: '정화소 보호 장비', price: 0, cat: 'key', icon: 'part', desc: '은서가 빌려준 장갑·덧신·마스크. 가방에 있으면 정화소에서 저절로 쓴다. 독 동료나 해독제가 없어도 괜찮다.' },
+    permit10: { n: '정화소 작업 허가증', price: 0, cat: 'key', icon: 'letter', desc: '푸른숨 정화소 아래 침전수로에 들어갈 수 있는 작업 허가증.' },
+    maint: { n: '누락된 정비표', price: 0, cat: 'key', icon: 'book', desc: '정화소 감독이 빼 두었던 정비표. 증폭 장비의 제조 번호와 줄어든 정비 주기가 적혀 있다.' },
+    bridle: { n: '물판 고정끈', price: 0, cat: 'key', icon: 'boardItem', desc: '급류 강습에서 받은 고정끈. 물판에 걸면 표식이 있는 급류 띠를 건널 수 있다. 폭포는 아직 무리다.' },
+    slip3: { n: '강 운송표', price: 0, cat: 'key', icon: 'letter', desc: '운송원 담소가 맡긴 운송표. 굽이강 위쪽 강굽이 쉼터에 전해 달라고 했다.' },
+    permit11: { n: '배차소 열람 허가증', price: 0, cat: 'key', icon: 'letter', desc: '운송조합이 내준 허가증. 옛 배차소의 안전 통로와 기록을 열람할 수 있다.' },
+    evid3: { n: '장부 대조 사본', price: 0, cat: 'key', icon: 'book', desc: '출하 장부·검사 도장·교체 이력을 대조한 사본. 원본은 조합이 보관하고, 본부 승인 번호가 적혀 있다.' },
+    harness: { n: '적재 하네스', price: 0, cat: 'key', icon: 'part', desc: '괴력운반 수업에서 받은 하네스. 동료가 큰 운반석을 들 때 몸을 다치지 않게 받쳐 준다.' },
+    letter3: { n: '짧은 편지', price: 0, cat: 'key', icon: 'letter', desc: '해무나루 우편 담당 누리가 맡긴 편지. 돌바퀴시 적재장에서 일하는 가족에게 전하자.' },
+    reply3: { n: '답장', price: 0, cat: 'key', icon: 'letter', desc: '돌바퀴시 적재장에서 받은 답장. 해무나루의 누리에게 돌려주자.' },
     candy: { n: '도깨비 사탕', price: 0, cat: 'secret', lvup: true, icon: 'candy', desc: '도깨비가 몰래 숨겨 둔 알사탕. 먹은 몬스터의 레벨이 1 오른다.' }
   };
   D.CANDY_MAX = 99;
@@ -551,7 +605,9 @@
     rockslide: id => { const t = D.MONS[id].t; return t.includes('바위') || t.includes('땅') || t.includes('격투') || ['bulguri', 'hwaguri', 'hwasan'].includes(id); },
     chargeguard: id => { const t = D.MONS[id].t; return t.includes('전기') || t.includes('강철'); },
     refresh: () => true,
-    scentveil: id => D.MONS[id].t.includes('풀')
+    scentveil: id => D.MONS[id].t.includes('풀'),
+    sludge: id => D.MONS[id].t.includes('독'),
+    quake: id => { const t = D.MONS[id].t; return t.includes('땅') || t.includes('바위') || ['bulguri', 'hwaguri', 'hwasan', 'deuldori', 'beotimgom', 'sanbatgom', 'dudeumong'].includes(id); }
   };
   D.canTM = (mon, mv) => !!(D.TM_FOR[mv] && D.TM_FOR[mv](mon.id));
 
@@ -582,6 +638,18 @@
   const E20 = tbl([28, 32], [['yeoubul', 30], ['bulbari', 20], ['ipppuri', 25], ['bangulssak', 25]]);
   const E21 = tbl([29, 33], [['ipppuri', 30], ['bangulssak', 30], ['gyundeung', 25], ['napul', 15]]);
   const E23 = tbl([30, 35], [['deungbulhaepa', 45], ['byeolbangul', 30], ['meongburi', 15], ['muljjori', 10]]);
+  // ---- chapter 3 (world-data C3E01-C3E12)
+  const C301 = tbl([31, 34], [['pomal', 45], ['deungbulhaepa', 25], ['byeolbangul', 20], ['silhaema', 10]]);    // R13 sea
+  const C302 = tbl([31, 34], [['chalkakge', 35], ['moraekkom', 35], ['pomal', 20], ['meongburi', 10]]);       // R13 shore
+  const C303 = tbl([32, 35], [['moraekkom', 45], ['chalkakge', 25], ['byeolbangul', 20], ['pomal', 10]]);     // D09 pool
+  const C304 = tbl([32, 35], [['gwibami', 35], ['jagalkong', 30], ['heukkori', 20], ['moraekkom', 15]]);      // D09 raised path
+  const C305 = tbl([33, 36], [['moraekong', 30], ['yeoubul', 25], ['ipppuri', 25], ['huugi', 20]]);           // R14 grass
+  const C306 = tbl([35, 38], [['jindeugi', 45], ['huugi', 30], ['heukkori', 15], ['nachimdol', 10]]);         // D10 inspection basin
+  const C307 = tbl([33, 36], [['pomal', 30], ['silhaema', 25], ['deungbulhaepa', 25], ['chalkakge', 20]]);    // M08 quayside (look into the pool)
+  const C308 = tbl([37, 40], [['silhaema', 40], ['pomal', 25], ['meongburi', 20], ['deungbulhaepa', 15]]);   // R15 current
+  const C309 = tbl([37, 40], [['chalkakge', 40], ['heukkori', 25], ['deuldori', 20], ['huugi', 15]]);        // R16 grass
+  const C310 = tbl([39, 42], [['nachimdol', 35], ['tokguri', 25], ['jagalkong', 25], ['jindeugi', 15]]);     // D11 yard
+  const C311 = tbl([40, 43], [['moraekong', 30], ['deuldori', 25], ['bulbari', 25], ['jindeugi', 20]]);      // R17 grass
   D.ENC = {
     route1: both(E01),      // R01 햇살들판
     westpath: both(E02),    // R02 서쪽 돌담길
@@ -607,14 +675,27 @@
     echohall: both(E19),    // D08 울림당 회랑
     gardenroad: both(E20),  // R11 햇꽃정원길
     greenhouse: both(E21),  // D07 유리온실
-    searoute: { sea: E23 }  // R12 다음 해안 항로
+    searoute: { sea: E23 },  // R12 다음 해안 항로
+    // ---- chapter 3
+    r13: { sea: C301, 2: C302 },          // R13 흰부표 해로: bay sea / beach grass
+    nw1: { 1: C304, pool: C303 }, nw2: { 1: C304, pool: C303 },   // D09 너울잠굴: raised floor / look into a pool
+    r14: { 1: C305 },                     // R14 바닷솔길
+    d10a: { 1: C306, pool: C306 }, d10b: { 1: C306, pool: C306 },  // D10 침전수로
+    m08: { pool: C307 },                  // M08 푸른숨시: only at the quayside observation pool, by choice
+    r15: { current: C308 },               // R15 굽이강: while riding the river
+    r16: { 1: C309 },                     // R16 제방들길
+    d11b: { 1: C310 },                    // D11 옛 배차소 마당
+    r17: { 1: C311 }                      // R17 돌바퀴 언덕
   };
   // fishing from the marked mounds: E11 with the first rod (물쫄이 only), E22 with the waterside rod (물가낚싯대)
   D.FISH = { camp: [['muljjori', 5, 10, 100]],
     reedford: [['muljjori', 14, 18, 60], ['mulkkori', 15, 18, 40]], harbor: [['muljjori', 15, 19, 55], ['meongburi', 16, 19, 45]],
     rod2: [['byeolbangul', 18, 24, 20], ['mulkkori', 18, 24, 25], ['meongburi', 18, 24, 25], ['dungjami', 18, 24, 20], ['muljjori', 18, 24, 10]] };
+  // chapter 3 shores fish from their own lists with either rod (C3E12 for the bay)
+  const C312 = [['moraekkom', 32, 36, 25], ['chalkakge', 32, 36, 25], ['silhaema', 32, 36, 30], ['pomal', 32, 36, 20]];
+  D.FISH3 = { r13: C312, m07: C312, m08: C312, r16: [['silhaema', 37, 40, 40], ['meongburi', 37, 40, 30], ['chalkakge', 37, 40, 30]] };
   D.rollFishing = mapId => {
-    const list = (G.S.bag.rod2 && mapId !== 'camp') ? D.FISH.rod2 : (D.FISH[mapId] || D.FISH.camp);
+    const list = D.FISH3[mapId] || ((G.S.bag.rod2 && mapId !== 'camp') ? D.FISH.rod2 : (D.FISH[mapId] || D.FISH.camp));
     let r = G.rand() * list.reduce((t, e) => t + e[3], 0);
     for (const e of list) { r -= e[3]; if (r <= 0) return { id: e[0], lv: G.ri(e[1], e[2]) }; }
     return { id: list[0][0], lv: list[0][1] };

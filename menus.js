@@ -388,7 +388,7 @@
       }
       if (it.cat === 'tool') {
         if (it.rope) {
-          if (!G.field.inCave()) { await G.say('동굴 안에서만 쓸 수 있다.'); continue; }
+          if (!G.field.ropeOK()) { await G.say('동굴 안에서만 쓸 수 있다.'); continue; }
           return { field: () => G.field.rescue(true) };
         }
         continue;
@@ -747,18 +747,21 @@
   // ------------------------------------------------------------ start menu
   function fmtTime(sec) { const h = Math.floor(sec / 3600), m = Math.floor(sec / 60) % 60; return `${h}:${String(m).padStart(2, '0')}`; }
   Mn.fmtTime = fmtTime;
+  Mn.BADGES = [['badge1', '산등', '#b8834e', '#f0d0a0'], ['badge2', '물울림', '#2a7890', '#86d4dc'], ['badge3', '등대', '#c49a2a', '#f6e27a'], ['badge4', '잎향', '#3f8a4a', '#a8e090'],
+    ['badge5', '푸른숨', '#2a8a96', '#9ee4ea'], ['badge6', '돌바퀴', '#6a6458', '#d0c8b4']];
   function trainerCard(T) {
     topCard(T, '트레이너 카드');
     const S = G.S;
     G.box(T, 6, 24, 244, 160, G.STYLE.white, 6);
     const ch = A.charStand(S.char);
     T.drawImage(ch, 0, 0, 16, ch.height, 186, 38, 48, ch.height * 3);
-    const BADGES = [['badge1', '산등', '#b8834e', '#f0d0a0'], ['badge2', '물울림', '#2a7890', '#86d4dc'], ['badge3', '등대', '#c49a2a', '#f6e27a'], ['badge4', '잎향', '#3f8a4a', '#a8e090']];
+    const BADGES = Mn.BADGES;
     const got = BADGES.filter(b => S.flags[b[0]]);
-    const rows = [['이름', S.name], ['돈', S.money.toLocaleString() + '원'], ['도감', `${D.dexCount()}마리 포획`], ['플레이 시간', fmtTime(S.time || 0)], ['배지', got.length ? got.map(b => b[1]).join('·') : '없음']];
+    const rows = [['이름', S.name], ['돈', S.money.toLocaleString() + '원'], ['도감', `${D.dexCount()}마리 포획`], ['플레이 시간', fmtTime(S.time || 0)],
+      ['배지', !got.length ? '없음' : got.length <= 4 ? got.map(b => b[1]).join('·') : `${got.length}개 · ${got[got.length - 1][1]}까지`]];
     rows.forEach(([k, v], i) => { G.text(T, k, 18, 36 + i * 24, '#5a5648', null); G.text(T, v, 94, 36 + i * 24, '#2c2f45', null); });
     BADGES.forEach((b, i) => {
-      const x = 150 + i * 24, y = 162;
+      const x = 112 + i * 23, y = 162;
       if (S.flags[b[0]]) { G.disc(T, x, y, 10, b[2]); G.disc(T, x, y, 8, b[3]); T.fillStyle = '#ffffff'; T.fillRect(x - 4, y - 5, 3, 2); }
       else { G.disc(T, x, y, 10, '#d8d0bc'); G.disc(T, x, y, 8, '#efe8d6'); }
     });

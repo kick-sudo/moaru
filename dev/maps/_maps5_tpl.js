@@ -619,18 +619,22 @@
   // ------------------------------------------------------------ R12 다음 해안 항로 (after Q20)
   M.searoute = {
     name: '다음 해안 항로', kind: 'out', bgm: 'water', rows: ROWS.searoute,
-    links: { n: { to: 'harbor', dx: 10, gated: 1 } },
+    links: { n: { to: 'harbor', dx: 10, gated: 1 }, s: { to: 'r13', dx: 0, from: 10, until: 13, gated: 1, cond: () => flag('q24_start') } },
     seaLine: '파도가 높은 바다다. 하얀 줄 부표 너머는 물살이 거센 경계다.',
     signs: { '27,6': '다음 해안 선착장\n"이 너머 해안길은 공사 중 — 새길상회 해안 공사 구간"' },
     items: [{ id: 'revive', x: 9, y: 8, flag: 'sr_isle' }, { id: 'goldcube', n: 3, x: 8, y: 7, flag: 'sr_cube' }],
-    triggers: [{ x: 25, y: 9, w: 1, h: 2, cond: () => flag('q20') && !flag('ch2_end'), run: async () => { set('ch2_end'); await G.chapterEnd(2); } }],
+    triggers: [{ x: 25, y: 9, w: 1, h: 2, cond: () => flag('q20') && !flag('ch2_end'), run: async () => { set('ch2_end'); await G.chapterEnd(2); if (H.kickoff3) await H.kickoff3(); } }],
     npcs: [{ id: 'sr_worker', char: 'worker', x: 27, y: 12, dir: 'left', name: '해안 공사 인부',
-      text: '여기서부터는 새길상회 해안 공사 구간이야. 길이 아직 다 이어지지 않았어.\n...본사 사람들이 바다 건너 섬에서 뭔가 큰 걸 찾는다나 봐.' }],
+      text: '여기서부터는 새길상회 해안 공사 구간이야. 길이 아직 다 이어지지 않았어.\n...본사 사람들이 바다 건너 섬에서 뭔가 큰 걸 찾는다나 봐.' },
+      { id: 'sr_rescue', char: 'sailor', x: 26, y: 8, dir: 'down', name: '구조대원 파랑', cond: () => flag('ch2_end'),
+        text: '흰 부표 사이를 따라 남쪽으로 내려가면 해무 섬이에요. 섬 서쪽 해변 선착장에서 내려요!\n구조대장 가온 님이 해무나루 구조대 앞에서 기다려요.' }],
     drawExtra: (T, cx, cy) => {
-      for (let X = 0; X < 25; X += 2) { const x = X * 16 + 8 - cx, y = 17 * 16 + 4 - cy + (Math.floor(G.frame / 24 + X) % 2); G.disc(T, x, y, 3, '#ffffff'); G.disc(T, x, y, 2, '#f2a020'); }
+      const lane = flag('q24_start');   // chapter 3: a gap in the boundary line, marked by white buoys down to 흰부표 해로
+      for (let X = 0; X < 25; X += 2) { if (lane && X >= 9 && X <= 14) continue; const x = X * 16 + 8 - cx, y = 17 * 16 + 4 - cy + (Math.floor(G.frame / 24 + X) % 2); G.disc(T, x, y, 3, '#ffffff'); G.disc(T, x, y, 2, '#f2a020'); }
+      if (lane) for (let y = 12; y <= 17; y += 2) [9, 14].forEach(X => { const x = X * 16 + 8 - cx, yy = y * 16 + 9 - cy + ((X + y + Math.floor(G.frame / 24)) % 2); G.disc(T, x, yy, 3, '#2c5ea8'); G.disc(T, x, yy, 2, '#ffffff'); });
       [[5, 3], [15, 5], [20, 12], [12, 14]].forEach(([bx, by]) => { const x = bx * 16 + 8 - cx, y = by * 16 + 9 - cy + (Math.floor(G.frame / 20) % 2); G.disc(T, x, y, 4, '#ffffff'); G.disc(T, x, y, 3, '#2c7ac8'); T.fillStyle = '#ffffff'; T.fillRect(x - 1, y - 7, 2, 4); });
     },
-    onEnter: async () => { visit('searoute'); }
+    onEnter: async () => { visit('searoute'); if (flag('ch2_end') && !flag('q24_start') && H.kickoff3) await H.kickoff3(); }
   };
 
   // ------------------------------------------------------------ chapter 2 data for the notebook and the map
@@ -709,7 +713,7 @@
       r(S('lh3', 'magnet'), '등대 관측 난간 상자', '자력 맞춤', fm, flag('lh_box'), '관측 난간 끝, 자성 자물쇠로 잠긴 작은 상자. 나침돌 계열의 자력 맞춤이 필요하다.');
       r(S('tidedeck', 'sea') || S('tidedeck', 'water'), '조수만 바위섬', '파도타기', fs, flag('td_shelf'), '데크 동쪽 바다 위 바위섬. 모래톱에 무언가 반짝인다.');
       r(flag('q20'), '항로 위 작은 섬', '파도타기', fs, flag('sr_isle'), '다음 해안 항로 한가운데 작은 모래섬.');
-      r(S('memory', 'rapids'), '기억나루 불어난 강', '상급 수상 강습 (다음 장)', false, false, '물살이 거세게 흐르는 강. 파도타기로도 아직 무리다.', 1);
+      r(S('memory', 'rapids'), '기억나루 불어난 강', '급류타기 (3장)', F().unlocked('current') && !!G.S.bag.bridle, H.num && H.num('sq305') >= 2, '물살이 거세게 흐르는 강. 강 한가운데 모래톱에 옛 표지가 보인다. 급류타기를 익히면 건널 수 있다.', !F().unlocked('current'));
       return out;
     }
   };

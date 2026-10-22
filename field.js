@@ -18,9 +18,11 @@
     ripple: { n: '잔물타기', short: '물길', desc: '물판을 펼쳐 잔잔한 강과 연못을 건넌다.', where: '물울림 체육관 · 리안의 강습' },
     magnet: { n: '자력 맞춤', short: '자력', desc: '자성 자물쇠의 방향을 맞춰 연다. 선택 상자와 난간에만 쓴다.', where: '돛바람항 등대 복구 뒤 · 세나' },
     smash: { n: '바위깨기', short: '깨기', desc: '금이 간 작은 바위를 조심스럽게 깨서 길을 연다.', where: '돛바람항 공방 · 세 번째 배지 뒤 강습' },
-    surf: { n: '파도타기', short: '파도', desc: '해상 안정판을 펼쳐 허용된 바다 항로를 건넌다. 급류와 폭포는 아직 무리다.', where: '돛바람항 해양학교 · 네 번째 배지 뒤 강습' }
+    surf: { n: '파도타기', short: '파도', desc: '해상 안정판을 펼쳐 허용된 바다 항로를 건넌다. 급류와 폭포는 아직 무리다.', where: '돛바람항 해양학교 · 네 번째 배지 뒤 강습' },
+    current: { n: '급류타기', short: '급류', desc: '물판에 고정끈을 걸고, 표식이 있는 굵은 물결 띠(급류)를 가로질러 건넌다. 폭포와 바다 자동 통과는 안 된다.', where: '해무나루 급류 강습장 · 다섯 번째 배지 뒤 여민의 강습' },
+    haul: { n: '괴력운반', short: '운반', desc: '고리와 레일 문양이 있는 큰 운반석을 동료와 함께 들어 정해진 레일 받침에 옮긴다. 받침 앞에서 되돌릴 수도 있다.', where: '돌바퀴시 적재장 · 여섯 번째 배지 뒤 도담의 수업' }
   };
-  Fd.ORDER = ['vine', 'push', 'echo', 'ripple', 'magnet', 'smash', 'surf'];
+  Fd.ORDER = ['vine', 'push', 'echo', 'ripple', 'magnet', 'smash', 'surf', 'current', 'haul'];
   const lines = (...ids) => ids;
   // who can learn what (whole evolution lines)
   Fd.APT = {
@@ -32,8 +34,17 @@
     magnet: lines('nachimdol', 'jabukhwan'),
     smash: lines('daram', 'daramsup', 'sumaek', 'bulguri', 'hwaguri', 'hwasan', 'muldal', 'padodal', 'neoul', 'kongju', 'dudeumong', 'deuldori', 'beotimgom', 'sanbatgom',
       'jagalkong', 'doldureum', 'sandeung', 'moraekong', 'sagureu', 'ppultori', 'ppuldajim', 'sanppul', 'gasito', 'deombulto', 'gasiboru', 'heukkori', 'teoneolgup', 'yeoulgwon', 'dolgubi'),
-    surf: lines('muldal', 'padodal', 'neoul', 'muljjori', 'yongsot', 'muldolgae', 'yeoulgwon', 'joryubyeol', 'haeryudeung', 'neugeutduk', 'mulgyeolburi')
+    surf: lines('muldal', 'padodal', 'neoul', 'muljjori', 'yongsot', 'muldolgae', 'yeoulgwon', 'joryubyeol', 'haeryudeung', 'neugeutduk', 'mulgyeolburi',
+      'pomal', 'haepum', 'moraekkom', 'borupae', 'silhaema', 'haeryonggyeol'),
+    // chapter 3 (world-data eligibleSpecies: #7-9, 58, 61, 81, 83, 85, 87, 91, 92, 97, 98)
+    current: lines('muldal', 'padodal', 'neoul', 'yongsot', 'joryubyeol', 'yeoulgwon', 'haeryudeung', 'neugeutduk', 'mulgyeolburi', 'pomal', 'haepum', 'silhaema', 'haeryonggyeol'),
+    // (#1-9, 16, 29, 32, 36, 40, 41, 59, 68, 69, 70, 96)
+    haul: lines('daram', 'daramsup', 'sumaek', 'bulguri', 'hwaguri', 'hwasan', 'muldal', 'padodal', 'neoul', 'dudeumong', 'gasiboru', 'sanppul', 'sagureu', 'doldureum', 'sandeung', 'dolgubi',
+      'deuldori', 'beotimgom', 'sanbatgom', 'jebangjipge')
   };
+  // a few chapter 3 companions also take the older skills (by their design sheets)
+  Fd.APT.push = Fd.APT.push.concat(['chalkakge', 'jebangjipge']);
+  Fd.APT.smash = Fd.APT.smash.concat(['chalkakge', 'jebangjipge']);
   Fd.canLearn = (mon, sk) => Fd.APT[sk].includes(mon.id);
   Fd.knows = (mon, sk) => !!(mon && mon.field && mon.field.includes(sk));
   Fd.teach = (mon, sk) => { mon.field = mon.field || []; if (!mon.field.includes(sk)) mon.field.push(sk); };
@@ -196,7 +207,7 @@
     const m = W().map;
     if (!m || !m.def.boulders) return [];
     const st = stoneState(m.id);
-    return m.def.boulders.map(b => { const s = st[b.id]; return s === 'sunk' ? null : { id: b.id, x: s ? s[0] : b.x, y: s ? s[1] : b.y, model: b.model }; }).filter(Boolean);
+    return m.def.boulders.map(b => { const s = st[b.id]; return s === 'sunk' ? null : { id: b.id, x: s ? s[0] : b.x, y: s ? s[1] : b.y, model: b.model, w: b.w, look: b.look }; }).filter(Boolean);
   };
   Fd.boulderAt = (x, y) => Fd.boulders().find(b => b.x === x && b.y === y) || null;
   let undo = [], slide = null, hinted = {};
@@ -254,12 +265,12 @@
       while (slide && slide.t < slide.n) await G.wait(1);
       slide = null;
       if (tg.slot) {
-        st[b.id] = 'sunk';
+        st[b.id] = 'sunk'; st['@' + b.id] = [tg.nx, tg.ny];
         Fd.setTile(m.id, tg.nx, tg.ny, 'U');
         sfx('knock2');
         W().shake = 8;
-        await G.say('돌이 홈에 쿵 하고 맞물렸다! 통로가 이어졌다.');
-        if (m.def.onSlot) await m.def.onSlot(tg.nx, tg.ny);
+        if (!m.def.quietSlots) await G.say('돌이 홈에 쿵 하고 맞물렸다! 통로가 이어졌다.');
+        if (m.def.onSlot) await m.def.onSlot(tg.nx, tg.ny, b);
       }
     });
     W().tryMove(p, dir);   // the stone moved out of the way: step after it
@@ -268,8 +279,9 @@
     const u = undo.pop();
     if (!u || u.map !== W().map.id || slide) return false;
     const st = stoneState(u.map), p = W().player;
-    if (u.slot) { const tiles = G.S.tiles[u.map]; if (tiles) delete tiles[u.to[0] + ',' + u.to[1]]; W().rebuild(u.map); }
+    if (u.slot) { const tiles = G.S.tiles[u.map]; if (tiles) delete tiles[u.to[0] + ',' + u.to[1]]; delete st['@' + u.id]; W().rebuild(u.map); }
     st[u.id] = u.from.slice();
+    if (u.slot && W().map.def.onUnslot) G.run(() => W().map.def.onUnslot(u));
     p.x = u.player[0]; p.y = u.player[1]; p.dir = u.player[2]; p.mv = null;
     W().placeFollower();
     sfx('recall');
@@ -277,15 +289,31 @@
   };
   Fd.resetPuzzle = async () => {
     const m = W().map, st = stoneState(m.id);
-    for (const b of m.def.boulders || []) if (st[b.id] !== 'sunk') delete st[b.id];
+    for (const b of m.def.boulders || []) {
+      if (st[b.id] !== 'sunk') { delete st[b.id]; continue; }
+      if (!m.def.resetAll) continue;   // seated stones normally stay; a scale (resetAll) gives them back too
+      const at = st['@' + b.id];
+      if (at && G.S.tiles && G.S.tiles[m.id]) delete G.S.tiles[m.id][at[0] + ',' + at[1]];
+      delete st[b.id]; delete st['@' + b.id];
+    }
+    if (m.def.resetAll) W().rebuild(m.id);
     undo = [];
     sfx('rock');
+    if (m.def.onReset) await m.def.onReset();
     await G.say('돌들이 처음 자리로 돌아왔다.');
   };
+  Fd.sunkAt = (mapId, id) => { const st = stoneState(mapId); return st[id] === 'sunk' ? st['@' + id] || null : null; };
 
   // ------------------------------------------------------------ 파도타기 (sea, chapter 2)
+  const refuseBoard = async (x, y) => {
+    const m = W().map, nb = m.def.noBoard;
+    const msg = typeof nb === 'function' ? nb(x, y) : nb;
+    if (!msg) return false;
+    await G.say(msg); return true;
+  };
   async function seaAt(x, y, t) {
     const m = W().map;
+    if (await refuseBoard(x, y)) return;
     seeB(x, y, 'sea');
     if (!Fd.unlocked('surf') || !G.S.bag.seaboard) {
       await G.say(m.def.seaLine || '파도가 높은 바다다. 경고 부표가 떠 있다.\n바다 항로는 해양학교의 파도타기 강습과 외해 항로도가 있어야 나갈 수 있다.');
@@ -309,19 +337,22 @@
   async function boardAt(x, y, t) {
     const m = W().map;
     if (t.sea) { await seaAt(x, y, t); return; }
+    if (await refuseBoard(x, y)) return;
     if (!t.cavewater) seeB(x, y, 'water');
     if (t.cavewater) { await G.say('검고 차가운 지하수가 고여 있다.\n잔물타기로 건너기엔 위험해 보인다.'); return; }
     if (!Fd.unlocked('ripple') || !G.S.bag.board) {
       await G.say(m.def.waterLine || '잔잔한 물이다. 물길을 건너는 법을 배우면 저편에 갈 수 있을 것 같다.\n(배우는 곳: 물울림 체육관 · 리안의 강습)');
       return;
     }
-    const act = Fd.actor('ripple');
+    // on a river with marked currents, a 급류타기 companion takes the board once the skill is learned
+    const cur = m.def.currents && Fd.canRideCurrent(m) ? Fd.actor('current') : null;
+    const act = cur || Fd.actor('ripple');
     if (!act) { await G.say('잔잔한 물이다.\n' + noActorLine('ripple')); return; }
-    const ok = await G.ask(`잔잔한 물이다. 물판을 펼치고\n${G.wa(act.name)} 물길을 건널까?`);
+    const ok = await G.ask(cur ? `고정끈을 건 물판으로 ${G.wa(act.name)}\n물길을 건널까? (급류 띠도 건넌다)` : `잔잔한 물이다. 물판을 펼치고\n${G.wa(act.name)} 물길을 건널까?`);
     if (!ok) return;
     const first = !flag('fx_ripple');
     await showActor(act, x, y, first);
-    W().surfing = { id: act.id, name: act.name };
+    W().surfing = { id: act.id, name: act.name, current: !!cur };
     W().follower.hidden = true;
     sfx('water');
     const p = W().player, [dx, dy] = W().DIRS[p.dir];
@@ -329,6 +360,40 @@
     set('fx_ripple');
     if (first) { while (p.mv) await G.wait(1); await G.say(`${G.iga(act.name)} 앞에서 물판을 이끈다.\n뭍에 닿으면 저절로 내린다.`); }
   }
+  // ------------------------------------------------------------ 급류타기 (chapter 3): marked current bands on a few rivers
+  Fd.canRideCurrent = m => !!(m && m.def.currents && Fd.unlocked('current') && G.S.bag.bridle && Fd.actor('current'));
+  Fd.currentLine = m => {
+    if (!m.def.currents) return '물살이 하얗게 부서지는 급류다.\n표식이 없는 급류라 급류타기로도 건너지 않는 게 좋겠다.';
+    if (!Fd.unlocked('current') || !G.S.bag.bridle) return `굵은 물결 띠가 하얗게 부서지는 급류다.\n잔물타기로는 건널 수 없다. (배우는 곳: ${Fd.SKILLS.current.where})`;
+    return '굵은 물결 띠의 급류다.\n' + noActorLine('current');
+  };
+  Fd.rodeCurrent = (m, x, y) => { if (m.def.onCurrent) G.run(() => m.def.onCurrent(x, y)); };
+  async function currentAt(x, y) {
+    const m = W().map;
+    seeB(x, y, 'rapids');
+    if (!Fd.canRideCurrent(m)) { await G.say(Fd.currentLine(m)); return; }
+    if (await refuseBoard(x, y)) return;
+    const act = Fd.actor('current');
+    const ok = await G.ask(`표식이 있는 급류다. 고정끈을 걸고\n${G.wa(act.name)} 건널까?`);
+    if (!ok) return;
+    const first = !flag('fx_current');
+    await showActor(act, x, y, first);
+    W().surfing = { id: act.id, name: act.name, current: true };
+    W().follower.hidden = true;
+    sfx('water');
+    const p = W().player, [dx, dy] = W().DIRS[p.dir];
+    p.mv = { dx, dy, t: 0, n: 18, jump: true };
+    set('fx_current');
+    if (first) { while (p.mv) await G.wait(1); await G.say(`${G.iga(act.name)} 고정끈을 팽팽히 당기며 물살을 가로지른다.\n뭍이나 선착장에 닿으면 저절로 내린다.`); }
+  }
+  Fd.seeFalls = (x, y) => seeB(x, y, 'falls');
+  // a save made on the water before rides were kept: whoever can carry the board takes it
+  Fd.fallbackRide = t => {
+    const a = Fd.actor(t.sea ? 'surf' : t.rapids ? 'current' : 'ripple') || Fd.actor('ripple') || Fd.actor('surf');
+    const lead = G.S.party[0];
+    const who = a ? { id: a.id, name: a.name } : lead ? { id: lead.id, name: D.nameOf(lead) } : null;
+    return who ? Object.assign(who, { sea: !!t.sea, current: !!t.rapids }) : null;
+  };
   Fd.drawSurfer = (T, p, cx, cy, pp) => {
     const [px, py] = pp, bob = Math.floor(G.frame / 20) % 2;
     const sx = Math.round(px - cx), sy = Math.round(py - cy);
@@ -344,6 +409,82 @@
     T.drawImage(img, sx, sy + 12 - fr.h + bob);
     if (p.dir !== 'up') front();
     if (G.frame % 16 < 8) { T.fillStyle = 'rgba(230,246,255,0.8)'; T.fillRect(sx - 2 - dx * 4, sy + 15 + bob, 3, 1); T.fillRect(sx + 15 - dx * 4, sy + 15 + bob, 3, 1); }
+  };
+
+  // ------------------------------------------------------------ 괴력운반 (chapter 3): carry a ring-marked haul stone to its rail support
+  // def.hauls: [{ id, x, y, to: [tx, ty], floor, flag, cond, condLine, lock, lockLine, onDone, onUndo }]
+  const haulFrom = (m, x, y) => (m.def.hauls || []).find(h => h.x === x && h.y === y);
+  const haulOnto = (m, x, y) => (m.def.hauls || []).find(h => h.to[0] === x && h.to[1] === y);
+  Fd.hauled = (mapId, id) => !!(G.S.hauls && G.S.hauls[mapId] && G.S.hauls[mapId][id]);
+  const clearTile = (mapId, x, y) => { if (G.S.tiles && G.S.tiles[mapId]) delete G.S.tiles[mapId][x + ',' + y]; };
+  async function carry(m, h, back, act) {
+    const from = back ? h.to : [h.x, h.y], to = back ? [h.x, h.y] : h.to;
+    if (back) { Fd.setTile(m.id, from[0], from[1], '^'); } else Fd.setTile(m.id, from[0], from[1], h.floor || floorChar(m));
+    sfx('rock'); W().shake = 6;
+    const mini = G.mons.mini(act.id), img = mini.down;
+    await Fd.play(44, (T, cx, cy, k) => {
+      const kk = Math.min(1, k * 1.15), X = (from[0] + (to[0] - from[0]) * kk) * 16 - cx, Y = (from[1] + (to[1] - from[1]) * kk) * 16 - cy - Math.sin(kk * Math.PI) * 14;
+      T.drawImage(A.shadow, Math.round((from[0] + (to[0] - from[0]) * kk) * 16 - cx + 1), Math.round((from[1] + (to[1] - from[1]) * kk) * 16 - cy + 12));
+      T.drawImage(img, Math.round(X + 8 - img.width / 2), Math.round(Y + 22 - img.height));
+      T.drawImage(A.haulStone, Math.round(X), Math.round(Y - 4));
+    });
+    if (back) { clearTile(m.id, to[0], to[1]); clearTile(m.id, from[0], from[1]); W().rebuild(m.id); }
+    else Fd.setTile(m.id, to[0], to[1], '%');
+    sfx('knock2'); W().shake = 8;
+    W().placeFollower();
+  }
+  async function haulAt(x, y) {
+    const m = W().map, h = haulFrom(m, x, y);
+    seeB(x, y, 'bigrock');
+    if (!Fd.unlocked('haul') || !G.S.bag.harness) {
+      await G.say('고리와 레일 문양이 새겨진 커다란 운반석이다.\n둥근 돌과 달리 밀어서는 꿈쩍도 하지 않는다.');
+      await G.say(`(괴력운반을 배우면 옆의 레일 받침으로 옮길 수 있을 것 같다. 배우는 곳: ${Fd.SKILLS.haul.where})`);
+      return;
+    }
+    if (!h) { await G.say('고리 문양 운반석이다. 근처에 옮겨 놓을 레일 받침이 보이지 않는다.'); return; }
+    if (h.cond && !h.cond()) { await G.say(h.condLine || '지금은 옮기지 않는 게 좋겠다.'); return; }
+    const act = Fd.actor('haul');
+    if (!act) { await G.say('고리 문양 운반석이다.\n' + noActorLine('haul')); return; }
+    const ok = await G.ask(`고리 문양 운반석이다. 레일 받침으로\n${G.wa(act.name)} 함께 옮길까?`);
+    if (!ok) return;
+    const first = !flag('fx_haul');
+    await showActor(act, x, y, first);
+    await carry(m, h, false, act);
+    G.S.hauls = G.S.hauls || {}; (G.S.hauls[m.id] = G.S.hauls[m.id] || {})[h.id] = 1;
+    set('fx_haul');
+    if (first) await G.say(`${G.wa(act.name)} 함께 운반석을 들어 레일 받침에 내려놓았다!\n(받침 앞에서 A 버튼을 누르면 처음 자리로 되돌릴 수 있다)`);
+    if (h.flag) set(h.flag);
+    if (h.onDone) await h.onDone(h);
+  }
+  async function seatAt(x, y, t) {
+    const m = W().map;
+    if (t.haulseat === 1) { await G.say('노란 레일 표시가 칠해진 돌 받침이다.\n고리 문양 운반석이 꼭 맞게 들어갈 것 같다.'); return; }
+    const h = haulOnto(m, x, y);
+    if (!h || !Fd.hauled(m.id, h.id)) { await G.say('운반석이 받침에 단단히 놓여 있다.'); return; }
+    if (h.lock && h.lock()) { await G.say(h.lockLine || '운반석이 받침에 단단히 놓여 있다. 이제 이 자리가 제자리다.'); return; }
+    const act = Fd.unlocked('haul') && Fd.actor('haul');
+    if (!act) { await G.say('운반석이 받침에 놓여 있다.\n' + noActorLine('haul')); return; }
+    const ok = await G.ask('받침에 놓인 운반석이다. 처음 자리로 되돌릴까?');
+    if (!ok) return;
+    await showActor(act, x, y, false);
+    await carry(m, h, true, act);
+    delete G.S.hauls[m.id][h.id];
+    if (h.flag && !h.keepFlag) delete G.S.flags[h.flag];
+    if (h.onUndo) await h.onUndo(h);
+  }
+  // the yard's reset board: every unlocked haul stone on this map back to where it started
+  Fd.resetHauls = async () => {
+    const m = W().map; let n = 0;
+    for (const h of m.def.hauls || []) {
+      if (!Fd.hauled(m.id, h.id) || (h.lock && h.lock())) continue;
+      clearTile(m.id, h.x, h.y); clearTile(m.id, h.to[0], h.to[1]);
+      delete G.S.hauls[m.id][h.id];
+      if (h.flag && !h.keepFlag) delete G.S.flags[h.flag];
+      n++;
+    }
+    W().rebuild(m.id); W().placeFollower();
+    sfx('rock');
+    await G.say(n ? '운반석이 모두 처음 자리로 돌아왔다.' : '되돌릴 운반석이 없다. 모두 처음 자리에 있다.');
   };
 
   // ------------------------------------------------------------ fishing from the marked mounds
@@ -407,21 +548,23 @@
     if (b) { await pushPrompt(b); return true; }
     if (!t) return false;
     if (t.vine) { await vineAt(x, y); return true; }
-    if (t.bigrock) {
-      seeB(x, y, 'bigrock');
-      await G.say('짙은 회색의 거대한 바위가 길을 막고 있다.\n둥근 돌과 달리 꿈쩍도 하지 않는다. 훨씬 큰 힘이 필요해 보인다.');
-      await G.say('(수첩과 지도에 [고급 괴력] 표시를 남겼다. 이 바위는 1장에서는 열리지 않는다)');
-      return true;
-    }
+    if (t.bigrock) { await haulAt(x, y); return true; }
+    if (t.haulseat) { await seatAt(x, y, t); return true; }
+    if (t.falls) { seeB(x, y, 'falls'); await G.say('물이 하얗게 쏟아져 내리는 폭포다.\n지금 배운 기술로는 거슬러 오를 수 없다. (수첩에 기록해 두었다)'); return true; }
+    if (t.shellbed) { await G.say('줄무늬 조개들이 젖은 모래에 반쯤 묻혀 있다.'); return true; }
     if (t.echo) { await echoAt(x, y); return true; }
-    if (t.rapids) { seeB(x, y, 'rapids'); await G.say('물살이 하얗게 부서지며 거세게 흐른다.\n잔물타기로는 건널 수 없는 급류다.'); return true; }
+    if (t.rapids) {
+      if (m.def.currents) { await currentAt(x, y); return true; }
+      seeB(x, y, 'rapids'); await G.say('물살이 하얗게 부서지며 거세게 흐른다.\n잔물타기로는 건널 수 없는 급류다.'); return true;
+    }
     if (t.marker) { await Fd.checkPost(x, y); return true; }
     if (t.crack) { await smashAt(x, y); return true; }
     if (t.magnet) { await magnetAt(x, y); return true; }
-    if (t.pool) {   // 조수 웅덩이: look in, and something may be there
+    if (t.pool) {   // 조수 웅덩이 (or a map's own basin): look in, and something may be there
+      const [empty, look] = m.def.poolLine || ['맑은 조수 웅덩이다.', '조수 웅덩이를 가만히 들여다보았다...'];
       const enc = D.rollEncounter(m.id, 'pool');
-      if (!enc) { await G.say('맑은 조수 웅덩이다.'); return true; }
-      await G.say('조수 웅덩이를 가만히 들여다보았다...', { auto: 30 });
+      if (!enc) { await G.say(empty); return true; }
+      await G.say(look, { auto: 30 });
       await G.battle.wild(enc);
       return true;
     }
@@ -448,7 +591,19 @@
     for (const b of Fd.boulders()) {
       let x = b.x * 16, y = b.y * 16;
       if (slide && slide.id === b.id) { const k = slide.t / slide.n; x = (slide.x0 + (slide.x1 - slide.x0) * k) * 16; y = (slide.y0 + (slide.y1 - slide.y0) * k) * 16; }
-      if (b.model) { T.drawImage(A.boulder, 0, 0, 16, 16, Math.round(x - cx + 3), Math.round(y - cy + 5), 11, 11); continue; }
+      if (b.model) {
+        T.drawImage(A.boulder, 0, 0, 16, 16, Math.round(x - cx + 3), Math.round(y - cy + 5), 11, 11);
+        if (b.w) G.textC(T, String(b.w), Math.round(x - cx + 8), Math.round(y - cy + 2), '#ffffff', 'rgba(0,0,0,0.7)');
+        continue;
+      }
+      if (b.look === 'filter') {   // the replacement filter cartridge (교체 거름틀): a boxed mesh on runners
+        const X = Math.round(x - cx), Y = Math.round(y - cy);
+        T.drawImage(A.shadow, X + 1, Y + 12);
+        T.fillStyle = '#2a4a50'; T.fillRect(X + 1, Y + 2, 14, 13); T.fillStyle = '#5ab0b8'; T.fillRect(X + 2, Y + 3, 12, 10);
+        T.fillStyle = '#c8eef0'; for (let i = 3; i < 14; i += 3) T.fillRect(X + i, Y + 3, 1, 10); T.fillRect(X + 2, Y + 3, 12, 1);
+        T.fillStyle = '#e3b23c'; T.fillRect(X + 2, Y + 13, 12, 2);
+        continue;
+      }
       T.drawImage(A.shadow, Math.round(x - cx + 1), Math.round(y - cy + 12));
       T.drawImage(A.boulder, Math.round(x - cx), Math.round(y - cy));
     }
@@ -507,10 +662,12 @@
 
   // ------------------------------------------------------------ getting out of a cave (구조 요청 / 탈출줄)
   Fd.inCave = () => { const m = W().map; return !!(m && m.def.rescue); };
+  Fd.ropeOK = () => { const m = W().map; return Fd.inCave() && m.def.rescueKind !== 'water'; };
   Fd.rescue = async (viaRope) => {
     const m = W().map, r = typeof m.def.rescue === 'function' ? m.def.rescue() : m.def.rescue;
     if (!r) { await G.say('여기서는 쓸 수 없다.'); return false; }
-    const ok = await G.ask(viaRope ? '탈출줄을 써서 동굴 입구로 돌아갈까?' : '탐굴 구조 요청을 보낼까?\n(마지막으로 지나온 동굴 입구까지 무료로 돌아간다)');
+    const water = m.def.rescueKind === 'water';
+    const ok = await G.ask(viaRope ? '탈출줄을 써서 동굴 입구로 돌아갈까?' : water ? `해무나루 구조대를 부를까?\n(${r.n || '가까운 안전 부두'}까지 무료로 데려다 준다)` : '탐굴 구조 요청을 보낼까?\n(마지막으로 지나온 동굴 입구까지 무료로 돌아간다)');
     if (!ok) return false;
     if (viaRope) D.useItem('rope');
     W().surfing = null; W().pushActive = null;
@@ -518,7 +675,7 @@
     await G.fadeTo(1, 16);
     W().enter(r.map, r.x, r.y, r.dir || 'down');
     await G.fadeTo(0, 16);
-    await G.say(viaRope ? '탈출줄을 따라 동굴 입구로 나왔다.' : '탐굴 구조대의 안내로 동굴 입구까지 무사히 나왔다.\n열어 둔 지름길과 복구 기록은 그대로 남아 있다.');
+    await G.say(viaRope ? '탈출줄을 따라 동굴 입구로 나왔다.' : water ? `구조대 보트가 와서 ${r.n || '안전한 부두'}까지 데려다 주었다.\n복구한 길과 의뢰 기록은 그대로 남아 있다.` : '탐굴 구조대의 안내로 동굴 입구까지 무사히 나왔다.\n열어 둔 지름길과 복구 기록은 그대로 남아 있다.');
     return true;
   };
 
@@ -561,7 +718,8 @@
 
   // ------------------------------------------------------------ the notebook (수첩): goals, field skills, places to revisit
   const CHAPTER = () => G.CH;
-  const CHS = () => [G.CH1, G.CH2].filter(Boolean);   // every chapter's map page (the world map can flip between them)
+  const CHS = () => [G.CH1, G.CH2, G.CH3].filter(Boolean);   // every chapter's map page (the world map can flip between them)
+  Fd.CHS = CHS;
   Fd.notebook = async () => {
     const CH = CHAPTER();
     let tab = 0;
@@ -676,7 +834,7 @@
     return def.rows.map((r, y) => { let row = r; for (const k in ov) { const [X, Y] = k.split(',').map(Number); if (Y === y) row = row.slice(0, X) + ov[k] + row.slice(X + 1); } return row; });
   }
   const BAR = { vine: ['덩굴', '#5c9a2c'], push: ['밀기', '#8a7a66'], water: ['물길', '#2c7ac8'], echo: ['메아리', '#7a5ab8'], bigrock: ['괴력', '#4a4a52'], rapids: ['급류', '#5a8ab0'],
-    smash: ['깨기', '#b8834e'], sea: ['파도', '#1c4a88'], magnet: ['자력', '#c8783a'] };
+    smash: ['깨기', '#b8834e'], sea: ['파도', '#1c4a88'], magnet: ['자력', '#c8783a'], falls: ['폭포', '#3a6aa8'] };
   // barriers you investigated that still stand on this map
   function barriersOn(id) {
     const rows = rowsOf(id), out = [], sb = G.S.seenBarrier || {};
@@ -684,8 +842,8 @@
       if (!k.startsWith(id + ':')) continue;
       const m = k.slice(id.length + 1).match(/^(\d+),(\d+)$/); if (!m) continue;
       const x = +m[1], y = +m[2], kind = sb[k], c = (rows[y] || '')[x];
-      const stands = kind === 'vine' ? c === 'V' : kind === 'echo' ? c === 'e' : kind === 'bigrock' ? c === 'Q' : kind === 'rapids' ? c === 'R' : kind === 'water' ? !Fd.unlocked('ripple') : kind === 'push' ? !Fd.unlocked('push')
-        : kind === 'smash' ? c === 'J' : kind === 'magnet' ? c === 'A' : kind === 'sea' ? !Fd.unlocked('surf') : false;
+      const stands = kind === 'vine' ? c === 'V' : kind === 'echo' ? c === 'e' : kind === 'bigrock' ? c === 'Q' : kind === 'rapids' ? c === 'R' && !(G.MAPS[id].currents && Fd.unlocked('current')) : kind === 'water' ? !Fd.unlocked('ripple') : kind === 'push' ? !Fd.unlocked('push')
+        : kind === 'smash' ? c === 'J' : kind === 'magnet' ? c === 'A' : kind === 'sea' ? !Fd.unlocked('surf') : kind === 'falls' ? c === 'W' : false;
       if (stands) out.push({ x, y, kind });
     }
     // one mark per kind per neighbourhood
@@ -826,7 +984,7 @@
             G.textC(B, (L.floor + 1) + ' / ' + f.length + '  ' + (G.MAPS[f[L.floor]].floorName || G.MAPS[f[L.floor]].name), 128, 35, '#2c2f45', null);
             G.button(B, 204, 30, 40, 26, '▶', { onTap: () => { L.floor = (L.floor + 1) % f.length; } });
           } else G.textC(B, n ? n.n : '', 128, 35, '#2c2f45', null);
-          Object.keys(BAR).forEach((k, j) => { const [s, c] = BAR[k]; const X = 14 + (j % 3) * 80, Y = 70 + Math.floor(j / 3) * 18; G.disc(B, X + 4, Y + 7, 4, c); G.text(B, s, X + 12, Y, '#36363f', null); });
+          Object.keys(BAR).forEach((k, j) => { const [s, c] = BAR[k]; const X = 10 + (j % 4) * 60, Y = 66 + Math.floor(j / 4) * 18; G.disc(B, X + 4, Y + 7, 4, c); G.text(B, s, X + 12, Y, '#36363f', null); });
           G.textC(B, inScope(n.id) ? '흐린 부분: 받은 지도의 큰 윤곽' : '받은 지도에 없는 곳: 걸은 길만 기록', 128, 128, '#8a8270', null);
           G.button(B, 12, 154, 112, 30, '전체 지도', { onTap: () => { L.view = 'world'; } });
         }

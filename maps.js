@@ -459,7 +459,7 @@
       'TC....=.;;;;;.=......T',
       '=Q..===..;;;..========',
       'TC.S=..kk.....r......T',
-      'TC..=.,,,,,..;;;;k...T',
+      'TC^.=.,,,,,..;;;;k...T',
       'Tkr.=.,,,,,,.;;;;kk..T',
       'Tkk.===.y....;;;....rT',
       'TTTTTTTTTTTTTTTTTTTTTT'],
@@ -647,7 +647,7 @@
       const out = [];
       const r = (seen, t, need, open, done, d, later) => { if (seen || done) out.push({ t, need, open, done, d, later }); };
       r(S('route1', 'vine'), '햇살들판 옆길', '덩굴 정리', fv, tileOpen('route1', 10, 24), '울타리 옆 좁은 길이 얇은 덩굴로 막혀 있다. 안쪽에 회복열매가 보인다.');
-      r(S('westpath', 'bigrock'), '서쪽 돌담길 옛 산길', '고급 괴력 (다음 장)', false, false, '짙은 회색의 거대한 바위가 옛 산길을 막고 있다. 1장에서 배우는 바위 밀기로는 움직이지 않는다.', 1);
+      r(S('westpath', 'bigrock'), '서쪽 돌담길 옛 산길', '괴력운반 (3장)', F().unlocked('haul'), F().hauled('westpath', 'oldpath'), '고리 문양이 새겨진 커다란 운반석이 옛 산길을 막고 있다. 바위 밀기로는 움직이지 않는다. 돌바퀴시의 괴력운반이면 옆 받침으로 옮길 수 있다.', !F().unlocked('haul'));
       r(K('forest:5,4'), '이슬숲 북쪽 덤불', '덩굴 정리', fv, tileOpen('forest', 5, 4), '빽빽한 덤불 사이로 덩굴이 얽혀 있다. 숨은 물건이 있을지도 모른다.');
       r(S('forest', 'water'), '이슬숲 개울 작은 섬', '잔물타기', fr, flag('rv_fisle'), '끊어진 다리 아래 개울에 작은 모래섬이 있다. 무언가 놓여 있다.');
       r(K('cave2:b:C') || explored('moonroom'), '달숨동굴 달빛방', '바위 밀기', fp, flag('rv_moon'), '반향층 서쪽, 둥근 돌 너머로 희미한 달빛이 새어 든다.');
@@ -656,7 +656,7 @@
       r(S('city', 'water') || K('city:warehouse'), '바람나루 강 건너 창고', '잔물타기', fr, flag('rv_warehouse'), '무너진 다리 너머 옛 창고. 오래전 길지기의 물건이 남아 있다고 한다.');
       r(S('sandwind', 'water'), '모래바람길 물웅덩이 건너', '잔물타기', fr, flag('rv_puddle'), '넓은 물웅덩이 건너편 모래턱에 무언가 반짝인다.');
       r(S('mistwalk', 'water') || K('mistwalk:lotus'), '수문연구소 뒤 연꽃섬', '잔물타기', fr, flag('rv_lotus'), '연구소 앞 연못의 연꽃섬. 다음 여정의 단서가 있다고 한다.');
-      r(S('mulullim', 'rapids'), '물울림 동쪽 급류 갈래', '상급 수상 강습 (다음 장)', false, false, '하얗게 부서지는 급류. 잔물타기로는 건널 수 없다.', 1);
+      r(S('mulullim', 'rapids'), '물울림 동쪽 급류 갈래', '표식 없는 급류 (다음 장)', false, false, '하얗게 부서지는 급류. 표식이 없는 급류라 급류타기로도 건너지 않는다.', 1);
       return out;
     }
   };

@@ -80,6 +80,10 @@ async def main():
                 r = await pg.evaluate(st[1])
                 if r is not None:
                     print('js->', json.dumps(r, ensure_ascii=False)[:600])
+            elif k == 'dump':     # ["dump", "js expression returning a string", "path"]
+                r = await pg.evaluate(st[1])
+                open(os.path.join(HERE, st[2]), 'w', encoding='utf-8').write(r if isinstance(r, str) else json.dumps(r, ensure_ascii=False))
+                print('dumped', st[2], len(r) if r else 0)
             elif k == 'waitfor':
                 try:
                     await pg.wait_for_function(st[1], timeout=st[2] if len(st) > 2 else 20000)

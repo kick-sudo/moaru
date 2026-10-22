@@ -245,6 +245,7 @@ g = Grid(34, 26, '.')
 g.rect(0, 0, 34, 1, 'T'); g.vl(0, 0, 25, 'T'); g.vl(33, 0, 25, 'T')
 g.rect(1, 1, 32, 5, 'R')                                     # the swollen river
 g.puts([(1, 6), (2, 6), (3, 6)], 'd')                        # the old ferry landing
+g.rect(26, 2, 5, 3, 's'); g.put(28, 2, 'N'); g.puts([(26, 4), (30, 4)], 'r')   # a sandbar in the rapids with an old marker (3장 SQ3-05, 급류타기)
 g.puts([(16, 6), (17, 6)], '=')
 g.hl(1, 32, 7, '='); g.hl(1, 32, 16, '='); g.vl(16, 7, 24, '='); g.vl(17, 7, 24, '=')
 g.building(3, 9, 6, 4, [5, 6])        # center

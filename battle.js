@@ -1125,6 +1125,6 @@
     D.healParty();
     G.world.enter(hp.map, hp.x, hp.y, hp.dir || 'up', { quiet: true, noEvents: true });
     await G.fadeTo(0, 20);
-    await G.say(G.MAPS[hp.map].kind === 'in' && hp.map === 'home' ? '엄마: 어머, 많이 지쳤구나! 푹 쉬고 나니 다들 기운을 차렸단다.' : '간호사: 맡겨 주신 몬스터들은 모두 건강해졌어요. 너무 무리하지 마세요!');
+    await G.say(G.MAPS[hp.map].healLine || (G.MAPS[hp.map].kind === 'in' && hp.map === 'home' ? '엄마: 어머, 많이 지쳤구나! 푹 쉬고 나니 다들 기운을 차렸단다.' : '간호사: 맡겨 주신 몬스터들은 모두 건강해졌어요. 너무 무리하지 마세요!'));
   };
 })();

@@ -33,12 +33,14 @@
     const occ = {};
     (def.npcs || []).forEach(n => {
       ok(inb(n.x, n.y), `${id}: npc ${n.id} out of bounds`);
-      const t = m.tile(n.x, n.y); ok(t && !t.solid, `${id}: npc ${n.id} on solid ${m.at(n.x, n.y)} at ${n.x},${n.y}`);
+      const t = m.tile(n.x, n.y); ok(t && (!t.solid || (n.swim && t.water)), `${id}: npc ${n.id} on solid ${m.at(n.x, n.y)} at ${n.x},${n.y}`);
       if (n.trainer) { n.trainer.team.forEach(([sp, lv, mv]) => { ok(D.MONS[sp], `${id}: ${n.id} team species ${sp}`); (mv || []).forEach(x => ok(D.MOVES[x], `${id}: ${n.id} move ${x}`)); }); }
       if (n.mon) ok(D.MONS[n.mon], `${id}: mon npc ${n.mon}`);
     });
     (def.items || []).forEach(it => { ok(D.ITEMS[it.id], `${id}: item id ${it.id}`); const t = m.tile(it.x, it.y); ok(t && !t.solid, `${id}: item ${it.id} on solid ${m.at(it.x, it.y)} at ${it.x},${it.y}`); });
     (def.boulders || []).forEach(b => { const t = m.tile(b.x, b.y); ok(t && !t.solid, `${id}: boulder ${b.id} on solid`); });
+    // chapter 3: haul stones sit on 'Q' and their rail support is '^'
+    (def.hauls || []).forEach(hl => { ok(def.rows[hl.y][hl.x] === 'Q', `${id}: haul ${hl.id} origin is '${def.rows[hl.y][hl.x]}' not Q`); ok(def.rows[hl.to[1]][hl.to[0]] === '^', `${id}: haul ${hl.id} support is '${def.rows[hl.to[1]][hl.to[0]]}' not ^`); });
     (def.triggers || []).forEach(tr => ok(inb(tr.x, tr.y), `${id}: trigger out of bounds`));
     Object.keys(def.objects || {}).forEach(k => { const [x, y] = k.split(',').map(Number); ok(inb(x, y), `${id}: object ${k} out of bounds`); });
     Object.keys(def.signs || {}).forEach(k => { const [x, y] = k.split(',').map(Number); ok(inb(x, y), `${id}: sign ${k} out of bounds`); });
@@ -54,7 +56,9 @@
     for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) { const t = m.tile(x, y); if (t && t.grass) zones.add(t.grass); }
     zones.forEach(z => ok(D.ENC[id] && D.ENC[id][z], `${id}: grass zone ${z} has no encounter table`));
   }
-  const CHS = [G.CH1, G.CH2].filter(Boolean);
+  const CHS = [G.CH1, G.CH2, G.CH3].filter(Boolean);
+  // every map item (MAP01-MAP12) is covered by some chapter's scopes
+  Object.values(D.ITEMS).filter(it => it.map).forEach(it => ok(CHS.some(c => c.scopes && c.scopes[it.map]), `map item ${it.n} (${it.map}) has no scope`));
   // posts exist on marker tiles
   CHS.flatMap(c => c.posts || []).forEach(p => { const m = W.getMap(p.map); ok(m.at(p.x, p.y) === 'K', `post ${p.id} not on a K tile (${m.at(p.x, p.y)})`); });
   // chapter nodes cover all maps

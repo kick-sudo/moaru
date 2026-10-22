@@ -246,22 +246,27 @@
     const prev = G.scene;
     let t = 0;
     const n = G.S.name;
-    const stats = [`플레이 시간  ${G.menus.fmtTime(G.S.time || 0)}`, `잡은 몬스터  ${D.dexCount()} / ${D.DEX.length}`, `배지  ${['badge1', 'badge2', 'badge3', 'badge4'].filter(k => G.S.flags[k]).length}개`];
+    const stats = [`플레이 시간  ${G.menus.fmtTime(G.S.time || 0)}`, `잡은 몬스터  ${D.dexCount()} / ${D.DEX.length}`, `배지  ${G.menus.BADGES.filter(b => G.S.flags[b[0]]).length}개`];
     const lines = ch === 1 ? [
       '모아루: 잠든 길의 노래', '', '1장 · 잠든 길을 깨우다', '', '',
       `${n}${G.josa(n, '와', '과')} 동료들은`, '끊긴 숲길을 다시 잇고,', '달숨동굴의 울림을 되찾고,', '물울림의 수문을 되살렸다.', '',
       '하지만 새길상회의 공사는', '대륙 곳곳으로 이어지고 있다.', '', '', ...stats, '', '',
       '2장 · 돛바람항으로', '— 동쪽 수문이 열렸다 —', '', '', '', '글꼴: 갈무리 (Lee Minseo, SIL OFL 1.1)']
-      : [
+      : ch === 2 ? [
       '모아루: 잠든 길의 노래', '', '2장 · 바람과 향기의 길', '', '',
       `${n}${G.josa(n, '와', '과')} 동료들은`, '돛바람 등대에 불을 밝히고,', '바위울림터널의 물길을 되돌리고,', '기억나루의 옛길을 복원하고,', '잎향시의 온실에 숨을 돌려주었다.', '',
       '새길상회의 장비는 땅속 울림을 키워', '무언가를 찾고 있었다.', '그 흔적은 바다 건너 해안으로 이어진다.', '', '', ...stats, '', '',
-      '3장 · 다음 해안으로', '— 다음 시안 빌드에서 이어집니다 —', '', '', '', '글꼴: 갈무리 (Lee Minseo, SIL OFL 1.1)'];
+      '3장 · 물결이 모이는 곳', '— 흰 부표를 따라 남쪽으로 —', '', '', '', '글꼴: 갈무리 (Lee Minseo, SIL OFL 1.1)']
+      : [
+      '모아루: 잠든 길의 노래', '', '3장 · 물결이 모이는 곳', '', '',
+      `${n}${G.josa(n, '와', '과')} 동료들은`, '흰 부표를 따라 해무나루에 닿고,', '옛 부두와 정화소의 물길을 되살리고,', '굽이강의 급류를 건너,', '돌바퀴시 장부에서 지워진 날짜를 찾았다.', '',
+      '바다와 강과 산의 문제는', '하나의 본부 승인 번호로 이어져 있었다.', '높은물길 너머, 새길상회 본부로.', '', '', ...stats, '', '',
+      '4장 · 높은물길 너머', '— 다음 시안 빌드에서 이어집니다 —', '', '', '', '글꼴: 갈무리 (Lee Minseo, SIL OFL 1.1)'];
     const scene = {
       update() { t++; },
       drawTop(T) {
         T.drawImage(titleBg, 0, 0);
-        const big = G.mons.front(ch === 1 ? 'yongsot' : 'joryubyeol');
+        const big = G.mons.front(ch === 1 ? 'yongsot' : ch === 2 ? 'joryubyeol' : 'haeryonggyeol');
         T.drawImage(big, 148, 92 + Math.sin(t / 25) * 3);
         T.fillStyle = 'rgba(10,8,20,0.45)'; T.fillRect(0, 0, 256, 192);
         const y0 = 196 - t * 0.35;

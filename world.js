@@ -76,6 +76,10 @@
     return Object.assign({ x: 0, y: 0, dir: 'down', mv: null, foot: 0, anim: 0, hidden: false, emote: 0, bob: 0 }, o);
   }
   Wd.player = makeEnt({ kind: 'player', char: 'boy' });
+  // the water ride lives in the save: a game saved on the board loads back on the board
+  Object.defineProperty(Wd, 'surfing', { configurable: true, enumerable: true,
+    get: () => (G.S && G.S.ride) || null,
+    set: v => { if (!G.S) return; if (v) G.S.ride = v; else delete G.S.ride; } });
   Wd.npcs = [];
   Wd.items = [];
   Wd.map = null;
@@ -100,7 +104,10 @@
     p.x = x; p.y = y; p.dir = dir || p.dir; p.mv = null;
     Wd.menuQueued = false;
     if (prev !== id) { Wd.pushActive = null; G.field && G.field.onEnter(id, prev); }
-    if (Wd.surfing && !(Wd.map.tile(x, y) || {}).water) Wd.surfing = null;
+    const here = Wd.map.tile(x, y) || {};
+    if (Wd.surfing && !here.water && !here.rapids) Wd.surfing = null;
+    // a save from before rides were kept, made on the water: put the player back on a board instead of leaving them stuck
+    if (!Wd.surfing && (here.water || here.rapids) && G.field) Wd.surfing = G.field.fallbackRide(here);
     G.S.pos = { map: id, x, y, dir: p.dir };
     spawnNPCs();
     placeFollower();
@@ -161,9 +168,15 @@
     if (isP && G.field) {
       // on the water board: water is open, land ends the ride
       if (Wd.surfing) {
+        const warn = msg => { if (!Wd.seaWarned) { Wd.seaWarned = true; G.run(async () => { await G.say(msg); Wd.seaWarned = false; }); } };
+        if (t && t.falls) { bump(); G.field.seeFalls(nx, ny); warn('물이 하얗게 쏟아져 내리는 폭포다.\n지금 배운 기술로는 거슬러 오를 수 없다.'); return false; }
+        if (t && t.rapids) {   // marked current bands: only with 급류타기 and the bridle, and only where the current is marked as a route
+          if (G.field.canRideCurrent(m) && !entAt(nx, ny, e)) { e.mv = { dx, dy, t: 0, n: run ? 10 : 14 }; G.field.rodeCurrent(m, nx, ny); return true; }
+          bump(); warn(G.field.currentLine(m, nx, ny)); return false;
+        }
         if (t && t.water && t.sea && !Wd.surfing.sea) {   // the river board is no match for the open sea
           bump();
-          if (!Wd.seaWarned) { Wd.seaWarned = true; G.run(async () => { await G.say('파도가 높아 물판으로는 바다에 나갈 수 없다.'); Wd.seaWarned = false; }); }
+          warn('파도가 높아 물판으로는 바다에 나갈 수 없다.');
           return false;
         }
         if (t && t.water && !entAt(nx, ny, e) && !(G.field.boulderAt(nx, ny))) {
@@ -308,7 +321,7 @@
     if (!G.MAPS[ln.to]) return false;
     const d = edgeDest(ln, nx, ny), tm = getMap(ln.to), t = tm.tile(d.x, d.y);
     if (!t) return false;
-    return !t.solid || (!!Wd.surfing && !!t.water);
+    return !t.solid || (!!Wd.surfing && !!t.water) || (!!Wd.surfing && !!t.rapids && !!G.field && G.field.canRideCurrent(tm));
   }
   async function edgeTravel(ln, nx, ny, dir) {
     await G.fadeTo(1, 8);
@@ -349,10 +362,10 @@
         const enc = G.data.rollEncounter(m.id, t.grass);
         if (enc) G.run(() => G.battle.wild(enc));
       }
-    } else if (t && t.sea && Wd.surfing && !mv.jump && G.data.ENC[m.id] && G.data.ENC[m.id].sea) {   // open-sea routes have their own table
+    } else if (t && (t.water || t.rapids) && Wd.surfing && !mv.jump && G.data.ENC[m.id] && G.data.ENC[m.id][t.sea ? 'sea' : 'current']) {   // sea routes and river currents have their own tables
       G.S.graceSteps = Math.max(0, (G.S.graceSteps || 0) - 1);
       if (G.S.graceSteps === 0 && G.chance(G.data.ENC_RATE * 0.8) && G.data.partyAlive()) {
-        const enc = G.data.rollEncounter(m.id, 'sea');
+        const enc = G.data.rollEncounter(m.id, t.sea ? 'sea' : 'current');
         if (enc) G.run(() => G.battle.wild(enc));
       }
     }
@@ -509,6 +522,13 @@
     }
     const img = fr[e.dir][idx];
     const sx = Math.round(px - cx), sy = Math.round(py - cy);
+    if (e.swim) {   // a swimmer in the water: head and shoulders above a ring of ripples
+      const bob = Math.floor(G.frame / 22) % 2, cut = fr.h - 8;
+      T.drawImage(img, 0, 0, 16, cut, sx, Math.round(sy + 16 - fr.h + 6 + bob), 16, cut);
+      T.fillStyle = 'rgba(230,246,255,0.85)'; T.fillRect(sx + 1, sy + 13 + bob, 14, 1); T.fillRect(sx + 3, sy + 14 + bob, 10, 1);
+      if (e.emote > 0) T.drawImage(A.bubble, sx + 2, sy + 16 - fr.h - 9 + Math.min(0, e.emote - 36));
+      return;
+    }
     T.drawImage(A.shadow, sx + 1, sy + 12);
     T.drawImage(img, sx, Math.round(sy + 16 - fr.h + jy - (idx === 1 || idx === 3 ? 1 : 0)));
     if (e.emote > 0) T.drawImage(A.bubble, sx + 2, sy + 16 - fr.h - 15 + Math.min(0, e.emote - 36));
@@ -579,7 +599,7 @@
     for (const [tx, ty] of m.animTiles) {
       const sx = tx * 16 - cx, sy = ty * 16 - cy;
       if (sx < -16 || sy < -16 || sx > G.W || sy > G.H) continue;
-      const isW = m.at(tx, ty) === 'w';
+      const isW = m.at(tx, ty) === 'w' || m.at(tx, ty) === 'W';
       T.drawImage(animFrame(m, tx, ty, isW ? f : ff), sx, sy);
     }
     if (m.stamps) T.drawImage(m.stamps, -cx, -cy - 32);

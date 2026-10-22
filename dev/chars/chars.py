@@ -640,6 +640,34 @@ CHARS.update({
  'swimmer': ('bob', 'kid', 'kid_b'),
 })
 
+# ---- 모아루 3장 cast
+PAL.update({
+ 'gaon':   dict(S='#e8b088', s='#c88860', H='#3a2418', h='#22140c', C='#e8602c', c='#b8401a', P='#2a3a5a', p='#1c284c', B='#2a2a30', A='#f4f8fc', a='#c8d4e0', W='#ffffff', R='#e89878'),
+ 'yeomin': dict(S='#f8d4b0', s='#e0ac84', H='#2a2430', h='#16121c', C='#2a8a98', c='#1a5c68', P='#1c4a60', p='#123444', B='#f2d23a', A='#f2d23a', a='#c8a420', R='#f4a0a0'),
+ 'bora':   dict(S='#f8d4b0', s='#e0ac84', H='#6a4a7a', h='#4a305a', C='#e8d8b0', c='#c8b488', P='#8a6a4a', p='#6a4e34', B='#5a3a20', R='#f4a0a0'),
+ 'eunseo': dict(S='#f8d4b0', s='#e0ac84', H='#2a3a4a', h='#1a2430', C='#f4f8f8', c='#c8d8dc', P='#2a7a7a', p='#1a5858', B='#3a3a48', G='#283040', W='#f8f8ff', R='#f4a0a0'),
+ 'hajin':  dict(S='#f8d4b0', s='#e0ac84', H='#4a3a6a', h='#30244a', C='#a8c8a0', c='#7aa070', P='#8a78b8', p='#665494', B='#f4f0e8', A='#b8a8e8', a='#8a78b8', R='#f4a0a0'),
+ 'damso':  dict(S='#f0c098', s='#d09870', H='#5a3a28', h='#3e281c', C='#d89a3a', c='#a87018', P='#4a4a52', p='#32323a', B='#3a2a20', A='#f4f0e0', a='#d0c8b0', W='#ffffff', R='#e89878'),
+ 'sion':   dict(S='#f0c098', s='#d09870', H='#2a2a30', h='#18181c', C='#3a4a6a', c='#283450', P='#5a5a62', p='#404048', B='#2a2a30', G='#283040', W='#f8f8ff', R='#e89878'),
+ 'gyuho':  dict(S='#e8b088', s='#c88860', H='#2a2420', h='#18120e', C='#8a8478', c='#6a6458', P='#c87830', p='#985820', B='#3a2a20', R='#e89878'),
+ 'dodam':  dict(S='#e8b088', s='#c88860', H='#3a2a20', h='#22180f', C='#d8b048', c='#a88a28', P='#4a4038', p='#342c26', B='#2a201a', A='#e8602c', a='#b8401a', W='#ffffff', R='#e89878'),
+ 'rio':    dict(S='#f8d0a8', s='#e0a880', H='#6a8aa8', h='#4a6a88', C='#8ac0d8', c='#5a98b8', P='#4a5060', p='#343a48', B='#2a2a30', R='#f0a090'),
+ 'nuri':   dict(S='#f8d4b0', s='#e0ac84', H='#5a3a28', h='#3e281c', C='#e05a4a', c='#b03a2c', P='#2c2f45', p='#1c1f30', B='#3a2a20', R='#f4a0a0'),
+})
+CHARS.update({
+ 'gaon': ('spiky', 'adult', 'gaon'),
+ 'yeomin': ('bob', 'adult', 'yeomin'),
+ 'bora': ('long', 'adult', 'bora'),
+ 'eunseo': ('glasses', 'adult', 'eunseo'),
+ 'hajin': ('long', 'adult', 'hajin'),
+ 'damso': ('cap', 'adult', 'damso'),
+ 'sion': ('glasses', 'adult', 'sion'),
+ 'gyuho': ('short', 'adult', 'gyuho'),
+ 'dodam': ('cap', 'adult', 'dodam'),
+ 'rio': ('spiky', 'kid', 'rio'),
+ 'nuri': ('bob', 'adult', 'nuri'),
+})
+
 if __name__ == '__main__':
     check()
     preview()
