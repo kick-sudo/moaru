@@ -364,7 +364,7 @@
             if (ok) { set('f_magnet'); F().teach(apt, 'magnet'); G.audio && G.audio.jingle('learn'); await say(`${G.eun(D().nameOf(apt))} 탐험 기술 [자력 맞춤]을 익혔다!`); }
             return;
           }
-          if (flag('f_magnet')) { await say('등대가 다시 돌아. 자력 맞춤으로 관측 난간 자물쇠도 열어 봐!', N); return; }
+          if (flag('f_magnet') || all.some(m => F().knows(m, 'magnet')) || (G.S.loans && G.S.loans.magnet)) { await say('등대가 다시 돌아. 자력 맞춤으로 관측 난간 자물쇠도 열어 봐!', N); return; }
           await say('등대가 켜지니 항구가 살아나는 것 같아. 고마워!\n나침돌 계열 동료가 생기면 와. 자력 맞춤을 무료로 가르쳐 줄게.', N);
         } },
       { id: 'hb_gymg', char: 'man', x: 14, y: 21, dir: 'down', name: '체육관 관리인', cond: () => !LIT(),

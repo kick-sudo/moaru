@@ -48,7 +48,9 @@
   Fd.canLearn = (mon, sk) => Fd.APT[sk].includes(mon.id);
   Fd.knows = (mon, sk) => !!(mon && mon.field && mon.field.includes(sk));
   Fd.teach = (mon, sk) => { mon.field = mon.field || []; if (!mon.field.includes(sk)) mon.field.push(sk); };
-  Fd.unlocked = sk => flag('f_' + sk);
+  // usable once its lesson set f_<skill>, or after the skills spell (flags.spell_skills): the spell never writes the lessons'
+  // own flags, so every lesson still plays with its quest steps
+  Fd.unlocked = sk => flag('f_' + sk) || flag('spell_skills');
   // a companion who can do it: party first, then a support call from the box, then a loaned helper
   Fd.actor = sk => {
     const p = G.S.party.find(m => Fd.knows(m, sk));

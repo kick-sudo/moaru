@@ -33,6 +33,7 @@
 | `legend_trial.js` · `mk_legend_trial.py` | 실제 3장 완료 저장의 파티·가방 그대로 전설 전투 반복(포획 6번·쓰러뜨리기 3번) → 큐브·회복약·턴 기록 |
 | `mk_legend_touch.py` | 휴대폰 화면 터치 점검(장면 건너뛰기·선택 버튼·전투 도망·도감·지도), 소리 끔/켬 두 벌 |
 | `mk_legend_vis.py` | 전설 장면·성역·전투·도감·수첩·미니 화면 스크린샷 |
+| `spell.js` · `mk_spell.py` · `mk_spell_vis.py` | 탐험 기술 비밀 주문 점검(새 게임·3장 완료 저장: 9가지 사용 가능, 강습·의뢰 단계 유지, 장비 중복 없음, 의뢰가 걸린 운반석은 그대로, 저장 코드 왕복, 사탕 주문 회귀)과 화면 캡처. 주문 문구는 저장소에 두지 않으므로 환경 변수 `MOARU_SPELL_SKILLS`·`MOARU_SPELL_CANDY`로 넘긴다 |
 | `mk_regress.py` · `run_bg.sh` | 1~3장 회귀 묶음(1장 새 게임·2장·3장 5종·3장 단위 점검) 생성, 두 개씩 실행. 3장 끝 저장은 `_saves/rg3_*.json`으로 따로 남겨 `ch3_*.json`을 덮지 않음 |
 
 2장 완료 저장은 `story2.js` 봇 끝에서 `["dump", "JSON.stringify(G.S)", "_saves/ch2_<스타팅>.json"]` 단계로 만든다.

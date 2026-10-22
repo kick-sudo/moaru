@@ -12,7 +12,10 @@
   const say = (t, name) => G.say(t, name ? { name } : undefined);
   const P = () => G.S.name;
   const give = async (id, n, quiet) => {
-    D().addItem(id, n || 1); G.audio && G.audio.sfx('item');
+    // gear the skills spell already put in the bag (G.S.spellGear): the lesson hands over "that one", no second copy
+    const sg = G.S.spellGear, pre = sg && sg.includes(id) && G.S.bag[id] > 0;
+    if (pre) G.S.spellGear = sg.filter(k => k !== id); else D().addItem(id, n || 1);
+    G.audio && G.audio.sfx('item');
     if (!quiet) await say(`${P()}${G.josa(P(), '은', '는')} ${D().ITEMS[id].n}${(n || 1) > 1 ? ' ' + n + '개' : ''}${G.josa(D().ITEMS[id].n, '을', '를')} 받았다!`);
   };
   const STARTERS = { daram: 'bulguri', bulguri: 'muldal', muldal: 'daram' };   // the rival takes the one strong against yours

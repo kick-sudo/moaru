@@ -604,19 +604,88 @@
   // ------------------------------------------------------------ 비밀 주문 — typed into the save-code box
   // only a hash of each spell is kept, so reading the source doesn't give it away
   const spellHash = s => [...s].reduce((h, ch) => (Math.imul(h, 131) + ch.codePointAt(0)) >>> 0, 7);
-  const SPELLS = { 4253758596: 'candy', 1860923197: 'cube' };
+  const SPELLS = { 4253758596: 'candy', 1860923197: 'cube', 3613971225: 'skills' };
   // one swing fills the pouch (up to the bag limit of 99)
   const GIFTS = { candy: { id: 'candy', per: 99 }, cube: { id: 'mastercube', per: 99, owner: true } };
   Mn.trySpell = async v => {
-    const g = GIFTS[SPELLS[spellHash(String(v).replace(/[\s!.,~?…'"·]/g, ''))]];
+    const kind = SPELLS[spellHash(String(v).replace(/[\s!.,~?…'"·]/g, ''))];
+    if (kind === 'skills') { await skillSpell(String(v).trim().slice(0, 24)); return true; }
+    const g = GIFTS[kind];
     if (!g) return false;
     if (g.owner && !(await G.isOwner())) return false;   // anyone but the owner just gets "bad save code"
-    const it = D.ITEMS[g.id];
+    const it = D.ITEMS[g.id], spr = A[it.icon] || A.candy;
     const n = Math.min(g.per, D.CANDY_MAX - (G.S.bag[g.id] || 0));
     if (n <= 0) { await G.say(`${G.iga(it.n)} 이미 가방에 가득하다!`); return true; }
-    await ttukttak(n, String(v).trim().slice(0, 24), g.id);
+    await ttukttak(String(v).trim().slice(0, 24), {
+      sprites: [spr], n,
+      got: B => { B.drawImage(spr, 112, 80, 32, 32); G.textC(B, it.n + ' × ' + n, 128, 120, '#6a3a8a', null); },
+      apply: () => { G.S.bag[g.id] = (G.S.bag[g.id] || 0) + n; },
+      lines: () => [`${it.n} ${n}개를 받았다!\n가방 속 ${it.cat === 'secret' ? '비밀 주머니' : '큐브 주머니'}에 넣어 두었다.`]
+    });
     return true;
   };
+
+  // the skills spell: every exploration skill the story teaches (F01-F09) usable at once — for each one a companion who can do
+  // it (a party / box member who can learn it, otherwise a free support helper like the story's own loans) and its gear.
+  // It never writes the story's f_* flags (G.field.unlocked also reads flags.spell_skills), so every lesson still plays as
+  // written with its quest steps and gifts: nothing on the main path is skipped or blocked. Story gates (q33 for the
+  // legend sanctuaries, quest steps on the chapter-3 haul stones, people standing in the way) stay where they are.
+  const SKILL_HELP = { vine: 'jwi', push: 'kongju', echo: 'gwibami', ripple: 'muljjori', magnet: 'nachimdol', smash: 'deuldori', surf: 'yeoulgwon', current: 'haepum', haul: 'sanbatgom' };
+  const SKILL_GEAR = { ripple: 'board', surf: 'seaboard', current: 'bridle', haul: 'harness' };
+  const SKILL_COL = { vine: '#5c9a2c', push: '#8a7a66', echo: '#7a5ab8', ripple: '#2c7ac8', magnet: '#c8783a', smash: '#b8834e', surf: '#1c4a88', current: '#5a8ab0', haul: '#4a4a52' };
+  Mn.SKILL_HELP = SKILL_HELP; Mn.SKILL_GEAR = SKILL_GEAR;
+  const books = {};
+  const skillBook = sk => books[sk] || (books[sk] = (() => {   // the green 교본 icon recoloured in the skill's colour
+    const [c, x] = A.cv(16, 16); x.drawImage(A.book, 0, 0);
+    const d = x.getImageData(0, 0, 16, 16), h = SKILL_COL[sk], rgb = [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+    for (let i = 0; i < d.data.length; i += 4) if (d.data[i] === 0x3f && d.data[i + 1] === 0x8a && d.data[i + 2] === 0x4a) { d.data[i] = rgb[0]; d.data[i + 1] = rgb[1]; d.data[i + 2] = rgb[2]; }
+    x.putImageData(d, 0, 0); return c;
+  })());
+  // what still needs doing for each skill (nothing = already usable)
+  Mn.skillSpellTodo = () => {
+    const F = G.field;
+    return F.ORDER.filter(sk => !F.unlocked(sk) || !F.actor(sk) || (SKILL_GEAR[sk] && !G.S.bag[SKILL_GEAR[sk]]));
+  };
+  async function skillSpell(spoken) {
+    const F = G.field;
+    if (!Mn.skillSpellTodo().length) { await G.say('탐험 기술은 이미 모두 쓸 수 있다!\n(수첩의 [탐험 기술]에서 확인할 수 있다)'); return; }
+    const ok = await G.ask('탐험 기술 9가지를 지금 모두 익힐까?\n(이야기보다 앞서 갈 수도 있다)', ['익힌다', '그만둔다']);
+    if (!ok) return;
+    const taught = {}, helpers = [], gear = [];
+    await ttukttak(spoken, {
+      sprites: F.ORDER.map(skillBook), n: F.ORDER.length,
+      got: B => {
+        F.ORDER.forEach((sk, i) => {
+          const x = i < 5 ? 14 : 136, y = 74 + (i % 5) * 20;
+          B.drawImage(skillBook(sk), x, y - 3);
+          G.text(B, F.SKILLS[sk].n, x + 20, y, '#2c2f45', null);
+        });
+      },
+      apply: () => {
+        G.S.flags.spell_skills = 1;
+        const all = G.S.party.concat(G.S.box);
+        for (const sk of F.ORDER) {
+          if (F.actor(sk)) continue;
+          const m = G.S.party.find(x => F.canLearn(x, sk)) || all.find(x => F.canLearn(x, sk));
+          if (m) { F.teach(m, sk); (taught[D.nameOf(m)] = taught[D.nameOf(m)] || []).push(F.SKILLS[sk].n); }
+          else { G.S.loans = G.S.loans || {}; G.S.loans[sk] = SKILL_HELP[sk]; helpers.push(D.MONS[SKILL_HELP[sk]].n); }
+        }
+        for (const sk of F.ORDER) {
+          const id = SKILL_GEAR[sk];
+          if (id && !G.S.bag[id]) { G.S.bag[id] = 1; gear.push(D.ITEMS[id].n); G.S.spellGear = (G.S.spellGear || []).concat([id]); }
+        }
+        G.autosave();
+      },
+      lines: () => {
+        const out = ['탐험 기술 9가지를 모두 쓸 수 있게 되었다!'];
+        for (const n in taught) { const t = taught[n]; out.push(`${n}${G.josa(n, '이', '가')} ${t.join('·')}${G.josa(t[t.length - 1], '을', '를')} 익혔다!`); }
+        if (helpers.length) out.push('나머지는 지원 동료가 맡아 준다.\n' + helpers.join('·'));
+        if (gear.length) out.push(gear.join('·') + G.josa(gear[gear.length - 1], '을', '를') + ' 받았다!');
+        out.push('이야기 속 강습은 그대로 들을 수 있다.\n' + (helpers.length ? '지원 동료는 전투·교환에 나서지 않는다.' : '수첩의 [탐험 기술]에서 확인해 보자.'));
+        return out;
+      }
+    });
+  }
   let nightBg = null;
   function nightBackdrop() {
     if (nightBg) return nightBg;
@@ -631,9 +700,10 @@
     for (let X = 0; X < 256; X++) { const h = Math.round(18 + Math.sin(X / 23) * 3 + Math.sin(X / 7 + 1) * 1.5); x.fillRect(X, 192 - h, 1, h); }
     return (nightBg = c);
   }
-  // the goblin club knocks twice — 뚝! 딱! — and candies spill out
-  async function ttukttak(n, spoken, itemId) {
-    const it = D.ITEMS[itemId], spr = A[it.icon] || A.candy;
+  // the goblin club knocks twice — 뚝! 딱! — and the gift spills out
+  // pay: { sprites: [16px canvases that fly out], n, got(B): the lower screen once received, apply(), lines(): what is said }
+  async function ttukttak(spoken, pay) {
+    const n = pay.n;
     const prev = G.scene;
     const rr = (a, b) => a + G.rand() * (b - a);
     const PX = 98, PY = 184, LEN = 58;           // club grip (pivot) and head distance
@@ -657,7 +727,7 @@
         const cw = A.club.width * 2, ch = A.club.height * 2;
         T.save(); T.translate(PX + sx, PY); T.rotate(st.a); T.drawImage(A.club, -cw / 2, -ch + 4, cw, ch); T.restore();
         for (const p of st.sparks) { T.fillStyle = p.c; T.fillRect(Math.round(p.x) + sx, Math.round(p.y), 2, 2); }
-        for (const c of st.candies) T.drawImage(spr, Math.round(c.x) + sx, Math.round(c.y));
+        for (const c of st.candies) T.drawImage(c.spr, Math.round(c.x) + sx, Math.round(c.y));
         if (st.word && st.wt < 40) {
           const img = G.bigText(st.word, 3, '#fbe8a8'), sh = G.bigText(st.word, 3, '#5a2a18');
           const [hx, hy] = st.wordAt;
@@ -670,10 +740,7 @@
       drawBot(B) {
         header(B, '도깨비 방망이', '');
         G.textC(B, `"${spoken}"`, 128, 52, '#2c2f45', null);
-        if (st.got) {
-          B.drawImage(spr, 112, 80, 32, 32);
-          G.textC(B, it.n + ' × ' + n, 128, 120, '#6a3a8a', null);
-        }
+        if (st.got) pay.got(B);
         G.addHot({ x: 0, y: 22, w: 256, h: 170, onTap: () => { G.pressed.a = 1; } });
       }
     };
@@ -691,7 +758,7 @@
       const [hx, hy] = head();
       for (let i = 0; i < 16; i++) st.sparks.push({ x: hx, y: hy, vx: rr(-2.6, 2.6), vy: rr(-3.4, 0.4), life: G.ri(12, 26), c: G.pick(['#fbe8a8', '#f6c94a', '#ffffff', '#f49ac0']) });
       if (last) {
-        for (let i = 0; i < n; i++) st.candies.push({ x: hx - 8 + rr(-4, 4), y: hy - 12, vx: rr(-3.4, 1.4), vy: rr(-6.5, -3.5), floor: 158 + G.ri(-3, 3) });
+        for (let i = 0; i < n; i++) st.candies.push({ spr: pay.sprites[i % pay.sprites.length], x: hx - 8 + rr(-4, 4), y: hy - 12, vx: rr(-3.4, 1.4), vy: rr(-6.5, -3.5), floor: 158 + G.ri(-3, 3) });
         G.audio && G.audio.sfx('sparkle');
       }
       await G.wait(last ? 10 : 18);
@@ -700,10 +767,10 @@
     await swing('뚝!', 'knock');
     await swing('딱!', 'knock2', true);
     await G.wait(60);
-    G.S.bag[itemId] = (G.S.bag[itemId] || 0) + n;
+    pay.apply();
     st.got = true;
     G.audio && G.audio.sfx('item');
-    await G.say(`${it.n} ${n}개를 받았다!\n가방 속 ${it.cat === 'secret' ? '비밀 주머니' : '큐브 주머니'}에 넣어 두었다.`);
+    for (const ln of pay.lines()) await G.say(ln);
     await G.fadeTo(1, 10, '#000');
     G.scene = prev;
     await G.fadeTo(0, 10);
