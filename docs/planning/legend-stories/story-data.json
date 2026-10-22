@@ -453,6 +453,11 @@
     "battleLevels": {
       "geumo": 48,
       "wolbaek": 49
+    },
+    "difficultyDecision": {
+      "date": "2026-10-22",
+      "by": "designer",
+      "decision": "keep as is: geumo Lv48 / wolbaek Lv49, stats, moves, battle manners and the existing blackout rule unchanged (legend capture is meant to be hard)"
     }
   }
 }
