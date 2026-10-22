@@ -487,11 +487,20 @@
     buong: { no: 908, hidden: true, n: '부엉콩', t: ['노말', '비행'], b: [60, 32, 42, 42, 56, 50], cr: 255, xp: 58, night: true,
       learn: [[1, 'peck'], [1, 'growl'], [4, 'lull'], [8, 'gust'], [12, 'focus'], [15, 'wingcut'], [21, 'rush']],
       dex: '밤에만 눈을 뜨는 동그란 부엉이 몬스터. 자장노래를 부르면 숲 전체가 조용해진다.' },
-    geumo: { no: 909, hidden: true, n: '금오', t: ['불', '비행'], b: [80, 72, 70, 88, 78, 84], cr: 45, xp: 220, legend: true,
+    // ---- the two legends (docs/planning/legend-stories): not in the numbered dex; they get their own 전설 page once noticed.
+    // Numbers: 금오 keeps #909; 월백 takes #910 next to it. #001-#102 (and later regular kinds from #103 on) and the
+    // hidden regional kinds #901-#908 are left exactly as they are.
+    geumo: { no: 909, n: '금오', t: ['불', '비행'], b: [80, 72, 70, 88, 78, 84], cr: 45, xp: 220, legend: true, hab: '햇귀절벽 (바람등성이)',
       learn: [[1, 'ember'], [1, 'gust'], [10, 'wingcut'], [15, 'flamewheel'], [20, 'sunfire'], [25, 'dive'], [30, 'blaze']],
-      dex: '해 속에 산다는 세 발 달린 까마귀. 아침마다 해를 등에 지고 날아오른다고 전해진다.' }
+      dex: '해를 등에 지고 낮의 길을 먼저 살핀다는 세 발 달린 신조. 긴 날개와 눈무늬가 박힌 세 줄 꼬리깃에서 금빛 불꽃이 흐른다. 지친 동료를 몰아붙이지 않고 길이 열릴 때까지 기다려 준다고 한다.' },
+    wolbaek: { no: 910, n: '월백', t: ['에스퍼', '고스트'], b: [76, 58, 74, 92, 90, 82], cr: 45, xp: 220, legend: true, hab: '월은못 (달숨동굴)',
+      learn: [[1, 'confusion'], [1, 'mistveil'], [8, 'lick'], [15, 'nightshade'], [22, 'psybeam'], [29, 'calm'], [36, 'shadowball'], [43, 'hypnosis'], [50, 'psychic'], [57, 'moonlight']],
+      dex: '달빛 아래 길에 남은 발걸음의 잔향을 읽는 아홉 꼬리 여우. 길을 잃은 여행자에게 돌아갈 길을 빛으로 비춰 준다. 친해지면 아홉 꼬리 끝이 차례로 부드럽게 빛난다.' }
   };
-  D.DEX = Object.keys(D.MONS).filter(id => !D.MONS[id].hidden).sort((a, b) => D.MONS[a].no - D.MONS[b].no);
+  // the numbered dex: every regular kind (not the hidden regional ones, not the legends)
+  D.mainDex = id => !!(D.MONS[id] && !D.MONS[id].hidden && !D.MONS[id].legend);
+  D.DEX = Object.keys(D.MONS).filter(D.mainDex).sort((a, b) => D.MONS[a].no - D.MONS[b].no);
+  D.LEGENDS = Object.keys(D.MONS).filter(id => D.MONS[id].legend).sort((a, b) => D.MONS[a].no - D.MONS[b].no);
   // how a species is reached: 'wild' habitat text, or the line it grows from
   D.origin = id => {
     for (const k in D.MONS) { const e = D.MONS[k].evo; if (e && e.to === id) return { from: k, lv: e.lv, item: e.item, res: e.res }; }
@@ -742,7 +751,7 @@
   D.useItem = id => { if (G.S.bag[id] > 0) { G.S.bag[id]--; if (!G.S.bag[id]) delete G.S.bag[id]; return true; } return false; };
   D.seen = id => { G.S.dex.seen[id] = 1; };
   D.caught = id => { G.S.dex.seen[id] = 1; G.S.dex.caught[id] = 1; };
-  D.dexCount = () => Object.keys(G.S.dex.caught).filter(k => D.MONS[k] && !D.MONS[k].hidden).length;
+  D.dexCount = () => Object.keys(G.S.dex.caught).filter(D.mainDex).length;
   // add a caught monster: party, else storage box
   D.receive = mon => {
     D.caught(mon.id);

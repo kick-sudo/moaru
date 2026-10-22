@@ -342,29 +342,8 @@
     }
   };
 
-  // 금오: the three-legged sun crow — round and regal, golden eyes, a sun halo behind (80 x 80 space)
-  DRAW.geumo = (g, back) => {
-    const black = '#2a2a48', sheen = '#5a5a96', gold = '#f6cc4a', red = '#f0553a';
-    g.E(40, 34, 28, 28, red, { light: '#ff9a6a', line: '#a82a1a', hlPath: p => p.ellipse(31, 22, 9, 6, -0.5, 0, 7) });
-    g.E(40, 34, 22, 22, '#f8783c', { noLine: true, hl: false, flat: true });
-    for (let i = 0; i < 12; i++) { const a = i * Math.PI / 6; g.E(40 + Math.cos(a) * 25, 34 + Math.sin(a) * 25, 1.6, 1.6, '#ffd27a', { hl: false, noLine: true }); }
-    [-1, 1].forEach(s => {
-      g.Sm([[40 + s * 8, 40], [40 + s * 24, 24], [40 + s * 37, 18], [40 + s * 36, 27], [40 + s * 39, 33], [40 + s * 31, 37], [40 + s * 33, 44], [40 + s * 20, 47], [40 + s * 12, 52]], black, { light: sheen });
-      [[26, 27], [31, 34], [27, 42]].forEach(([X, Y]) => g.line([[40 + s * (X - 6), Y + 4], [40 + s * X, Y]], 1.6, gold, { line: '#8a6010' }));
-    });
-    g.Sm([[34, 62], [40, 75], [46, 62]], black, { light: sheen });
-    g.Pg([[36.5, 69], [40, 76], [43.5, 69]], gold, { line: '#8a6010' });
-    [[33.5, 0], [40, 1.5], [46.5, 0]].forEach(([X, d]) => { g.line([[X, 58], [X + (X - 40) * 0.2, 67 + d]], 2, '#f0a030', { line: '#7a4a10' }); g.line([[X - 2.5 + (X - 40) * 0.2, 68 + d], [X + 2.5 + (X - 40) * 0.2, 68 + d]], 1.6, '#f0a030', { line: '#7a4a10' }); });
-    g.E(40, 48, 12.5, 13, black, { light: sheen });
-    if (!back) g.E(40, 51, 6.5, 7.5, sheen, { hl: false, noLine: true });
-    g.Sm([[35, 16], [37.5, 6], [40.5, 13], [44, 5], [45.5, 16]], gold, { line: '#8a6010', light: '#fff0a8' });
-    g.E(40, 28, 13, 12, black, { light: sheen });
-    if (!back) {
-      g.ceye(34.6, 27.5, 3.8, { iris: '#f6cc4a', dark: '#141428' }); g.ceye(45.4, 27.5, 3.8, { iris: '#f6cc4a', dark: '#141428' });
-      g.Pg([[37.4, 32.5], [42.6, 32.5], [40, 37.5]], '#f6cc4a', { line: '#8a6010', light: '#fff0a8' });
-      g.blush(30, 33, 2); g.blush(50, 33, 2);
-    }
-  };
+  // 금오 and 월백 are not painted here: their only artwork is the designer's final front / back pair
+  // (docs/planning/legend-stories/assets), converted by _legend_pix.py into G.SPRITES (wide canvases + G.SPRITE_META)
 
   // 꼬마게: a little crab waving one big claw, eyes on stalks
   DRAW.kkomage = (g, back) => {
@@ -462,7 +441,7 @@
       im.src = S[k];
     })));
   };
-  const BIG = new Set(['geumo', 'haetae']);
+  const BIG = new Set(['haetae']);
   const bitmap = key => {
     const im = IMG[key];
     if (!im) return null;
@@ -531,7 +510,7 @@
   Mo.silhouette = (id, view, col) => {
     const key = id + ':s:' + view + ':' + (col || 'w');
     if (cache[key]) return cache[key];
-    const src = view === 'back' ? Mo.back(id) : view === 'card' ? Mo.card(id) : Mo.front(id);
+    const src = view === 'back' ? Mo.back(id) : view === 'card' ? Mo.card(id) : view === 'icon' ? Mo.icon(id) : Mo.front(id);
     const [c, x] = G.art.cv(src.width, src.height);
     x.drawImage(src, 0, 0);
     x.globalCompositeOperation = 'source-in';
@@ -540,5 +519,8 @@
     return (cache[key] = c);
   };
   Mo.has = id => !!(DRAW[id] || IMG[id + ':front']);
+  // wide sprites (the legends) carry a body pivot and effect anchors: G.SPRITE_META['id:view']
+  Mo.meta = key => (G.SPRITE_META && G.SPRITE_META[key]) || null;
+  Mo.wide = id => !!Mo.meta(id + ':front');
   Mo.ids = () => [...new Set([...Object.keys(DRAW), ...Object.keys(G.SPRITES || {}).map(k => k.split(':')[0])])];
 })();

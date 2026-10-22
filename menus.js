@@ -34,7 +34,9 @@
     for (let i = 0; i < lines.length; i += 2) pages.push(lines.slice(i, i + 2));
     const spd = [0.6, 1.2, 3][G.S ? (G.S.settings.text ?? 1) : 1];
     const L = { modal: true, pages, page: 0, chars: 0, t: 0, name: opts.name, keep: !!opts.keep, ready: false };
+    L.close = () => { G.popLayer(L); res(); };   // a skippable scene can close its line from outside (a tap)
     L.update = () => {
+      if (opts.onB && G.hit('b')) { opts.onB(); return; }   // inside a skippable scene B skips the scene (A still reads on)
       const total = pages[L.page].join('').length;
       if (L.chars < total) {
         L.chars += spd;
@@ -218,20 +220,24 @@
     T.drawImage(img, Math.round(x + (w - img.width) / 2), Math.round(y + h - img.height - 1));
   }
   Mn.drawCard = drawCard;
+  // width of the picture box: 84, or wider for the legends' wide pictures
+  const cardBox = id => Math.max(84, G.mons.card(id).width + 6);
+  Mn.cardBox = cardBox;
 
   // monster summary on the top screen
   function monSummary(T, mon, mode) {
     topCard(T, '몬스터 정보');
     if (!mon) return;
     const sp = D.MONS[mon.id], st = D.stats(mon);
-    G.box(T, 6, 21, 84, 82, G.STYLE.white, 4);
-    drawCard(T, mon.id, 6, 21, 84, 82);
-    G.text(T, D.nameOf(mon), 96, 22, '#2c2f45', null);
+    const bw = cardBox(mon.id), x0 = 6 + bw + 6;   // a wide legend picture widens its box; the text moves right
+    G.box(T, 6, 21, bw, 82, G.STYLE.white, 4);
+    drawCard(T, mon.id, 6, 21, bw, 82);
+    G.text(T, D.nameOf(mon), x0, 22, '#2c2f45', null);
     G.textR(T, 'Lv.' + mon.lv, 248, 22, '#2c2f45', null);
-    let bx = 96;
+    let bx = x0;
     sp.t.forEach(t => { bx += typeBadge(T, t, bx, 39) + 3; });
-    G.text(T, `HP ${Math.max(0, mon.hp)}/${st.hp}`, 96, 56, '#36363f', null);
-    hpBar(T, 96, 72, 152, mon.hp / st.hp);
+    G.text(T, `HP ${Math.max(0, mon.hp)}/${st.hp}`, x0, 56, '#36363f', null);
+    hpBar(T, x0, 72, 248 - x0, mon.hp / st.hp);
     const next = mon.lv >= 100 ? 0 : D.expFor(mon.lv + 1) - mon.exp;
     G.textR(T, mon.hp <= 0 ? '기절' : mon.status ? D.STATUS[mon.status].n : '양호', 248, 56, mon.hp <= 0 ? '#b0403a' : mon.status ? '#7a3ab0' : '#5a5648', null);
     G.textR(T, '다음 Lv까지 ' + next, 248, 81, '#5a5648', null);
@@ -242,8 +248,8 @@
         G.rrect(T, 7, y + 1, 242, 17, 3, '#fdfbf3');
         G.rrect(T, 8, y + 2, 4, 15, 1, D.TYPE_COL[m.t]);
         G.text(T, m.n, 16, y + 3, '#36363f', null);
-        G.text(T, m.t, 112, y + 3, D.TYPE_DARK[m.t], null);
-        G.text(T, m.p ? '위력' + m.p + (m.hits ? '×' + (Array.isArray(m.hits) ? m.hits.join('~') : m.hits) : '') : '변화', 146, y + 3, '#5a5648', null);
+        G.text(T, m.t, 106, y + 3, D.TYPE_DARK[m.t], null);   // room for the three-letter types (에스퍼·고스트·드래곤)
+        G.text(T, m.p ? '위력' + m.p + (m.hits ? '×' + (Array.isArray(m.hits) ? m.hits.join('~') : m.hits) : '') : '변화', 150, y + 3, '#5a5648', null);
         G.textR(T, `PP${mv.pp}/${m.pp}`, 246, y + 3, '#5a5648', null);
       });
     }
@@ -495,17 +501,18 @@
     if (!id) {
       G.box(T, 6, 24, 244, 72, G.STYLE.white, 5);
       G.text(T, '아루 대륙 몬스터 도감', 14, 32, '#2c2f45', null);
-      G.text(T, `발견 ${Object.keys(G.S.dex.seen).filter(k => D.MONS[k] && !D.MONS[k].hidden).length}  ·  포획 ${D.dexCount()}  /  ${D.DEX.length}`, 14, 54, '#5a5648', null);
+      G.text(T, `발견 ${Object.keys(G.S.dex.seen).filter(D.mainDex).length}  ·  포획 ${D.dexCount()}  /  ${D.DEX.length}`, 14, 54, '#5a5648', null);
       G.wrap('미리보기는 디자이너만 볼 수 있어요. 기록(발견·포획)은 바뀌지 않아요.', 226).forEach((ln, k) => G.text(T, ln, 14, 112 + k * 16, '#6a3a8a', null));
       return;
     }
     const sp = D.MONS[id], seen = preview || G.S.dex.seen[id], caught = preview || G.S.dex.caught[id];
-    G.box(T, 6, 24, 84, 84, G.STYLE.white, 4);
-    drawCard(T, id, 6, 24, 84, 84, caught ? null : G.mons.silhouette(id, 'card', DEXSIL));
-    G.text(T, `No.${String(sp.no).padStart(3, '0')}  ${seen ? sp.n : '???'}`, 98, 26, '#2c2f45', null);
-    if (seen) { let bx = 98; sp.t.forEach(t => { bx += typeBadge(T, t, bx, 44) + 3; }); }
+    const bw = cardBox(id), x0 = 6 + bw + 8;
+    G.box(T, 6, 24, bw, 84, G.STYLE.white, 4);
+    drawCard(T, id, 6, 24, bw, 84, caught ? null : G.mons.silhouette(id, 'card', DEXSIL));
+    G.text(T, `No.${String(sp.no).padStart(3, '0')}  ${seen ? sp.n : '???'}`, x0, 26, '#2c2f45', null);
+    if (seen) { let bx = x0; sp.t.forEach(t => { bx += typeBadge(T, t, bx, 44) + 3; }); }
     const info = seen ? dexInfo(id) : '';
-    if (info) G.wrap(info, 150).slice(0, 2).forEach((ln, k) => G.text(T, ln, 98, 64 + k * 15, '#5a5648', null));
+    if (info) G.wrap(info, 248 - x0).slice(0, 2).forEach((ln, k) => G.text(T, ln, x0, 64 + k * 15, '#5a5648', null));
     if (preview) { const mn = G.mons.mini(id); T.drawImage(Math.floor(G.frame / 40) % 2 ? mn.right : mn.left, 222, 80); }
     if (preview && !G.mons.has(id)) G.text(T, '도트 작업 대기 (시안 필요)', 98, 94, '#b0403a', null);
     G.box(T, 6, 114, 244, 72, G.STYLE.white, 5);
@@ -559,18 +566,22 @@
     for (;;) {
       const head = owner ? [{ label: preview ? '◆ 디자이너 미리보기  켜짐' : '◇ 디자이너 미리보기  꺼짐', color: '#6a3a8a' }] : [];
       const off = head.length;
+      // the legends follow the numbered entries on their own page, once you have heard of them (see legends.js)
+      const legs = G.legend ? G.legend.dexIds(preview) : [];
+      const all = ids.concat(legs);
       const items = head.concat(ids.map(id => {
         const s = D.MONS[id], seen = preview || G.S.dex.seen[id], caught = G.S.dex.caught[id];
         return { label: `${String(s.no).padStart(3, '0')}  ${seen ? s.n : '???'}`, right: caught ? '포획' : G.S.dex.seen[id] ? '발견' : '', color: caught || preview ? '#2c2f45' : seen ? '#5a5648' : '#9a968c' };
-      }));
+      })).concat(legs.map(id => G.legend.dexRow(id, preview)));
       const i = await G.list(items, {
-        title: '몬스터 도감', sub: `발견 ${Object.keys(G.S.dex.seen).filter(k => D.MONS[k] && !D.MONS[k].hidden).length} · 포획 ${D.dexCount()}`, start,
-        top: (T, s) => dexTop(T, s >= off ? ids[s - off] : null, preview)
+        title: '몬스터 도감', sub: `발견 ${Object.keys(G.S.dex.seen).filter(D.mainDex).length} · 포획 ${D.dexCount()}` + (legs.length ? ` · 전설 ${legs.length}` : ''), start,
+        top: (T, s) => { const id = s >= off ? all[s - off] : null; if (id && D.MONS[id].legend) G.legend.dexTop(T, id, preview); else dexTop(T, id, preview); }
       });
       if (i < 0) return;
       if (i < off) { preview = !preview; G.S.settings.dexPreview = preview; start = 0; continue; }
       start = i;
-      const id = ids[i - off];
+      const id = all[i - off];
+      if (D.MONS[id].legend) { if (preview || G.S.dex.seen[id] || G.S.dex.caught[id]) G.audio && G.audio.cry(id); continue; }
       if (preview || G.S.dex.seen[id]) G.audio && G.audio.cry(id);
       // evolution menu: a stopped level evolution can be tried again while the level holds
       const ready = G.S.party.filter(m => m.id === id && D.levelEvoReady(m));
@@ -734,6 +745,7 @@
           if (!o) { await G.say('저장 코드를 읽을 수 없어요. 코드 전체를 정확히 붙여 넣었는지 확인해 주세요.'); continue; }
           G.S = G.normalize(o); Mn.saveGame();
           await G.say('저장 코드를 불러왔어요!');
+          G.world.clearCache();   // redraw every map from the loaded save's tiles
           G.world.enter(G.S.pos.map, G.S.pos.x, G.S.pos.y, G.S.pos.dir, { noEvents: true });
           return;
         }

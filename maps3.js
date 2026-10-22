@@ -50,9 +50,9 @@
     moonroom: [
       '##############',
       '##llllllllll##',
-      '##lrllllllll##',
+      '##lrlllllll^##',
       '##llllllllll##',
-      '##llllllllll##',
+      '##llllllllllQ_',
       '##llllllllll##',
       '##llllllllrl##',
       '##llll___lll##',

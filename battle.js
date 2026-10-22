@@ -45,14 +45,18 @@
   const newStages = () => ({ atk: 0, def: 0, spa: 0, spd: 0, spe: 0, acc: 0 });
 
   // ------------------------------------------------------------ background
-  function makeBg(night) {
+  // under(x): an extra layer between the sky and the hills (the legends' sun / moon disc is drawn there,
+  // as an encounter effect of its own: it is never part of the creature's sprite)
+  function makeBg(night, under, skyCols) {
     const [c, x] = G.art.cv(256, 192);
     const sky = x.createLinearGradient(0, 0, 0, 110);
-    if (night) { sky.addColorStop(0, '#1c2048'); sky.addColorStop(1, '#5a4a8a'); }
+    if (skyCols) skyCols.forEach(([k, col]) => sky.addColorStop(k, col));
+    else if (night) { sky.addColorStop(0, '#1c2048'); sky.addColorStop(1, '#5a4a8a'); }
     else { sky.addColorStop(0, '#8fd0f4'); sky.addColorStop(1, '#e6f6fa'); }
     x.fillStyle = sky; x.fillRect(0, 0, 256, 110);
+    if (under) under(x);
     if (night) { const r = G.srng(7); x.fillStyle = '#f6f2d0'; for (let i = 0; i < 26; i++) x.fillRect(Math.floor(r() * 256), Math.floor(r() * 70), 1, 1); }
-    else {
+    else if (!skyCols) {
       // soft flat-bottomed clouds
       const cloud = (cx, cy, s) => {
         [[-12, 2, 7], [-4, -3, 9], [6, -1, 8], [14, 3, 6]].forEach(([dx, dy, r]) => G.disc(x, cx + dx * s, cy + dy * s, Math.round(r * s), '#ffffff'));
@@ -86,6 +90,7 @@
     plat(70, 166, 64, 16);
     return c;
   }
+  Bt.makeBg = makeBg;
 
   // ------------------------------------------------------------ drawing
   function drawBoxE(T) {
@@ -125,19 +130,36 @@
     G.rrect(T, x, y, w, 14, 3, '#2c2f45'); G.rrect(T, x + 1, y + 1, w - 2, 12, 2, col);
     G.text(T, lb, x + 4, y + 1, '#fff', null);
   }
+  // where a battler is drawn. Ordinary sprites stand centred on their platform. The wide legend sprites
+  // (G.SPRITE_META) are placed by their body pivot and then held inside the free part of the screen,
+  // clear of both HP boxes, so no wing or tail is cut off or hidden; they grow / shrink about the pivot.
+  function place(side, m, img, s) {
+    const scale = s.scale, w = img.width * scale, h = img.height * scale;
+    const baseY = side === 'p' ? 172 : 96;
+    const meta = G.mons.meta(m.id + (side === 'p' ? ':back' : ':front'));
+    if (!meta || !meta.pivot) {
+      const cx = (side === 'p' ? 70 : 186) + s.dx;
+      return { x: Math.round(cx - w / 2), y: Math.round(baseY - h + s.dy), w, h, baseY, px: Math.round(cx), py: Math.round(baseY - h / 2 + s.dy) };
+    }
+    const [lo, hi] = side === 'p' ? [0, 128] : [130, 256];
+    const x0 = Math.max(lo, Math.min(hi - img.width, (side === 'p' ? 70 : 186) - meta.pivot[0]));
+    const y0 = (side === 'p' ? 172 : 94) - img.height;
+    const px = x0 + meta.pivot[0], py = y0 + meta.pivot[1];
+    return { x: Math.round(px - meta.pivot[0] * scale + s.dx), y: Math.round(py - meta.pivot[1] * scale + s.dy), w, h, baseY, px: px + s.dx, py: py + s.dy, meta };
+  }
+  Bt.place = place;
   function drawMon(T, side) {
     const s = sprite(side), m = active(side);
     if (!m || !s.on || s.alpha <= 0) return;
     const img = side === 'p' ? G.mons.back(m.id) : G.mons.front(m.id);
-    const scale = s.scale;
-    const w = img.width * scale, h = img.height * scale;
-    const baseY = side === 'p' ? 172 : 96;
-    const cx = (side === 'p' ? 70 : 186) + s.dx;
-    const x = Math.round(cx - w / 2), y = Math.round(baseY - h + s.dy);
+    const P = place(side, m, img, s);
+    const { x, y, w, h, baseY } = P;
     if (s.blink && Math.floor(G.frame / 3) % 2) return;
     T.globalAlpha = s.alpha;
     if (s.clip !== undefined) { T.save(); T.beginPath(); T.rect(0, 0, 256, baseY + 2); T.clip(); }
     T.drawImage(img, x, y + (s.clip || 0), w, h);
+    // the legends' own encounter light (월백's moon-fire on the tail tips, 금오's sun eyes) is an overlay, not part of the sprite
+    if (P.meta && G.legendFx && !s.flash && s.clip === undefined) G.legendFx(T, m.id, side === 'p' ? 'back' : 'front', P, s.scale, s.alpha);
     if (s.flash > 0) { T.globalAlpha = s.alpha * s.flash; T.drawImage(G.mons.silhouette(m.id, side === 'p' ? 'back' : 'front'), x, y + (s.clip || 0), w, h); }
     if (s.clip !== undefined) T.restore();
     T.globalAlpha = 1;
@@ -374,12 +396,13 @@
   function begin(o) {
     const night = G.isNight();
     BT = {
-      wild: !!o.wild, tr: o.trainer || null,
+      wild: !!o.wild, tr: o.trainer || null, ai: o.ai || null,
       eParty: o.eParty, ei: 0, pi: G.S.party.findIndex(m => m.hp > 0),
       pSt: newStages(), eSt: newStages(),
       ps: { on: false, alpha: 1, dx: 0, dy: 0, scale: 1, flash: 0, hp: 0, exp: 0, boxOn: false, boxX: 130 },
       es: { on: false, alpha: 1, dx: 0, dy: 0, scale: 1, flash: 0, hp: 0, boxOn: false, boxX: 4 },
-      fx: [], ui: null, cmdSel: 0, moveSel: 0, bg: makeBg(night), part: new Set(), runTries: 0,
+      fx: [], ui: null, cmdSel: 0, moveSel: 0, bg: o.scene && G.legendBg ? G.legendBg(o.scene, night) : makeBg(night), part: new Set(), runTries: 0,
+      onCaught: o.onCaught || null,
       leveled: new Set(), result: null, flashA: 0,
       pV: {}, eV: {}, yawns: {}, fled: null
     };
@@ -438,8 +461,10 @@
     const m = active(side), foe = active(other(side));
     const usable = m.moves.map((mv, i) => [mv, i]).filter(([mv]) => mv.pp > 0);
     if (!usable.length) return -1;
-    if (BT.wild) return G.pick(usable)[1];
-    const tg = side === 'e' && BT.tr && BT.tr.telegraph && BT.tr.telegraph[m.id];
+    // a trainer's plan, or a wild legend's own battle manner (BT.ai: telegraph / lead / smart); other wild monsters pick at random
+    const cfg = side === 'e' ? (BT.tr || BT.ai) : null;
+    if (BT.wild && !BT.ai) return G.pick(usable)[1];
+    const tg = cfg && cfg.telegraph && cfg.telegraph[m.id];
     let pool = usable;
     if (tg) {
       BT.tgNext = BT.tgNext || {};
@@ -453,20 +478,20 @@
       const rest = usable.filter(([mv]) => !tg.moves.includes(mv.id));
       if (rest.length) pool = rest;
     }
-    const lead = side === 'e' && BT.tr && BT.tr.lead && BT.tr.lead[m.id];
+    const lead = cfg && cfg.lead && cfg.lead[m.id];
     if (lead && !(BT.leadUsed = BT.leadUsed || {})[m.uid]) {
       BT.leadUsed[m.uid] = 1;
       const k = usable.find(([mv]) => mv.id === lead), lm = D.MOVES[lead], fv = vol(other(side));
       if (k && !(lm.yawn && (foe.status || fv.drowsy)) && !(lm.status && (foe.status || statusBlocked(lm, foe)))) return k[1];
     }
-    const smart = BT.tr && BT.tr.smart;
+    const smart = cfg && cfg.smart;
     let best = null, bestS = -1;
     for (const [mv, i] of pool) {
       const mm = D.MOVES[mv.id];
       const fv = vol(other(side)), myv = vol(side);
       let s;
       if (mm.splash) s = 1;
-      else if (mm.escape) s = BT.wild ? 40 : 0;
+      else if (mm.escape) s = BT.wild && !BT.ai ? 40 : 0;
       else if (mm.p) {
         const eff = D.eff(mm.t, D.MONS[foe.id].t);
         const stab = D.MONS[m.id].t.includes(mm.t) ? 1.5 : 1;
@@ -704,7 +729,8 @@
     D.useItem(itemId);
     await msg(`${G.S.name}${G.josa(G.S.name, '은', '는')} ${G.eul(D.ITEMS[itemId].n)} 던졌다!`, 25);
     sfx('throw');
-    const gx = 186, gy = 70;
+    const tg = place('e', e, G.mons.front(e.id), Object.assign({}, BT.es, { scale: 1, dx: 0, dy: 0 }));
+    const gx = G.mons.wide(e.id) ? tg.px : 186, gy = G.mons.wide(e.id) ? tg.py : 70;
     let gpos = { x: 40, y: 150, rot: 0, on: true };
     const cubeImg = G.art[D.ITEMS[itemId].icon] || G.art.cube;
     const drawG = (C) => { if (!gpos.on) return; C.save(); C.translate(gpos.x, gpos.y); C.rotate(gpos.rot); C.drawImage(cubeImg, -8, -10); C.restore(); };
@@ -742,6 +768,7 @@
       const isNew = !G.S.dex.caught[e.id];
       e.status = e.status || null;
       const where = D.receive(e);
+      if (BT.onCaught) BT.onCaught(e, where);   // in the same step as party/box + dex (a legend's own record), before any save can run
       if (isNew) await G.menus.dexReveal(e.id);   // the silhouette in the dex turns into the picture
       if (where === 'box') await G.say(`데리고 다닐 몬스터가 가득 차서 ${G.eun(name(e))} 보관함으로 보내졌다.`);
       return true;
@@ -1107,7 +1134,7 @@
   Bt.wild = async enc => {
     if (!G.S.party.some(m => m.hp > 0)) { await Bt.blackout(); return 'lose'; }
     const mon = D.makeMon(enc.id, enc.lv, enc.moves ? { moves: enc.moves, ivMin: 8 } : undefined);
-    const res = await run({ wild: true, eParty: [mon], legend: enc.legend });
+    const res = await run({ wild: true, eParty: [mon], legend: enc.legend, scene: enc.scene, onCaught: enc.onCaught, ai: enc.ai });
     if (res === 'lose') await Bt.blackout();
     return res;
   };

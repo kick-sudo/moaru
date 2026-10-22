@@ -34,6 +34,7 @@
       out.healPoint = base.healPoint;
     }
     if (!G.MAPS[out.pos.map]) out.pos = base.pos;
+    if (G.legend) G.legend.normalize(out, o);   // 금오·월백 records: defaults for older saves, a real 금오 already owned is kept as caught
     return out;
   };
   function loadSave() {
@@ -224,6 +225,7 @@
 
   function startWorld(resume) {
     G.S.flags.started = 1;
+    G.world.clearCache();             // maps are drawn from this save's tiles (moved stones, cleared vines), never another one's
     G.scene = G.world.scene;
     G.world.player.char = G.S.char;
     const p = G.S.pos;

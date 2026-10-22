@@ -18,6 +18,8 @@ put('mulullim', 28, 20, 'S')
 # survey markers (현장점검 표식)
 put('sandwind', 24, 6, 'K')
 put('mistwalk', 18, 24, 'K')
+# 달빛방 east wall: a ring-marked haul stone fills a new passage to 월은못 (legend LGZ02); its rail support stands inside
+put('moonroom', 12, 4, 'Q'); put('moonroom', 13, 4, '_'); put('moonroom', 11, 2, '^')
 tpl = open('_maps3_tpl.js').read()
 assert '/*ROWS*/null' in tpl
 body = '{\n' + ',\n'.join(f"    {k}: [\n" + ',\n'.join("      '" + r + "'" for r in rows) + "]" for k, rows in R.items()) + '\n  }'

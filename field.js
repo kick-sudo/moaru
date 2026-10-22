@@ -412,7 +412,7 @@
   };
 
   // ------------------------------------------------------------ 괴력운반 (chapter 3): carry a ring-marked haul stone to its rail support
-  // def.hauls: [{ id, x, y, to: [tx, ty], floor, flag, cond, condLine, lock, lockLine, onDone, onUndo }]
+  // def.hauls: [{ id, x, y, to: [tx, ty], floor, seatFloor, flag, cond, condLine, lock, lockLine, look, onDone, onUndo }]
   const haulFrom = (m, x, y) => (m.def.hauls || []).find(h => h.x === x && h.y === y);
   const haulOnto = (m, x, y) => (m.def.hauls || []).find(h => h.to[0] === x && h.to[1] === y);
   Fd.hauled = (mapId, id) => !!(G.S.hauls && G.S.hauls[mapId] && G.S.hauls[mapId][id]);
@@ -436,6 +436,7 @@
   async function haulAt(x, y) {
     const m = W().map, h = haulFrom(m, x, y);
     seeB(x, y, 'bigrock');
+    if (h && h.look) await h.look(h);   // a stone that guards a place (the legend sanctuaries note their entrance here)
     if (!Fd.unlocked('haul') || !G.S.bag.harness) {
       await G.say('고리와 레일 문양이 새겨진 커다란 운반석이다.\n둥근 돌과 달리 밀어서는 꿈쩍도 하지 않는다.');
       await G.say(`(괴력운반을 배우면 옆의 레일 받침으로 옮길 수 있을 것 같다. 배우는 곳: ${Fd.SKILLS.haul.where})`);
@@ -720,14 +721,20 @@
   const CHAPTER = () => G.CH;
   const CHS = () => [G.CH1, G.CH2, G.CH3].filter(Boolean);   // every chapter's map page (the world map can flip between them)
   Fd.CHS = CHS;
-  Fd.notebook = async () => {
+  Fd.notebook = async (start) => {
     const CH = CHAPTER();
-    let tab = 0;
+    let tab = start || 0;
     for (;;) {
-      const tabs = ['할 일', '탐험 기술', '다시 가 볼 곳'];
+      // the legend journal (전설 기록) appears once anything about 금오 or 월백 has been noted
+      const tabs = ['할 일', '탐험 기술', '다시 가 볼 곳'].concat(G.legend && G.legend.journal().length ? ['전설 기록'] : []);
+      if (tab >= tabs.length) tab = 0;
       let items = [], detail = [];
-      if (tab === 0) {
-        const goals = CH.objectives();
+      if (tab === 3) {
+        const jn = G.legend.journal();
+        items = jn.map(j => ({ label: j.t, right: j.who, color: j.done ? '#2c7a3a' : '#2c2f45' }));
+        detail = jn.map(j => j.d);
+      } else if (tab === 0) {
+        const goals = CH.objectives().concat(G.legend ? G.legend.objectives() : []);
         items = goals.map(g => ({ label: (g.done ? '✓ ' : '● ') + g.t, color: g.done ? '#8a8270' : g.opt ? '#2c5ea8' : '#2c2f45' }));
         detail = goals.map(g => g.d || '');
       } else if (tab === 1) {
@@ -738,12 +745,12 @@
           detail.push(`${S.desc}\n배우는 곳: ${S.where}\n적성 계열: ${apt}`);
         });
       } else {
-        const rv = CHS().flatMap(c => c.revisits ? c.revisits() : []);
+        const rv = CHS().flatMap(c => c.revisits ? c.revisits() : []).concat(G.legend ? G.legend.revisits() : []);
         items = rv.map(r => ({ label: (r.done ? '✓ ' : r.open ? '◆ ' : '◇ ') + r.t, right: r.done ? '완료' : r.open ? '갈 수 있음' : r.need, color: r.done ? '#8a8270' : r.open ? '#2c7a3a' : '#5a5648' }));
         detail = rv.map(r => r.d);
         if (!rv.length) { items = [{ label: '아직 기록이 없어요', color: '#9a968c' }]; detail = ['길을 막는 덩굴·바위·물가를 조사하면 필요한 기술과 함께 여기에 기록돼요.']; }
       }
-      items.push({ label: '▶ ' + tabs[(tab + 1) % 3], color: '#2c5ea8' });
+      items.push({ label: '▶ ' + tabs[(tab + 1) % tabs.length], color: '#2c5ea8' });
       const i = await G.list(items, {
         title: '탐험 수첩', sub: tabs[tab],
         top: (T, s) => {
@@ -754,7 +761,7 @@
         }
       });
       if (i < 0) return;
-      if (i === items.length - 1) { tab = (tab + 1) % 3; continue; }
+      if (i === items.length - 1) { tab = (tab + 1) % tabs.length; continue; }
     }
   };
 
@@ -871,6 +878,12 @@
       T.fillStyle = pal[rows[y][x]] || (kind === 'cave' ? '#ac9a80' : '#a6d482');
       T.fillRect(ox + x * sc, oy + y * sc, sc, sc);
     }
+    // a secret place known only from its examined entrance: the entrance and the safe footholds, in outline
+    const ol = def.outline && def.outline();
+    if (ol) ol.forEach(([x, y]) => {
+      if (a && a[y * w + x]) return;
+      T.fillStyle = 'rgba(96,84,150,0.5)'; T.fillRect(ox + x * sc + 1, oy + y * sc + 1, Math.max(1, sc - 2), Math.max(1, sc - 2));
+    });
     // public buildings: known from the map giver, or once seen
     (def.buildings || []).forEach(b => {
       const seen = a && a[b.y * w + b.x];
@@ -908,7 +921,8 @@
       const move = d => { const list = shown(); if (!list.length) return; let i = list.findIndex(n => n.id === L.node); i = (i + d + list.length) % list.length; L.node = list[i].id; L.floor = 0; G.audio && G.audio.sfx('move'); };
       const flip = () => { const ps = pagesWith(); if (ps.length < 2) return; L.page = ps[(ps.indexOf(L.page) + 1) % ps.length]; L.view = 'world'; pickNode(); G.audio && G.audio.sfx('select'); };
       const nodeObj = () => CH().nodes.find(n => n.id === L.node);
-      const floors = () => { const n = nodeObj(); return n ? (n.show || n.maps.slice(0, 1)).filter(id => G.MAPS[id] && (!G.MAPS[id].secret || (G.S.explored && G.S.explored[id]))) : []; };
+      const outlineOnly = id => !!(G.MAPS[id].secret && !(G.S.explored && G.S.explored[id]) && G.MAPS[id].outline && G.MAPS[id].outline());
+      const floors = () => { const n = nodeObj(); return n ? (n.show || n.maps.slice(0, 1)).filter(id => G.MAPS[id] && (!G.MAPS[id].secret || (G.S.explored && G.S.explored[id]) || outlineOnly(id))) : []; };
       L.update = () => {
         if (G.rep('left')) { if (L.view === 'world') move(-1); else { const f = floors(); L.floor = (L.floor + f.length - 1) % f.length; } }
         if (G.rep('right')) { if (L.view === 'world') move(1); else { const f = floors(); L.floor = (L.floor + 1) % f.length; } }
@@ -985,7 +999,8 @@
             G.button(B, 204, 30, 40, 26, '▶', { onTap: () => { L.floor = (L.floor + 1) % f.length; } });
           } else G.textC(B, n ? n.n : '', 128, 35, '#2c2f45', null);
           Object.keys(BAR).forEach((k, j) => { const [s, c] = BAR[k]; const X = 10 + (j % 4) * 60, Y = 66 + Math.floor(j / 4) * 18; G.disc(B, X + 4, Y + 7, 4, c); G.text(B, s, X + 12, Y, '#36363f', null); });
-          G.textC(B, inScope(n.id) ? '흐린 부분: 받은 지도의 큰 윤곽' : '받은 지도에 없는 곳: 걸은 길만 기록', 128, 128, '#8a8270', null);
+          const fid = f[L.floor] || f[0];
+          G.textC(B, fid && outlineOnly(fid) ? '보라 점: 입구에서 알아낸 입구·발판 개략' : inScope(n.id) ? '흐린 부분: 받은 지도의 큰 윤곽' : '받은 지도에 없는 곳: 걸은 길만 기록', 128, 128, '#8a8270', null);
           G.button(B, 12, 154, 112, 30, '전체 지도', { onTap: () => { L.view = 'world'; } });
         }
         const two = L.view === 'area' || pagesWith().length > 1;

@@ -274,6 +274,7 @@ g.rect(0, 0, 26, 20, 'T')
 g.rect(10, 0, 6, 6, 'W'); g.rect(8, 3, 2, 3, 'c'); g.rect(16, 3, 2, 3, 'c')             # the high falls (not this chapter)
 g.vl(12, 6, 19, '='); g.vl(13, 6, 19, '=')
 g.rect(4, 8, 8, 5, '.'); g.rect(5, 9, 5, 3, 'G'); g.put(7, 9, 'S')                        # 첫 안전 전망대
+g.put(5, 9, 'N')                                                                           # its echo stone (legend scene LG_S08)
 g.puts([(10, 9), (10, 10), (11, 10)], 'f')
 g.rect(14, 12, 6, 4, '.'); g.puts([(15, 12), (17, 13), (16, 14), (18, 12)], 'F'); g.puts([(15, 6), (11, 15)], 'S')
 g.rect(12, 18, 2, 2, '='); g.put(12, 19, 'T')

@@ -125,5 +125,52 @@
     "assets/wolbaek-front.png",
     "assets/wolbaek-back.png"
   ],
-  "supersededModelPolicy": "Excluded from production references and selection. Use only these four canonical source images; replace existing in-game Geumo art during integration."
+  "supersededModelPolicy": "Excluded from production references and selection. Use only these four canonical source images; replace existing in-game Geumo art during integration.",
+  "derivedGameSprites": {
+    "status": "in-game",
+    "date": "2026-10-22",
+    "sourcesUsed": [
+      "assets/geumo-front.png",
+      "assets/geumo-back.png",
+      "assets/wolbaek-front.png",
+      "assets/wolbaek-back.png"
+    ],
+    "tool": "dev/sprites/_legend_pix.py (+ _legend_touch.py)",
+    "target": "sprites.js (G.SPRITES + G.SPRITE_META)",
+    "sprites": {
+      "geumo:front": [
+        124,
+        71
+      ],
+      "geumo:back": [
+        128,
+        73
+      ],
+      "geumo:icon": [
+        32,
+        32
+      ],
+      "geumo:mini": [
+        32,
+        24
+      ],
+      "wolbaek:front": [
+        118,
+        82
+      ],
+      "wolbaek:back": [
+        128,
+        87
+      ],
+      "wolbaek:icon": [
+        32,
+        32
+      ],
+      "wolbaek:mini": [
+        32,
+        26
+      ]
+    },
+    "notes": "front and back converted separately (no mirroring); alpha kept by coverage, never composited on a colour; wide canvases keep the full wings/tails; body pivots and effect anchors (geumo eye-spots x3, wolbaek tail tips x9) in G.SPRITE_META; icon/mini hand-placed from the same palette; moon-fire / sun glints are separate effects. Record: implementation-status.md"
+  }
 }

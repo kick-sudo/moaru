@@ -53,7 +53,8 @@
         "front": "assets/geumo-front.png",
         "back": "assets/geumo-back.png"
       },
-      "evolution": null
+      "evolution": null,
+      "implementation": "implementation-status.md"
     },
     {
       "id": "L02",
@@ -64,8 +65,8 @@
         "고스트"
       ],
       "runtimeKeyProposal": "wolbaek",
-      "runtimeKey": null,
-      "runtimeNumber": null,
+      "runtimeKey": "wolbaek",
+      "runtimeNumber": 910,
       "visualStatus": "transparent-character-source-ready",
       "visualSpec": "character-specs.md",
       "visualAssets": {
@@ -92,7 +93,8 @@
       },
       "arc": "달숨동굴의 은빛 털→울림당 기록의 아홉 갈래 귀로→옛 부두에 비친 아홉 꼬리→월은못의 선택 조우.",
       "lore": "살아 있는 여행자가 남긴 발걸음과 울림을 읽어, 돌아갈 길을 빛의 잔향으로 비춘다. 인간의 영혼이나 죽은 사람으로 설명하지 않는다.",
-      "evolution": null
+      "evolution": null,
+      "implementation": "implementation-status.md"
     }
   ],
   "scenes": [
@@ -442,5 +444,15 @@
     "worldAfterCapture": "Legends read and follow natural flows; they are not the sole engines of the sun, sea or forest. Capture does not break habitats or duplicate overworld bodies.",
     "mainClimax": "금오·월백의 포획 또는 두 의뢰 완료를 후속 메인 열쇠로 사용하지 않는다.",
     "background": "Game assets are character-only transparent PNGs. Sun/moon/cloud/mountain environments belong to separate optional encounter effects and are not baked into the character."
+  },
+  "implementationStatus": {
+    "status": "in-game-auto-verified",
+    "date": "2026-10-22",
+    "record": "implementation-status.md",
+    "numberPolicy": "geumo #909 kept (legend, no longer hidden); wolbaek #910; #001-102 and future #103+ regular numbers untouched; hidden regional #901-908 untouched",
+    "battleLevels": {
+      "geumo": 48,
+      "wolbaek": 49
+    }
   }
 }

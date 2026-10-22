@@ -184,6 +184,8 @@ g.rect(16, 13, 3, 6, 'z'); g.rect(13, 13, 3, 3, 'z')
 g.vl(17, 6, 11, 'I'); g.vl(19, 6, 11, 'I'); g.put(18, 9, 'J')   # windy stretch with rope rails; a cracked rock
 g.rect(15, 2, 7, 4, '.'); g.put(18, 1, 'm'); g.rect(15, 3, 2, 2, 'z')
 g.put(6, 24, 'K'); g.put(12, 36, 'S'); g.put(17, 2, 'S')
+g.put(4, 22, 'N')                                            # 전망 돌판 beside the shelter (legend scene LG_S05)
+g.puts([(2, 24), (3, 24)], '.'); g.put(4, 24, 'Q'); g.put(5, 25, '^')   # ring-marked haul stone in the cliff gap to 햇귀절벽 (LGZ01)
 add('ridge', 'out', g.rows())
 
 # ---------------------------------------------------------------- D06 바위울림터널 (cave)

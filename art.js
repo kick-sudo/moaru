@@ -928,7 +928,18 @@
     // ---- chapter 3: tide pools in the sea caves, and the calm teal basins of the purification works (the water board works there)
     'i': { solid: 1, pool: 1, anim: 1, draw: (x, m, tx, ty, ox, oy, f) => cavePool(x, m, tx, ty, ox, oy, f || 0) },
     'o': { solid: 1, water: 1, anim: 1, draw: (x, m, tx, ty, ox, oy, f) => basinWater(x, m, tx, ty, ox, oy, f || 0) },
+    // ---- the legend sanctuaries: a ring-marked haul stone and its rail support underground (달빛방 → 월은못)
+    'Q': { solid: 1, bigrock: 1, draw: (x, m, tx, ty, ox, oy) => bigBoulder(x, ox, oy, hash(tx, ty), () => caveHaulBase(x, m, tx, ty, ox, oy)) },
+    '^': { solid: 1, haulseat: 1, draw: (x, m, tx, ty, ox, oy) => railSupport(x, tx, ty, ox, oy, false, () => caveHaulBase(x, m, tx, ty, ox, oy)) },
+    '%': { solid: 1, haulseat: 2, draw: (x, m, tx, ty, ox, oy) => railSupport(x, tx, ty, ox, oy, true, () => caveHaulBase(x, m, tx, ty, ox, oy)) },
   };
+  // under a haul stone / support in a cave: the floor it stands on (h.floor where the stone starts, h.seatFloor at the support)
+  function caveHaulBase(x, m, tx, ty, ox, oy) {
+    const h = (m.def.hauls || []).find(e => (e.x === tx && e.y === ty) || (e.to[0] === tx && e.to[1] === ty));
+    const atSeat = h && h.to[0] === tx && h.to[1] === ty;
+    const c = (h && (atSeat ? h.seatFloor || h.floor : h.floor)) || '_';
+    if (c === 'l') moonFloor(x, m, tx, ty, ox, oy); else caveFloor(x, m, tx, ty, ox, oy, true);
+  }
 
   // pushable round stone (바위 밀기) and its small gym model
   A.boulder = (() => {
