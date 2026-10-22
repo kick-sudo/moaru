@@ -594,7 +594,8 @@
   // only a hash of each spell is kept, so reading the source doesn't give it away
   const spellHash = s => [...s].reduce((h, ch) => (Math.imul(h, 131) + ch.codePointAt(0)) >>> 0, 7);
   const SPELLS = { 4253758596: 'candy', 1860923197: 'cube' };
-  const GIFTS = { candy: { id: 'candy', per: 10 }, cube: { id: 'mastercube', per: 3, owner: true } };
+  // one swing fills the pouch (up to the bag limit of 99)
+  const GIFTS = { candy: { id: 'candy', per: 99 }, cube: { id: 'mastercube', per: 99, owner: true } };
   Mn.trySpell = async v => {
     const g = GIFTS[SPELLS[spellHash(String(v).replace(/[\s!.,~?…'"·]/g, ''))]];
     if (!g) return false;
